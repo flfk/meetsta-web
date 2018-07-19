@@ -35,6 +35,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
 `;
 
 const Screenshot = styled.div`
@@ -57,6 +63,8 @@ const Title = styled.div`
   color: white;
   opacity: 0.80;
   text-align: center;
+
+  text-weight: normal;
 `;
 
 export default Screenshots;

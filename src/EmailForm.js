@@ -6,6 +6,7 @@ class EmailForm extends Component {
     super();
     this.state = {
       emailFormText: "",
+      betaRequested: false,
     };
   }
 
@@ -15,7 +16,17 @@ class EmailForm extends Component {
     this.setState({ emailFormText: input });
   }
 
+  handleSubmit = (event) => {
+    this.setState({ betaRequested: true});
+  }
+
   render() {
+
+    const buttonText = (this.state.betaRequested)?
+      'We\'ll be in touch!':
+      'Get Early Access';
+
+
     return (
         <Container>
           <Textfield
@@ -24,29 +35,40 @@ class EmailForm extends Component {
             placeholder="Enter email address"
             onChange={this.handleTextChange}
           />
-          <BtnSubmit>Get Early Access</BtnSubmit>
+          <BtnSubmit onClick={this.handleSubmit}>{buttonText}</BtnSubmit>
         </Container>
     );
   }
 }
 
 const Container = styled.div`
-  // margin-top: 42px;
   display: flex;
   flex-direction: row;
   justify-content: center;
+
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
+
 `;
 
 const Textfield = styled.input`
-  height: 48px;
-  width: 464px;
+  flex: 0 1 464px;
+  // width: 464px;
+  padding: 1rem;
+  // padding-top: 1rem;
+  // padding-bottom: 1rem;
   background-color: white;
   border-radius: 5px;
   margin-right: 4px;
+  // padding-left: 16px;
 
-  border: 1px solid white;
+  border: none;
+  outline: none;
 
-  font-size: 24px;
+  font-size: 20px;
+  color: #495057;
 
   ::placeholder: {
     color: black;
@@ -54,18 +76,29 @@ const Textfield = styled.input`
     font-weight: normal;
   }
 
+  @media only screen and (max-width: 768px) {
+    flex: 0 1 auto;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
 `;
 
 const BtnSubmit = styled.button`
+  flex: 0 1 464px;
+
   background-color: #FF595E;
   border: none;
   color: white;
-  height: 48px;
-  width: 312px;
+  padding: 1rem;
+  // padding-top: 1rem;
+  // padding-bottom: 1rem;
   border-radius: 5px;
 
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
+
+  cursor: pointer;
 
   :focus {
     outline: none;
@@ -75,6 +108,12 @@ const BtnSubmit = styled.button`
     background-color: #FF7175;
   }
 
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+
+  @media only screen and (max-width: 768px) {
+    flex: 0 1 auto;
+    width: 100%;
+  }
 
 `;
 

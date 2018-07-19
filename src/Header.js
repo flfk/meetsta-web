@@ -5,7 +5,7 @@ const Header = (props) => {
   return (
       <Container>
         <BrandName>FanTime.</BrandName>
-        <Subheading>Set up online meet and greets in seconds.</Subheading>
+        <Subheading>Set up online meet and greets in <Strong>seconds</Strong>.</Subheading>
       </Container>
   );
 };
@@ -16,16 +16,20 @@ const Container = styled.div`
 `;
 
 const BrandName = styled.div`
-  font-size: 36px;
-  font-weight: bold;
+  font-size: 48px;
   color: white;
+  font-weight: 500;
 `;
 
 const Subheading = styled.div`
-  font-size: 36px;
-  color: white;
-  opacity: 0.80;
+  font-size: 24px;
+  color: #F2D9E0;
+  // opacity: 0.80;
+`;
 
+const Strong = styled.span`
+  color: white;
+  font-weight: 500;
 `;
 
 export default Header;

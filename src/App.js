@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import Screenshots from './Screenshots';
 import styled from 'styled-components';
 
+import "typeface-roboto";
+
 class App extends Component {
   render() {
     return (
@@ -17,13 +19,21 @@ class App extends Component {
 }
 
 const Background = styled.div`
-  width: 100vw;
-  height: 100vh;
+  min-width: calc(100vw - 48px);
+  padding: 24px;
+  min-height: 100vh;
   background: linear-gradient(#B73F69, #FF595E);
 
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+
+  >div{
+    margin-top: 40px;
+  }
+
+  // font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
+  font-family: Roboto;
 `;
 
 export default App;
