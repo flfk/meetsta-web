@@ -36,20 +36,25 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: center;
 
+  >:not(:first-child) {
+    margin-left: 48px;
+  }
+
   @media only screen and (max-width: 768px) {
     flex-direction: column;
     align-items: center;
+
+    >:not(:first-child) {
+    margin-left: 0;
+    margin-bottom: 40px;
+    }
+
   }
 
 `;
 
 const Screenshot = styled.div`
-  margin-right: 48px;
 
-  @media only screen and (max-width: 768px) {
-    margin-right: 0px;
-    margin-bottom: 40px;
-  }
 `;
 
 const Image = styled.div`

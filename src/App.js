@@ -20,7 +20,8 @@ class App extends Component {
 
 const Background = styled.div`
   min-width: calc(100vw - 48px);
-  padding: 24px;
+  padding-right: 24px;
+  padding-left: 24px;
   min-height: 100vh;
   background: linear-gradient(#B73F69, #FF595E);
 

@@ -83,7 +83,7 @@ const Textfield = styled.input`
 `;
 
 const BtnSubmit = styled.button`
-  flex: 0 1 464px;
+  flex: 0 1 312px;
 
   background-color: #FF595E;
   border: none;
