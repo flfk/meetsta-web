@@ -55,14 +55,10 @@ const Container = styled.div`
 
 const Textfield = styled.input`
   flex: 0 1 464px;
-  // width: 464px;
   padding: 1rem;
-  // padding-top: 1rem;
-  // padding-bottom: 1rem;
   background-color: white;
   border-radius: 5px;
   margin-right: 4px;
-  // padding-left: 16px;
 
   border: none;
   outline: none;
@@ -78,8 +74,10 @@ const Textfield = styled.input`
 
   @media only screen and (max-width: 768px) {
     flex: 0 1 auto;
-    width: 100%;
+    // adjust for padding
+    width: calc(100% - 2rem);
     margin-bottom: 4px;
+    margin-right: 0px;
   }
 
 `;
@@ -91,8 +89,6 @@ const BtnSubmit = styled.button`
   border: none;
   color: white;
   padding: 1rem;
-  // padding-top: 1rem;
-  // padding-bottom: 1rem;
   border-radius: 5px;
 
   font-size: 20px;

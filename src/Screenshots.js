@@ -45,6 +45,11 @@ const Container = styled.div`
 
 const Screenshot = styled.div`
   margin-right: 48px;
+
+  @media only screen and (max-width: 768px) {
+    margin-right: 0px;
+    margin-bottom: 40px;
+  }
 `;
 
 const Image = styled.div`
