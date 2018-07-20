@@ -27,10 +27,9 @@ class EmailForm extends Component {
 
   render() {
 
-    const buttonText = (this.state.betaRequested)?
-      'We\'ll be in touch!':
-      'Get Early Access';
-
+    const btnSubmit = (this.state.betaRequested)?
+      <BtnSubmitted>We'll be in touch!</BtnSubmitted>:
+      <BtnSubmit onClick={this.handleSubmit}>Get Early Access</BtnSubmit>;
 
     return (
         <Container>
@@ -40,7 +39,7 @@ class EmailForm extends Component {
             placeholder="Enter email address"
             onChange={this.handleTextChange}
           />
-          <BtnSubmit onClick={this.handleSubmit}>{buttonText}</BtnSubmit>
+          {btnSubmit}
         </Container>
     );
   }
@@ -116,6 +115,10 @@ const BtnSubmit = styled.button`
     width: 100%;
   }
 
+`;
+
+const BtnSubmitted = BtnSubmit.extend`
+  background-color: #FF7175;
 `;
 
 export default EmailForm;
