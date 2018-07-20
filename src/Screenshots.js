@@ -24,7 +24,7 @@ const Screenshots = (props) => {
         </Screenshot>
         <Screenshot>
           <Image><img src={deviceScreenShot4} alt="Screenshot 4"/></Image>
-          <Title>So you can focus on your fans.</Title>
+          <Title>Connect with fans from anywhere.</Title>
         </Screenshot>
       </Container>
   );

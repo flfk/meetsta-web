@@ -17,9 +17,11 @@ class App extends Component {
   render() {
     return (
       <Background>
-        <Header>Header</Header>
-        <EmailForm>Email Form</EmailForm>
-        <Screenshots> ScreenShots</Screenshots>
+        <Container>
+          <Header/>
+          <EmailForm/>
+          <Screenshots/>
+        </Container>
       </Background>
     );
   }
@@ -27,21 +29,21 @@ class App extends Component {
 
 const Background = styled.div`
   min-width: calc(100vw - 48px);
-  padding-right: 24px;
-  padding-left: 24px;
-  min-height: 100vh;
+  padding: 24px;
+  min-height: calc(100vh - 48px);
   background: linear-gradient(#B73F69, #FF595E);
 
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center
 
-  >div{
-    margin-top: 40px;
-  }
-
-  // font-family: Helvetica Neue, Arial, Helvetica, sans-serif;
   font-family: Roboto;
+`;
+
+const Container = styled.div`
+  >:not(:first-child) {
+    margin-top: 48px;
+  }
 `;
 
 export default App;
