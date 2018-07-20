@@ -46,7 +46,6 @@ const Container = styled.div`
 
     >:not(:first-child) {
     margin-left: 0;
-    margin-bottom: 40px;
     }
 
   }
@@ -54,7 +53,9 @@ const Container = styled.div`
 `;
 
 const Screenshot = styled.div`
-
+  @media only screen and (max-width: 768px) {
+    margin-bottom: 40px;
+  }
 `;
 
 const Image = styled.div`

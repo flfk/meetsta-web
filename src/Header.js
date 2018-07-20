@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Header = (props) => {
   return (
       <Container>
-        <BrandName>FanTime.</BrandName>
+        <BrandName>PleasedTo</BrandName>
         <Subheading>Set up online meet and greets in <Strong>seconds</Strong>.</Subheading>
       </Container>
   );
