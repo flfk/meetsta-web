@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 
 class EmailForm extends Component {
@@ -18,6 +19,10 @@ class EmailForm extends Component {
 
   handleSubmit = (event) => {
     this.setState({ betaRequested: true});
+        ReactGA.event({
+            category: 'Beta requested',
+            action: this.state.emailFormText,
+        });
   }
 
   render() {
