@@ -65,6 +65,11 @@ const Image = styled.div`
       height: 100%;
       width: 100%;
   }
+
+  @media only screen and (max-width: 768px) {
+    width: 240px;
+    height: 480px;
+  }
 `;
 
 const Title = styled.div`
@@ -76,6 +81,12 @@ const Title = styled.div`
   text-align: center;
 
   text-weight: normal;
+
+  @media only screen and (max-width: 768px) {
+    width: 240px;
+    font-size: 24px;
+  }
+
 `;
 
 export default Screenshots;
