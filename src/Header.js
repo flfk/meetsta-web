@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Header = (props) => {
   return (
       <Container>
-        <BrandName>PleasedTo</BrandName>
+        <BrandName>Meetsta</BrandName>
         <Subheading>Set up online meet and greets in <Strong>seconds</Strong>.</Subheading>
       </Container>
   );
@@ -16,9 +16,10 @@ const Container = styled.div`
 `;
 
 const BrandName = styled.div`
-  font-size: 48px;
+  font-size: 56px;
   color: white;
-  font-weight: 500;
+  font-weight: 200;
+  font-family: LeckerliOne;
 `;
 
 const Subheading = styled.div`
