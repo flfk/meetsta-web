@@ -2,6 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { FaDollarSign, FaCalendar, FaClock } from 'react-icons/fa';
 
+import Btn from '../components/Btn';
+import BtnProfile from '../components/BtnProfile';
 import ContentEvent from '../components/ContentEvent';
 import EVENT_IMAGE from '../assets/eventImages/EventImageAndreSwilley.jpg';
 import PROFILE_IMAGE from '../assets/profileImages/ProfileImageAndreSwilley.jpg';
@@ -38,12 +40,14 @@ class Events extends React.Component {
           <img src={EVENT_IMAGE} alt={INFLUENCER_NAME} />
         </WrapperEventImage>
 
-        <span>
-          <WrapperProfileImage>
-            <img src={PROFILE_IMAGE} alt={INFLUENCER_NAME} />
-          </WrapperProfileImage>
-          <FONTS.A href={INFLUENCER_URL}>{INFLUENCER_NAME}</FONTS.A>
-        </span>
+        <FONTS.A href={INFLUENCER_URL}>
+          <BtnProfile>
+            <WrapperProfileImage>
+              <img src={PROFILE_IMAGE} alt={INFLUENCER_NAME} />
+            </WrapperProfileImage>{' '}
+            {INFLUENCER_NAME}
+          </BtnProfile>
+        </FONTS.A>
 
         <FONTS.P>
           <FaCalendar /> {DATE}
@@ -60,6 +64,9 @@ class Events extends React.Component {
         <FONTS.P>Your chance to meet {INFLUENCER_NAME} in a 1-on-1 video call.</FONTS.P>
         <FONTS.P>Only {TICKETS} tickets available.</FONTS.P>
         <FONTS.P>{PRICE} per ticket - get yours now so you don't miss out!</FONTS.P>
+
+        <Btn primary>Get Ticket</Btn>
+        <Btn secondary>Send Information to parent/gaurdian</Btn>
       </ContentEvent>
     );
   }
