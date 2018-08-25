@@ -9,14 +9,14 @@ const Btn = styled.button`
   width: 100%;
   margin-bottom: 8px;
 
-  padding: 0.25em 1em;
+  padding: 1em 1em;
   background-color: transparent;
   border-radius: 5px;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: bold;
   cursor: pointer;
 
-  border: 4px solid ${COLORS.primary.red};
+  border: 1px solid ${COLORS.primary.red};
   background-color: ${props => (props.primary ? COLORS.primary.red : 'none')};
   color: ${props => (props.primary ? 'white' : COLORS.primary.red)};
 

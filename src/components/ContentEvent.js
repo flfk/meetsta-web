@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const ContentEvent = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  padding-bottom: 168px;
   width: 600px;
   margin: auto;
 `;

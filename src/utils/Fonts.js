@@ -22,15 +22,21 @@ const H1 = styled.h1`
   font-weight: 400;
 `;
 
-const P = styled.p`
+const P = styled.span`
   font-size: 16px;
   font-family: ${FONT_FAMILY.body};
   color: ${COLORS.greys.secondary};
+  margin: 8px 0;
 `;
 
 const A = styled.a`
   text-decoration: none;
-  color: red;
+  font-weight: bold;
+  color: ${COLORS.primary.red};
+
+  :hover {
+    text-decoration: underline;
+  }
 `;
 
 const FONTS = {};

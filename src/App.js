@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 
-import LandingPage from './containers/LandingPage';
 import Events from './containers/Events';
+import LandingPage from './containers/LandingPage';
+import Main from './components/Main';
 
 class App extends Component {
   constructor(props) {
@@ -12,7 +13,11 @@ class App extends Component {
   }
 
   render() {
-    return <Events />;
+    return (
+      <Main>
+        <Events />
+      </Main>
+    );
   }
 }
 
