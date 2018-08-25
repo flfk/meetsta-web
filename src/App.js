@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 
 import LandingPage from './containers/LandingPage';
-
-import 'typeface-roboto';
+import Events from './containers/Events';
 
 class App extends Component {
   constructor(props) {
@@ -13,7 +12,7 @@ class App extends Component {
   }
 
   render() {
-    return <LandingPage />;
+    return <Events />;
   }
 }
 
