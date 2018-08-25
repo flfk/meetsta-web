@@ -1,0 +1,71 @@
+{
+  "db": {
+    // Users collection
+    "Users": {
+      // User documents
+      "idUser" : {
+        "createdAt": "date",
+        "email": "string",
+        "wasEmailVerified": "bool",
+        "nameFirst": "string",
+        "nameLast": "string",
+        "isVerifiedInfluencer": "string",
+        "IGHandle": "string",
+        "dateOfBirth": "date",
+        "imageURL": "string",
+        "tickets": [ "idTicket" ]
+      }
+    },
+    // Events collection with event documents
+    "Events": {
+      // Event documents
+      "idEvent": {
+        "idOrganiser": "string",
+        "organiserName": "string",
+        "organiserIGHandle": "string",
+        "title": "string",
+        "description": "string",
+        "dateStart": "date",
+        "dateEnd": "date",
+        "price": "float",
+        "ticketsTotal": "int",
+        "ticketsSold": "int",
+        // Call Maps
+        "callsQueued": { "position": "idUser" },
+        "callsCompleted": { "position": "idUser" },
+        // Analytics collection
+        "analyticsByDay": [
+          // Daily Analytics documents
+          {
+            "date": "date",
+            "pageViews": "pageViews"
+          },
+        ]
+      },
+    },
+    // Tickets collection with ticket documents
+    "Tickets": {
+      // Ticket documents
+      "idTicket": {
+        "idEvent": "string",
+        "purchaseDate": "date",
+        "purchaseNameFirst": "string",
+        "purchaseNameLast": "string",
+        "orderNoMeetsta": "string",
+        "orderNoPayPal": "string",
+        "associatedIdUser": "string",
+        "timeslot": "date",
+        "hasStarted": "bool",
+      }
+    }
+  }
+}
+
+/*
+How event calls can be handled.
+
+Influencer uses their "idUser" access the event when "idOrganiser" matches.
+At "dateStart" they can begin the call which flips the event bool "hasStart" to "true".
+The app will be pull "Ticket" objects, and when "hasStarted" and "timeslot" fit, they can join the call.
+When they join the call they join the "callsQueued" with their "position".
+When the call finishes they join the "callsCompleted" with their "position".

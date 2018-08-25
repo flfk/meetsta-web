@@ -6,41 +6,41 @@ class EmailForm extends Component {
   constructor() {
     super();
     this.state = {
-      emailFormText: "",
-      betaRequested: false,
+      emailFormText: '',
+      betaRequested: false
     };
   }
 
-  handleTextChange = (event) => {
+  handleTextChange = event => {
     const input = event.target.value;
-    console.log(input);
     this.setState({ emailFormText: input });
-  }
+  };
 
-  handleSubmit = (event) => {
-    this.setState({ betaRequested: true});
-        ReactGA.event({
-            category: 'Beta requested',
-            action: this.state.emailFormText,
-        });
-  }
+  handleSubmit = event => {
+    this.setState({ betaRequested: true });
+    ReactGA.event({
+      category: 'Beta requested',
+      action: this.state.emailFormText
+    });
+  };
 
   render() {
-
-    const btnSubmit = (this.state.betaRequested)?
-      <BtnSubmitted>We'll be in touch!</BtnSubmitted>:
-      <BtnSubmit onClick={this.handleSubmit}>Get Early Access</BtnSubmit>;
+    const btnSubmit = this.state.betaRequested ? (
+      <BtnSubmitted>We'll be in touch!</BtnSubmitted>
+    ) : (
+      <BtnSubmit onClick={this.handleSubmit}>Get Early Access</BtnSubmit>
+    );
 
     return (
-        <Container>
-          <Textfield
-            type="text"
-            value={this.state.emailFormText}
-            placeholder="Enter email address"
-            onChange={this.handleTextChange}
-          />
-          {btnSubmit}
-        </Container>
+      <Container>
+        <Textfield
+          type="text"
+          value={this.state.emailFormText}
+          placeholder="Enter email address"
+          onChange={this.handleTextChange}
+        />
+        {btnSubmit}
+      </Container>
     );
   }
 }
@@ -54,7 +54,6 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
   }
-
 `;
 
 const Textfield = styled.input`
@@ -83,13 +82,12 @@ const Textfield = styled.input`
     margin-bottom: 4px;
     margin-right: 0px;
   }
-
 `;
 
 const BtnSubmit = styled.button`
   flex: 0 1 312px;
 
-  background-color: #FF595E;
+  background-color: #ff595e;
   border: none;
   color: white;
   padding: 1rem;
@@ -105,20 +103,20 @@ const BtnSubmit = styled.button`
   }
 
   :hover {
-    background-color: #FF7175;
+    background-color: #ff7175;
   }
 
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   @media only screen and (max-width: 768px) {
     flex: 0 1 auto;
     width: 100%;
   }
-
 `;
 
 const BtnSubmitted = BtnSubmit.extend`
-  background-color: #FF7175;
+  background-color: #ff7175;
 `;
 
 export default EmailForm;

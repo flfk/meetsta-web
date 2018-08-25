@@ -1,12 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Header = (props) => {
+const Header = props => {
   return (
-      <Container>
-        <BrandName>Meetsta</BrandName>
-        <Subheading>Set up online meet and greets in <Strong>seconds</Strong>.</Subheading>
-      </Container>
+    <Container>
+      <BrandName>Meetsta</BrandName>
+      <Subheading>
+        Set up online meet and greets in
+        <Strong> seconds</Strong>.
+      </Subheading>
+    </Container>
   );
 };
 
@@ -24,7 +27,7 @@ const BrandName = styled.div`
 
 const Subheading = styled.div`
   font-size: 24px;
-  color: #F2D9E0;
+  color: #f2d9e0;
   // opacity: 0.80;
 `;
 
