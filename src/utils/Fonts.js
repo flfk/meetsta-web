@@ -19,6 +19,7 @@ const H1 = styled.h1`
   font-size: 32px;
   font-family: ${FONT_FAMILY.header};
   color: ${COLORS.greys.primary};
+  font-weight: 400;
 `;
 
 const P = styled.p`
@@ -27,9 +28,14 @@ const P = styled.p`
   color: ${COLORS.greys.secondary};
 `;
 
+const A = styled.a`
+  text-decoration: none;
+`;
+
 const FONTS = {};
 FONTS.LOGO = LOGO;
 FONTS.H1 = H1;
 FONTS.P = P;
+FONTS.A = A;
 
 export default FONTS;
