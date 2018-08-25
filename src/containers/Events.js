@@ -66,12 +66,11 @@ class Events extends React.Component {
           <FONTS.P>Your chance to meet {INFLUENCER_NAME} in a 1-on-1 video call.</FONTS.P>
           <FONTS.P>Only {TICKETS} tickets available.</FONTS.P>
           <FONTS.P>{PRICE} per ticket - get yours now so you don't miss out!</FONTS.P>
-
-          <FooterSticky>
-            <Btn primary>Get Ticket</Btn>
-            <Btn secondary>Send Information to parent/gaurdian</Btn>
-          </FooterSticky>
         </ContentEvent>
+        <FooterSticky>
+          <Btn primary>Get Ticket</Btn>
+          <Btn secondary>Send Info To Parents</Btn>
+        </FooterSticky>
       </div>
     );
   }

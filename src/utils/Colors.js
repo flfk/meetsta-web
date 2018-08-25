@@ -6,7 +6,8 @@ const COLORS = {
   greys: {
     primary: '#333333',
     secondary: '#757575',
-    supporting: '#A1A1A1'
+    supporting: '#A1A1A1',
+    light: '#EBEBEB'
   }
 };
 
