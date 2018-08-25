@@ -5,7 +5,7 @@ import ReactGA from 'react-ga';
 import Screenshots from './Screenshots';
 import styled from 'styled-components';
 
-import "typeface-roboto";
+import 'typeface-roboto';
 
 class App extends Component {
   constructor(props) {
@@ -18,9 +18,9 @@ class App extends Component {
     return (
       <Background>
         <Container>
-          <Header/>
-          <EmailForm/>
-          <Screenshots/>
+          <Header />
+          <EmailForm />
+          <Screenshots />
         </Container>
       </Background>
     );
@@ -41,7 +41,7 @@ const Background = styled.div`
 `;
 
 const Container = styled.div`
-  >:not(:first-child) {
+  > :not(:first-child) {
     margin-top: 48px;
   }
 `;
