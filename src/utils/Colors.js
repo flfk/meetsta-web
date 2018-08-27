@@ -4,7 +4,7 @@ const COLORS = {
     green: '#4CB191'
   },
   greys: {
-    primary: '#333333',
+    primary: '#484848',
     secondary: '#757575',
     supporting: '#A1A1A1',
     light: '#EBEBEB'

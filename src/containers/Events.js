@@ -34,8 +34,6 @@ class Events extends React.Component {
     return (
       <div>
         <ContentEvent>
-          <FONTS.LOGO>Meetsta</FONTS.LOGO>
-
           <FONTS.H1>{INFLUENCER_NAME} - Meet & Greet Online</FONTS.H1>
 
           <WrapperEventImage>
@@ -51,6 +49,8 @@ class Events extends React.Component {
             </BtnProfile>
           </FONTS.A>
 
+          <br />
+
           <FONTS.P>
             <FaCalendar /> {DATE}
           </FONTS.P>
@@ -62,6 +62,8 @@ class Events extends React.Component {
           <FONTS.P>
             <FaDollarSign /> {PRICE} per {LENGTH} mins
           </FONTS.P>
+
+          <br />
 
           <FONTS.P>Your chance to meet {INFLUENCER_NAME} in a 1-on-1 video call.</FONTS.P>
           <FONTS.P>Only {TICKETS} tickets available.</FONTS.P>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const WrapperEventImage = styled.div`
   height: 300px;
-  width: 600px;
+  width: 584px;
   margin-bottom: 24px;
 
   img {

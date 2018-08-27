@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
 
+import ContainerNav from './components/ContainerNavBar';
 import Events from './containers/Events';
+import FONTS from './utils/Fonts';
 import LandingPage from './containers/LandingPage';
 import Main from './components/Main';
+import NavBar from './components/NavBar';
 
 class App extends Component {
   constructor(props) {
@@ -14,9 +17,30 @@ class App extends Component {
 
   render() {
     return (
-      <Main>
-        <Events />
-      </Main>
+      <div>
+        <ContainerNav>
+          <NavBar>
+            <li>
+              <a href="#home">
+                <FONTS.LOGO>Meetsta</FONTS.LOGO>
+              </a>
+            </li>
+            <li>
+              <a href="">About Us</a>
+            </li>
+            <li>
+              <a href="">FAQ</a>
+            </li>
+            <li>
+              <a href="">Contact</a>
+            </li>
+          </NavBar>
+        </ContainerNav>
+
+        <Main>
+          <Events />
+        </Main>
+      </div>
     );
   }
 }

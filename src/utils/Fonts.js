@@ -12,7 +12,7 @@ const FONT_FAMILY = {
 const LOGO = styled.span`
   font-size: 32px;
   font-family: ${FONT_FAMILY.logo};
-  color: ${COLORS.primary.red};
+  font-weight: 400;
 `;
 
 const H1 = styled.h1`
@@ -23,15 +23,16 @@ const H1 = styled.h1`
 `;
 
 const P = styled.span`
-  font-size: 16px;
+  font-size: 20px;
   font-family: ${FONT_FAMILY.body};
+  font-weight: 300;
   color: ${COLORS.greys.secondary};
   margin: 8px 0;
 `;
 
 const A = styled.a`
+  font-size: 20px;
   text-decoration: none;
-  font-weight: bold;
   color: ${COLORS.primary.red};
 
   :hover {
