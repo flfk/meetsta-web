@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
-import { Switch, Route, BrowserRouter, Link } from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
-import ContainerNav from './components/ContainerNavBar';
 import Events from './containers/Events';
-import FONTS from './utils/Fonts';
 import LandingPage from './containers/LandingPage';
 import Main from './components/Main';
-import NavBar from './components/NavBar';
+import NavBar from './containers/NavBar';
 
 class App extends Component {
   constructor(props) {
@@ -20,25 +18,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div>
-          <ContainerNav>
-            <NavBar>
-              <li>
-                <Link to="/">
-                  <FONTS.LOGO>Meetsta</FONTS.LOGO>
-                </Link>
-              </li>
-              <li>
-                <Link to="/event">About Us</Link>
-              </li>
-              <li>
-                <Link to="/event">FAQ</Link>
-              </li>
-              <li>
-                <Link to="/event">Contact</Link>
-              </li>
-            </NavBar>
-          </ContainerNav>
-
+          <NavBar />
           <Main>
             <Switch>
               <Route exact path="/" component={LandingPage} />
