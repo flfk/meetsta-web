@@ -23,7 +23,7 @@ const H1 = styled.h1`
 `;
 
 const P = styled.span`
-  font-size: 20px;
+  font-size: 16px;
   font-family: ${FONT_FAMILY.body};
   font-weight: 300;
   color: ${COLORS.greys.secondary};
@@ -31,7 +31,7 @@ const P = styled.span`
 `;
 
 const A = styled.a`
-  font-size: 20px;
+  font-size: 16px;
   text-decoration: none;
   color: ${COLORS.primary.red};
 
