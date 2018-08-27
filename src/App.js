@@ -1,11 +1,12 @@
-import EmailForm from './EmailForm';
-import Header from './Header';
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
-import Screenshots from './Screenshots';
-import styled from 'styled-components';
 
-import "typeface-roboto";
+import ContainerNav from './components/ContainerNavBar';
+import Events from './containers/Events';
+import FONTS from './utils/Fonts';
+import LandingPage from './containers/LandingPage';
+import Main from './components/Main';
+import NavBar from './components/NavBar';
 
 class App extends Component {
   constructor(props) {
@@ -16,34 +17,32 @@ class App extends Component {
 
   render() {
     return (
-      <Background>
-        <Container>
-          <Header/>
-          <EmailForm/>
-          <Screenshots/>
-        </Container>
-      </Background>
+      <div>
+        <ContainerNav>
+          <NavBar>
+            <li>
+              <a href="#home">
+                <FONTS.LOGO>Meetsta</FONTS.LOGO>
+              </a>
+            </li>
+            <li>
+              <a href="">About Us</a>
+            </li>
+            <li>
+              <a href="">FAQ</a>
+            </li>
+            <li>
+              <a href="">Contact</a>
+            </li>
+          </NavBar>
+        </ContainerNav>
+
+        <Main>
+          <Events />
+        </Main>
+      </div>
     );
   }
 }
-
-const Background = styled.div`
-  min-width: calc(100vw - 48px);
-  padding: 24px;
-  min-height: calc(100vh - 48px);
-  background: linear-gradient(#B73F69, #FF595E);
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center
-
-  font-family: Roboto;
-`;
-
-const Container = styled.div`
-  >:not(:first-child) {
-    margin-top: 48px;
-  }
-`;
 
 export default App;
