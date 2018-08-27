@@ -23,22 +23,18 @@ class App extends Component {
           <ContainerNav>
             <NavBar>
               <li>
-                <a href="#home">
-                  <Link to="/">
-                    <FONTS.LOGO>Meetsta</FONTS.LOGO>
-                  </Link>
-                </a>
-              </li>
-              <li>
-                <Link to="/event">
-                  <a href="">About Us</a>
+                <Link to="/">
+                  <FONTS.LOGO>Meetsta</FONTS.LOGO>
                 </Link>
               </li>
               <li>
-                <a href="">FAQ</a>
+                <Link to="/event">About Us</Link>
               </li>
               <li>
-                <a href="">Contact</a>
+                <Link to="/event">FAQ</Link>
+              </li>
+              <li>
+                <Link to="/event">Contact</Link>
               </li>
             </NavBar>
           </ContainerNav>
