@@ -3,7 +3,6 @@ import ReactGA from 'react-ga';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 import Events from './containers/Events';
-import LandingPage from './containers/LandingPage';
 import Main from './components/Main';
 import NavBar from './containers/NavBar';
 
@@ -21,7 +20,7 @@ class App extends Component {
           <NavBar />
           <Main>
             <Switch>
-              <Route exact path="/" component={LandingPage} />
+              <Route exact path="/" component={Events} />
               <Route path="/event" component={Events} />
             </Switch>
           </Main>
