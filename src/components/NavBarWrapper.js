@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import COLORS from '../utils/Colors';
 
-const ContainerNav = styled.div`
+const NavBarWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,4 +11,4 @@ const ContainerNav = styled.div`
   border-bottom: 1px solid ${COLORS.greys.light};
 `;
 
-export default ContainerNav;
+export default NavBarWrapper;
