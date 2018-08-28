@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import COLORS from '../utils/Colors';
 
-const FooterSticky = styled.div`
+const FooterEvents = styled.div`
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -14,4 +14,4 @@ const FooterSticky = styled.div`
   justify-content: center;
 `;
 
-export default FooterSticky;
+export default FooterEvents;
