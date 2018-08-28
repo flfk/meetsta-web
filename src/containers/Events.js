@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FaDollarSign, FaCalendar, FaClock } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
-import ContentEvent from '../components/ContentEvent';
+import Content from '../components/Content';
 import EVENT_IMAGE from '../assets/eventImages/EventImageAndreSwilley.jpg';
 import PROFILE_IMAGE from '../assets/profileImages/ProfileImageAndreSwilley.jpg';
 import FONTS from '../utils/Fonts';
@@ -33,7 +34,7 @@ class Events extends React.Component {
   render() {
     return (
       <div>
-        <ContentEvent>
+        <Content.Event>
           <FONTS.H1>{INFLUENCER_NAME} - Meet & Greet Online</FONTS.H1>
 
           <WrapperEventImage>
@@ -68,9 +69,11 @@ class Events extends React.Component {
           <FONTS.P>Your chance to meet {INFLUENCER_NAME} in a 1-on-1 video call.</FONTS.P>
           <FONTS.P>Only {TICKETS} tickets available.</FONTS.P>
           <FONTS.P>{PRICE} per ticket - get yours now so you don't miss out!</FONTS.P>
-        </ContentEvent>
+        </Content.Event>
         <FooterSticky>
-          <Btn primary>Get Ticket</Btn>
+          <Link to="/">
+            <Btn primary>Get Ticket</Btn>
+          </Link>
           <Btn secondary>Send Info To Parents</Btn>
         </FooterSticky>
       </div>
