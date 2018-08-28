@@ -8,7 +8,7 @@ import ContentEvent from '../components/ContentEvent';
 import EVENT_IMAGE from '../assets/eventImages/EventImageAndreSwilley.jpg';
 import PROFILE_IMAGE from '../assets/profileImages/ProfileImageAndreSwilley.jpg';
 import FONTS from '../utils/Fonts';
-import FooterSticky from '../components/FooterSticky';
+import FooterEvents from '../components/FooterEvents';
 import WrapperEventImage from '../components/WrapperEventImage';
 import WrapperProfileImage from '../components/WrapperProfileImage';
 
@@ -25,10 +25,12 @@ const PRICE = 20.0;
 const LENGTH = 5;
 const TICKETS = 25;
 
+const GOOGLE_FORM_URL = 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2';
+
 class Events extends React.Component {
-  constructor() {
-    super();
-  }
+  openMailForm = () => {
+    window.open(GOOGLE_FORM_URL, '_blank');
+  };
 
   render() {
     return (
@@ -69,10 +71,13 @@ class Events extends React.Component {
           <FONTS.P>Only {TICKETS} tickets available.</FONTS.P>
           <FONTS.P>{PRICE} per ticket - get yours now so you don't miss out!</FONTS.P>
         </ContentEvent>
-        <FooterSticky>
+
+        <FooterEvents>
           <Btn primary>Get Ticket</Btn>
-          <Btn secondary>Send Info To Parents</Btn>
-        </FooterSticky>
+          <Btn secondary onClick={this.openMailForm}>
+            Send Info To Parents
+          </Btn>
+        </FooterEvents>
       </div>
     );
   }

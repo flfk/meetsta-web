@@ -21,7 +21,7 @@ const NavBar = () => (
           <Link to="/event">FAQ</Link>
         </li>
         <li>
-          <Link to="/event">Contact</Link>
+          <a href="mailto:contact.meetsta@gmail.com">Contact</a>
         </li>
       </NavBarList>
     </NavBarWrapper>
