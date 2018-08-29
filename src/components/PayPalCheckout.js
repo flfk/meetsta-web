@@ -13,7 +13,7 @@ class PaypalButton extends React.Component {
     super(props);
 
     this.state = {
-      showButton: false
+      showButton: true
     };
 
     window.React = React;
@@ -83,6 +83,7 @@ class PaypalButton extends React.Component {
             onAuthorize={onAuthorize}
             onCancel={onCancel}
             onError={onError}
+            style={{ size: 'responsive' }}
           />
         )}
       </div>

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import React from 'react';
 
 import COLORS from '../utils/Colors';
 
@@ -21,7 +22,37 @@ const Seperator = styled.div`
   background-color: ${COLORS.greys.light};
 `;
 
+const FlexContainer = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+`;
+
+const SeperatorHalf = styled.div`
+  flex: 1 1 0;
+  height: 1px;
+  margin: 32px 8px;
+  background-color: ${COLORS.greys.light};
+`;
+
+const Label = styled.label`
+  color: ${COLORS.greys.secondary};
+  margin-bottom: 8px;
+  display: inline-block;
+`;
+
+const Divider = () => {
+  return (
+    <FlexContainer>
+      <SeperatorHalf />
+      <Label>OR</Label>
+      <SeperatorHalf />
+    </FlexContainer>
+  );
+};
+
 Content.Event = Event;
 Content.Seperator = Seperator;
+Content.Divider = Divider;
 
 export default Content;
