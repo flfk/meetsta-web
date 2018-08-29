@@ -7,6 +7,7 @@ import CardElement from '../components/CardElement';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
+import Seperator from '../components/Seperator';
 
 import styled from 'styled-components';
 
@@ -48,6 +49,9 @@ class Checkout extends React.Component {
     return (
       <Content>
         <FONTS.H1>Checkout</FONTS.H1>
+        <FONTS.H2>Your order</FONTS.H2>
+        <FONTS.P>1 x Andre Swiley Meet & Greet, 26 August 2018, 14:00 - 16:00 PDT</FONTS.P>
+        <Seperator />
         <Elements>
           <form onSubmit={this.handleSubmit}>
             <FONTS.H2>1. Your basic information</FONTS.H2>
@@ -62,8 +66,10 @@ class Checkout extends React.Component {
               placeholder="JaneDoe@email.com"
               onChange={this.handleChangeEmail}
             />
+            <Seperator />
             <FONTS.H2>2. Your payment information</FONTS.H2>
             <CardElement />
+            <Seperator />
             <Btn primary type="submit">
               Pay ${this.state.price} USD
             </Btn>
