@@ -1,11 +1,12 @@
 import React from 'react';
 import { CardElement } from 'react-stripe-elements';
 
-import COLORS from '../utils/Colors';
-import FONTS from '../utils/Fonts';
+import COLORS from '../../utils/Colors';
+import FONTS from '../../utils/Fonts';
+import './Styles.CardElement.css';
 
 const CardElementStyled = props => {
-  return <CardElement style={Style} />;
+  return <CardElement className="card-element" style={Style} />;
 };
 
 const Style = {
@@ -15,6 +16,7 @@ const Style = {
     lineHeight: '40px',
     fontFamily: FONTS.family.body,
     fontSize: FONTS.sizes.p,
+    border: '1px solid #eee',
 
     '::placeholder': {
       color: COLORS.greys.supporting

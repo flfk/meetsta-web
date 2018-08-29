@@ -54,7 +54,7 @@ class Checkout extends React.Component {
         <Seperator />
         <Elements>
           <form onSubmit={this.handleSubmit}>
-            <FONTS.H2>1. Your basic information</FONTS.H2>
+            <FONTS.H2>Your basic information</FONTS.H2>
             <InputText
               label="First name"
               placeholder="Jane"
@@ -67,7 +67,7 @@ class Checkout extends React.Component {
               onChange={this.handleChangeEmail}
             />
             <Seperator />
-            <FONTS.H2>2. Your payment information</FONTS.H2>
+            <FONTS.H2>Your payment information</FONTS.H2>
             <CardElement />
             <Seperator />
             <Btn primary type="submit">

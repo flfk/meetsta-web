@@ -71,7 +71,7 @@ class Events extends React.Component {
           <FONTS.P>{PRICE} per ticket - get yours now so you don't miss out!</FONTS.P>
         </Content.Event>
         <FooterSticky>
-          <Link to="/">
+          <Link to="/checkout">
             <Btn primary>Get Ticket</Btn>
           </Link>
           <Btn secondary>Send Info To Parents</Btn>

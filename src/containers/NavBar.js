@@ -15,10 +15,10 @@ const NavBar = () => (
           </Link>
         </li>
         <li>
-          <Link to="/event">About Us</Link>
+          <Link to="/event">FAQ</Link>
         </li>
         <li>
-          <Link to="/event">FAQ</Link>
+          <Link to="/">Host an event</Link>
         </li>
         <li>
           <Link to="/event">Contact</Link>
