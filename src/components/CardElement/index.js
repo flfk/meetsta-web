@@ -13,10 +13,9 @@ const Style = {
   base: {
     iconColor: COLORS.primary.green,
     color: COLORS.greys.primary,
-    lineHeight: '40px',
+    lineHeight: '36px',
     fontFamily: FONTS.family.body,
     fontSize: FONTS.sizes.p,
-    border: '1px solid #eee',
 
     '::placeholder': {
       color: COLORS.greys.supporting
