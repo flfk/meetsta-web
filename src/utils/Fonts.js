@@ -48,7 +48,7 @@ const A = styled.a`
   font-size: ${FONT_SIZES.p};
   text-decoration: none;
   color: ${COLORS.primary.red};
-
+  font-weight: bold;
   :hover {
     text-decoration: underline;
   }

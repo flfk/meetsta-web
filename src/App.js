@@ -7,6 +7,7 @@ import Checkout from './containers/Checkout';
 import Events from './containers/Events';
 import Main from './components/Main';
 import NavBar from './containers/NavBar';
+import OrderConfirmation from './containers/OrderConfirmation';
 
 class App extends Component {
   constructor(props) {
@@ -25,8 +26,9 @@ class App extends Component {
             <Main>
               <Switch>
                 <Route exact path="/" component={Events} />
-                <Route path="/event" component={Events} />
+                <Route path="/events" component={Events} />
                 <Route path="/checkout" component={Checkout} />
+                <Route path="/confirmation" component={OrderConfirmation} />
               </Switch>
             </Main>
           </div>

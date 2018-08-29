@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Elements } from 'react-stripe-elements';
+import { Link } from 'react-router-dom';
 
 import Btn from '../components/Btn';
 import CardElement from '../components/CardElement';
@@ -8,8 +9,6 @@ import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import Seperator from '../components/Seperator';
-
-import styled from 'styled-components';
 
 const propTypes = {};
 
@@ -70,9 +69,11 @@ class Checkout extends React.Component {
             <FONTS.H2>Your payment information</FONTS.H2>
             <CardElement />
             <Seperator />
-            <Btn primary type="submit">
-              Pay ${this.state.price} USD
-            </Btn>
+            <Link to="/confirmation">
+              <Btn primary type="submit">
+                Pay ${this.state.price} USD
+              </Btn>
+            </Link>
             powered by stripe
           </form>
         </Elements>

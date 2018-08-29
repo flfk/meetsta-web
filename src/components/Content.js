@@ -5,6 +5,7 @@ const Content = styled.div`
   flex-direction: column;
   width: 600px;
   margin: auto;
+  padding-bottom: 168px;
 `;
 
 const Event = Content.extend`
