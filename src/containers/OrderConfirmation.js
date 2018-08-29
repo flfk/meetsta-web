@@ -3,7 +3,6 @@ import React from 'react';
 
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
-import Seperator from '../components/Seperator';
 
 const URL_APPEARIN_IPHONE =
   'https://itunes.apple.com/au/app/appear-in-video-meetings/id878583078?mt=8';
@@ -23,7 +22,7 @@ const OrderConfirmation = props => {
       <FONTS.P>
         Your order confirmation number is <strong>123456.</strong>
       </FONTS.P>
-      <Seperator />
+      <Content.Seperator />
       <FONTS.H1>What now?</FONTS.H1>
       <FONTS.H2>1. Check you recieved a confirmation email</FONTS.H2>
       <FONTS.P>This will include your order number and time slot.</FONTS.P>
@@ -35,7 +34,7 @@ const OrderConfirmation = props => {
       <FONTS.P>
         Android users - you can download it <FONTS.A href={URL_APPEARIN_ANDROID}>here</FONTS.A>
       </FONTS.P>
-      <Seperator />
+      <Content.Seperator />
       <FONTS.H1>Any questions? We're here to help!</FONTS.H1>
       <FONTS.P>
         Send us en email at <FONTS.A href={`mailto: ${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</FONTS.A>

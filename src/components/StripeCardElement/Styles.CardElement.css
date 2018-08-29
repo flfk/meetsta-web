@@ -10,3 +10,7 @@
 .card-element.StripeElement--focus {
   border: 1px solid #4cb191;
 }
+
+.card-element.StripeElement--invalid {
+  border: 1px solid red;
+}
