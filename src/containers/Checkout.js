@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
@@ -23,7 +24,8 @@ class Checkout extends React.Component {
     firstName: '',
     lastName: '',
     email: '',
-    price: 19.99
+    price: 19.99,
+    toConfirmation: false
   };
 
   handleChangeFirstName = event => {
@@ -48,13 +50,20 @@ class Checkout extends React.Component {
     );
   };
 
-  onSuccess = payment => console.log('Successful payment!');
+  onSuccess = payment => {
+    console.log('Successful payment!');
+    this.setState({ toConfirmation: true });
+  };
 
   onError = error => console.log('Erroneous payment OR failed to load script!');
 
-  onCancel = data => console.log('Cancelled payment!');
+  onCancel = data => {
+    console.log('Cancelled payment!');
+  };
 
   render() {
+    if (this.state.toConfirmation === true) return <Redirect to="/confirmation" />;
+
     return (
       <Content>
         <FONTS.H1>Checkout</FONTS.H1>
