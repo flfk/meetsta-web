@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import validator from 'validator';
 
 import Content from '../components/Content';
 import validate from '../utils/Validators';
 import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import PayPalCheckout from '../components/PayPalCheckout';
-import StripeCardElement from '../components/StripeCardElement';
+import PayPalInvalid from '../components/PayPalInvalid';
+import ImageTicket from '../components/ImageTicket';
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -23,11 +25,12 @@ const defaultProps = {};
 class Checkout extends React.Component {
   state = {
     firstName: '',
-    firstNameErrMsg: 'testing',
+    firstNameErrMsg: '',
     lastName: '',
     lastNameErrMsg: '',
     email: '',
     emailErrMsg: '',
+    isFormValid: false,
     price: 19.99,
     toConfirmation: false
   };
@@ -68,6 +71,13 @@ class Checkout extends React.Component {
 
   areInputsValid = () => {
     const { firstName, lastName, email } = this.state;
+    if (validator.isEmpty(firstName)) {
+      this.setState({ firstNameErrMsg: 'First name is required.' });
+      return false;
+    } else {
+      this.setState({ firstNameErrMsg: '' });
+    }
+    return true;
   };
 
   render() {
@@ -87,6 +97,7 @@ class Checkout extends React.Component {
       <Content>
         <FONTS.H1>Checkout</FONTS.H1>
         <FONTS.H2>Your order</FONTS.H2>
+        <ImageTicket />
         <FONTS.P>1 x Andre Swiley Meet & Greet, 26 August 2018, 14:00 - 16:00 PDT</FONTS.P>
         <Content.Seperator />
         <form onSubmit={this.handleSubmit}>
