@@ -12,8 +12,8 @@ const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
   production: process.env.REACT_APP_PAYPAL_CLIENT_ID_PRODUCTION
 };
-
 const ENV = process.env.NODE_ENV === 'production' ? 'production' : 'sandbox';
+const CURRENCY = 'USD';
 
 const propTypes = {};
 
@@ -51,14 +51,14 @@ class Checkout extends React.Component {
   };
 
   onSuccess = payment => {
-    console.log('Successful payment!');
+    console.log('Successful payment!', payment);
     this.setState({ toConfirmation: true });
   };
 
-  onError = error => console.log('Erroneous payment OR failed to load script!');
+  onError = error => console.log('Erroneous payment OR failed to load script!', error);
 
   onCancel = data => {
-    console.log('Cancelled payment!');
+    console.log('Cancelled payment!', data);
   };
 
   render() {
@@ -72,10 +72,10 @@ class Checkout extends React.Component {
         <Content.Seperator />
         <form onSubmit={this.handleSubmit}>
           <FONTS.H2>Your basic information</FONTS.H2>
-          <InputText label="First name" placeholder="Jane" onChange={this.handleChangeFirstName} />
-          <InputText label="Last name" placeholder="Doe" onChange={this.handleChangeLastName} />
+          <InputText label="First name*" placeholder="Jane" onChange={this.handleChangeFirstName} />
+          <InputText label="Last name*" placeholder="Doe" onChange={this.handleChangeLastName} />
           <InputText
-            label="Email"
+            label="Email*"
             placeholder="JaneDoe@email.com"
             onChange={this.handleChangeEmail}
           />
@@ -84,8 +84,8 @@ class Checkout extends React.Component {
             client={CLIENT}
             env={ENV}
             commit={true}
-            currency="USD"
-            total={0.01}
+            currency={CURRENCY}
+            total={this.state.price}
             onSuccess={this.onSuccess}
             onError={this.onError}
             onCancel={this.onCancel}
