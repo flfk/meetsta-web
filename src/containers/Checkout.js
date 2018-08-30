@@ -3,6 +3,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 import Content from '../components/Content';
+import validate from '../utils/Validators';
 import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import PayPalCheckout from '../components/PayPalCheckout';
@@ -22,8 +23,11 @@ const defaultProps = {};
 class Checkout extends React.Component {
   state = {
     firstName: '',
+    firstNameErrMsg: 'testing',
     lastName: '',
+    lastNameErrMsg: '',
     email: '',
+    emailErrMsg: '',
     price: 19.99,
     toConfirmation: false
   };
@@ -38,6 +42,7 @@ class Checkout extends React.Component {
 
   handleChangeEmail = event => {
     this.setState({ email: event.target.value });
+    console.log(validate.isEmail(this.state.email));
   };
 
   handleChange = event => {
@@ -61,8 +66,22 @@ class Checkout extends React.Component {
     console.log('Cancelled payment!', data);
   };
 
+  areInputsValid = () => {
+    const { firstName, lastName, email } = this.state;
+  };
+
   render() {
     if (this.state.toConfirmation === true) return <Redirect to="/confirmation" />;
+
+    const {
+      firstName,
+      firstNameErrMsg,
+      lastName,
+      lastNameErrMsg,
+      email,
+      emailErrMsg,
+      price
+    } = this.state;
 
     return (
       <Content>
@@ -72,12 +91,26 @@ class Checkout extends React.Component {
         <Content.Seperator />
         <form onSubmit={this.handleSubmit}>
           <FONTS.H2>Your basic information</FONTS.H2>
-          <InputText label="First name*" placeholder="Jane" onChange={this.handleChangeFirstName} />
-          <InputText label="Last name*" placeholder="Doe" onChange={this.handleChangeLastName} />
+          <InputText
+            label="First name*"
+            placeholder="Jane"
+            onChange={this.handleChangeFirstName}
+            value={firstName}
+            errMsg={firstNameErrMsg}
+          />
+          <InputText
+            label="Last name*"
+            placeholder="Doe"
+            onChange={this.handleChangeLastName}
+            value={lastName}
+            errMsg={lastNameErrMsg}
+          />
           <InputText
             label="Email*"
             placeholder="JaneDoe@email.com"
             onChange={this.handleChangeEmail}
+            value={email}
+            errMsg={emailErrMsg}
           />
           <Content.Seperator />
           <PayPalCheckout
@@ -85,7 +118,7 @@ class Checkout extends React.Component {
             env={ENV}
             commit={true}
             currency={CURRENCY}
-            total={this.state.price}
+            total={price}
             onSuccess={this.onSuccess}
             onError={this.onError}
             onCancel={this.onCancel}

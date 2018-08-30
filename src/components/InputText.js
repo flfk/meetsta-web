@@ -7,7 +7,9 @@ import COLORS from '../utils/Colors';
 const propTypes = {
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  placeholder: PropTypes.string
+  value: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  erroMsg: PropTypes.string.isRequired
 };
 
 const defaultProps = {
@@ -39,11 +41,34 @@ const Input = styled.input`
   }
 `;
 
+const ErrLabel = Label.extend`
+  color: ${COLORS.error.primary};
+  margin-bottom: 16px;
+  font-weight: bold;
+`;
+
+const ErrInput = Input.extend`
+  border: 1px solid ${COLORS.error.primary};
+  background-color: ${COLORS.error.light};
+  margin-bottom: 8px;
+`;
+
 const InputText = props => {
+  const { value, label, onChange, placeholder, errMsg } = props;
+
+  const input = errMsg ? (
+    <div>
+      <ErrInput type="text" onChange={onChange} placeholder={placeholder} value={value} />
+      <ErrLabel>{errMsg}</ErrLabel>
+    </div>
+  ) : (
+    <Input type="text" onChange={onChange} placeholder={placeholder} value={value} />
+  );
+
   return (
     <div>
-      <Label>{props.label}</Label>
-      <Input type="text" onChange={props.onChange} placeholder={props.placeholder} />
+      <Label>{label}</Label>
+      {input}
     </div>
   );
 };
