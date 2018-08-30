@@ -8,8 +8,8 @@ import PayPalCheckout from '../components/PayPalCheckout';
 import StripeCardElement from '../components/StripeCardElement';
 
 const CLIENT = {
-  sandbox: 'xxxXXX',
-  production: 'xxxXXX'
+  sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
+  production: process.env.REACT_APP_PAYPAL_CLIENT_ID_PRODUCTION
 };
 
 const ENV = process.env.NODE_ENV === 'production' ? 'production' : 'sandbox';
@@ -48,11 +48,11 @@ class Checkout extends React.Component {
     );
   };
 
-  onSuccess = payment => console.log('Successful payment!', payment);
+  onSuccess = payment => console.log('Successful payment!');
 
-  onError = error => console.log('Erroneous payment OR failed to load script!', error);
+  onError = error => console.log('Erroneous payment OR failed to load script!');
 
-  onCancel = data => console.log('Cancelled payment!', data);
+  onCancel = data => console.log('Cancelled payment!');
 
   render() {
     return (
@@ -71,15 +71,12 @@ class Checkout extends React.Component {
             onChange={this.handleChangeEmail}
           />
           <Content.Seperator />
-          <FONTS.H2>Your payment information</FONTS.H2>
-          <StripeCardElement />
-          <Content.Divider />
           <PayPalCheckout
             client={CLIENT}
             env={ENV}
             commit={true}
             currency="USD"
-            total={100}
+            total={0.01}
             onSuccess={this.onSuccess}
             onError={this.onError}
             onCancel={this.onCancel}

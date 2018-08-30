@@ -28,7 +28,7 @@ class PaypalButton extends React.Component {
     }
   }
 
-  componentWillRecieveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const { isScriptLoaded, isScriptLoadSucceed } = nextProps;
 
     const isLoadedPreviouslyWasnt =
