@@ -30,22 +30,35 @@ class Checkout extends React.Component {
     lastNameErrMsg: '',
     email: '',
     emailErrMsg: '',
-    isFormValid: false,
     price: 19.99,
     toConfirmation: false
   };
 
   handleChangeFirstName = event => {
     this.setState({ firstName: event.target.value });
+    if (validator.isEmpty(event.target.value)) {
+      this.setState({ firstNameErrMsg: 'First name is required.' });
+    } else {
+      this.setState({ firstNameErrMsg: '' });
+    }
   };
 
   handleChangeLastName = event => {
     this.setState({ lastName: event.target.value });
+    if (validator.isEmpty(event.target.value)) {
+      this.setState({ lastNameErrMsg: 'Last name is required.' });
+    } else {
+      this.setState({ lastNameErrMsg: '' });
+    }
   };
 
   handleChangeEmail = event => {
     this.setState({ email: event.target.value });
-    console.log(validate.isEmail(this.state.email));
+    if (!validator.isEmail(event.target.value)) {
+      this.setState({ emailErrMsg: 'Please enter a valid email.' });
+    } else {
+      this.setState({ emailErrMsg: '' });
+    }
   };
 
   handleChange = event => {
@@ -103,27 +116,33 @@ class Checkout extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <FONTS.H2>Your basic information</FONTS.H2>
           <InputText
-            label="First name*"
+            label="First name"
             placeholder="Jane"
             onChange={this.handleChangeFirstName}
             value={firstName}
             errMsg={firstNameErrMsg}
           />
           <InputText
-            label="Last name*"
+            label="Last name"
             placeholder="Doe"
             onChange={this.handleChangeLastName}
             value={lastName}
             errMsg={lastNameErrMsg}
           />
           <InputText
-            label="Email*"
+            label="Email"
             placeholder="JaneDoe@email.com"
             onChange={this.handleChangeEmail}
             value={email}
             errMsg={emailErrMsg}
           />
           <Content.Seperator />
+
+          <p id="msg">Please check the checkbox</p>
+          <label>
+            <input id="check" type="checkbox" /> Check here to continue
+          </label>
+
           <PayPalCheckout
             client={CLIENT}
             env={ENV}

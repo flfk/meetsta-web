@@ -58,6 +58,40 @@ class PaypalButton extends React.Component {
         ]
       });
 
+    const isValid = () => document.querySelector('#check').checked;
+
+    function onChangeCheckbox(handler) {
+      document.querySelector('#check').addEventListener('change', handler);
+    }
+
+    function toggleValidationMessage() {
+      document.querySelector('#msg').style.display = isValid() ? 'block' : 'none';
+    }
+
+    const toggleButton = actions => {
+      console.log(`XX isValid value is ${isValid()}`);
+      isValid() ? actions.enable() : actions.disable();
+    };
+
+    const setUpValidation = actions => {
+      console.log('XX SET UP VALIDATION');
+
+      toggleValidationMessage();
+
+      toggleButton(actions);
+
+      onChangeCheckbox(function() {
+        toggleButton(actions);
+      });
+    };
+
+    const validate = actions => {
+      console.log('XX VALIDATING');
+
+      setUpValidation(actions);
+      // return actions.disable();
+    };
+
     const onAuthorize = (data, actions) =>
       actions.payment.execute().then(() => {
         const payment = {
@@ -84,6 +118,10 @@ class PaypalButton extends React.Component {
             onCancel={onCancel}
             onError={onError}
             style={{ size: 'responsive' }}
+            validate={validate}
+            onClick={() => {
+              toggleValidationMessage();
+            }}
           />
         )}
       </div>
