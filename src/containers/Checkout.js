@@ -31,8 +31,6 @@ class Checkout extends React.Component {
     lastNameErrMsg: '',
     email: '',
     emailErrMsg: '',
-    isChecked: false,
-    isCheckedErrMsg: '',
     price: 19.99,
     showPayment: false,
     toConfirmation: false
@@ -92,13 +90,6 @@ class Checkout extends React.Component {
       this.setState({ emailErrMsg: '' });
     }
 
-    if (!isChecked) {
-      this.setState({ isCheckedErrMsg: 'You need to agree to continue' });
-      isFormValid = false;
-    } else {
-      this.setState({ isCheckedErrMsg: '' });
-    }
-
     return isFormValid;
   };
 
@@ -119,16 +110,11 @@ class Checkout extends React.Component {
       lastNameErrMsg,
       email,
       emailErrMsg,
-      isChecked,
-      isCheckedErrMsg,
       price,
       toConfirmation
     } = this.state;
 
     if (toConfirmation === true) return <Redirect to="/confirmation" />;
-
-    const isCheckedErrLabel =
-      isCheckedErrMsg === '' ? null : <InputText.ErrLabel>{isCheckedErrMsg}</InputText.ErrLabel>;
 
     const basicInformation = (
       <div>
@@ -154,16 +140,6 @@ class Checkout extends React.Component {
           value={email}
           errMsg={emailErrMsg}
         />
-        <label>
-          <input
-            type="checkbox"
-            onChange={this.handleCheck}
-            defaultChecked={this.state.isChecked}
-          />{' '}
-          I agree to the terms and conditions and privacy policy
-        </label>
-        {isCheckedErrLabel}
-        <Content.Spacing />
         <Btn primary onClick={this.toPayment}>
           Proceed to Payment
         </Btn>
@@ -174,6 +150,11 @@ class Checkout extends React.Component {
       <div>
         <FONTS.H2>Payment</FONTS.H2>
         <p>Total price ${price}</p>
+        <Content.Spacing />
+        <FONTS.P>
+          By clicking on Checkout, you agree with Meetsta's Terms and Conditions of Use and Privacy
+          Policy.
+        </FONTS.P>
         <Content.Spacing />
         <PayPalCheckout
           client={CLIENT}
