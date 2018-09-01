@@ -30,17 +30,13 @@ class Checkout extends React.Component {
     lastNameErrMsg: '',
     email: '',
     emailErrMsg: '',
+    isFormValid: false,
     price: 19.99,
     toConfirmation: false
   };
 
   handleChangeFirstName = event => {
     this.setState({ firstName: event.target.value });
-    if (validator.isEmpty(event.target.value)) {
-      this.setState({ firstNameErrMsg: 'First name is required.' });
-    } else {
-      this.setState({ firstNameErrMsg: '' });
-    }
   };
 
   handleChangeLastName = event => {
@@ -82,20 +78,21 @@ class Checkout extends React.Component {
     console.log('Cancelled payment!', data);
   };
 
-  areInputsValid = () => {
-    const { firstName, lastName, email } = this.state;
-    if (validator.isEmpty(firstName)) {
-      this.setState({ firstNameErrMsg: 'First name is required.' });
-      return false;
-    } else {
-      this.setState({ firstNameErrMsg: '' });
+  validateForm = () => {
+    console.log('XX VALIDATE FORM CALLED');
+    this.setState({ state: this.state });
+
+    if (this.state.firstName === '') {
+      this.setState({ isFormValid: false });
+      console.log('XX FORM INVALID');
+      return;
     }
-    return true;
+
+    console.log('XX FORM IS VALID');
+    this.setState({ isFormValid: true });
   };
 
   render() {
-    if (this.state.toConfirmation === true) return <Redirect to="/confirmation" />;
-
     const {
       firstName,
       firstNameErrMsg,
@@ -103,8 +100,42 @@ class Checkout extends React.Component {
       lastNameErrMsg,
       email,
       emailErrMsg,
-      price
+      isFormValid,
+      price,
+      toConfirmation
     } = this.state;
+
+    if (toConfirmation === true) return <Redirect to="/confirmation" />;
+
+    const payPalBtn = isFormValid ? (
+      <PayPalCheckout
+        client={CLIENT}
+        env={ENV}
+        commit={true}
+        currency={CURRENCY}
+        total={price}
+        onSuccess={this.onSuccess}
+        onError={this.onError}
+        onCancel={this.onCancel}
+        validateForm={this.validateForm}
+        isFormValid={true}
+      />
+    ) : (
+      <div>
+        <PayPalCheckout
+          client={CLIENT}
+          env={ENV}
+          commit={true}
+          currency={CURRENCY}
+          total={price}
+          onSuccess={this.onSuccess}
+          onError={this.onError}
+          onCancel={this.onCancel}
+          validateForm={this.validateForm}
+          isFormValid={false}
+        />
+      </div>
+    );
 
     return (
       <Content>
@@ -113,47 +144,36 @@ class Checkout extends React.Component {
         <ImageTicket />
         <FONTS.P>1 x Andre Swiley Meet & Greet, 26 August 2018, 14:00 - 16:00 PDT</FONTS.P>
         <Content.Seperator />
-        <form onSubmit={this.handleSubmit}>
-          <FONTS.H2>Your basic information</FONTS.H2>
-          <InputText
-            label="First name"
-            placeholder="Jane"
-            onChange={this.handleChangeFirstName}
-            value={firstName}
-            errMsg={firstNameErrMsg}
-          />
-          <InputText
-            label="Last name"
-            placeholder="Doe"
-            onChange={this.handleChangeLastName}
-            value={lastName}
-            errMsg={lastNameErrMsg}
-          />
-          <InputText
-            label="Email"
-            placeholder="JaneDoe@email.com"
-            onChange={this.handleChangeEmail}
-            value={email}
-            errMsg={emailErrMsg}
-          />
-          <Content.Seperator />
 
-          <p id="msg">Please check the checkbox</p>
-          <label>
-            <input id="check" type="checkbox" /> Check here to continue
-          </label>
+        <FONTS.H2>Your basic information</FONTS.H2>
+        <InputText
+          label="First name"
+          placeholder="Jane"
+          onChange={this.handleChangeFirstName}
+          value={firstName}
+          errMsg={firstNameErrMsg}
+        />
+        <InputText
+          label="Last name"
+          placeholder="Doe"
+          onChange={this.handleChangeLastName}
+          value={lastName}
+          errMsg={lastNameErrMsg}
+        />
+        <InputText
+          label="Email"
+          placeholder="JaneDoe@email.com"
+          onChange={this.handleChangeEmail}
+          value={email}
+          errMsg={emailErrMsg}
+        />
+        <Content.Seperator />
 
-          <PayPalCheckout
-            client={CLIENT}
-            env={ENV}
-            commit={true}
-            currency={CURRENCY}
-            total={price}
-            onSuccess={this.onSuccess}
-            onError={this.onError}
-            onCancel={this.onCancel}
-          />
-        </form>
+        <p id="msg">Please check the checkbox</p>
+        <label>
+          <input id="check" type="checkbox" /> Check here to continue
+        </label>
+        {payPalBtn}
       </Content>
     );
   }
