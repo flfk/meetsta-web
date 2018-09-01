@@ -76,6 +76,8 @@ const InputText = props => {
   );
 };
 
+InputText.ErrLabel = ErrLabel;
+
 InputText.propTypes = propTypes;
 InputText.defaultProps = defaultProps;
 

@@ -7,7 +7,6 @@ import DARKEN from '../utils/Darken';
 
 const Btn = styled.button`
   width: 100%;
-  max-width: 292px;
   margin: 8px;
   padding: 1em 1em;
   background-color: transparent;

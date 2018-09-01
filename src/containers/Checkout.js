@@ -31,9 +31,10 @@ class Checkout extends React.Component {
     lastNameErrMsg: '',
     email: '',
     emailErrMsg: '',
-    isFormValid: '',
+    isChecked: false,
+    isCheckedErrMsg: '',
     price: 19.99,
-    showPayment: true,
+    showPayment: false,
     toConfirmation: false
   };
 
@@ -49,8 +50,9 @@ class Checkout extends React.Component {
     this.setState({ email: event.target.value });
   };
 
-  handleChange = event => {
-    this.setState({ textInput: event.target.value });
+  handleCheck = event => {
+    const updatedState = { isChecked: !this.state.isChecked };
+    this.setState(updatedState);
   };
 
   onSuccess = payment => {
@@ -65,9 +67,7 @@ class Checkout extends React.Component {
   };
 
   validateForm = () => {
-    console.log('XX VALIDATE FORM CALLED');
-
-    const { firstName, lastName, email } = this.state;
+    const { firstName, lastName, email, isChecked } = this.state;
 
     let isFormValid = true;
 
@@ -92,6 +92,13 @@ class Checkout extends React.Component {
       this.setState({ emailErrMsg: '' });
     }
 
+    if (!isChecked) {
+      this.setState({ isCheckedErrMsg: 'You need to agree to continue' });
+      isFormValid = false;
+    } else {
+      this.setState({ isCheckedErrMsg: '' });
+    }
+
     return isFormValid;
   };
 
@@ -112,15 +119,20 @@ class Checkout extends React.Component {
       lastNameErrMsg,
       email,
       emailErrMsg,
+      isChecked,
+      isCheckedErrMsg,
       price,
       toConfirmation
     } = this.state;
 
     if (toConfirmation === true) return <Redirect to="/confirmation" />;
 
+    const isCheckedErrLabel =
+      isCheckedErrMsg === '' ? null : <InputText.ErrLabel>{isCheckedErrMsg}</InputText.ErrLabel>;
+
     const basicInformation = (
       <div>
-        <FONTS.H2>Your basic information</FONTS.H2>
+        <FONTS.H2>Basic information</FONTS.H2>
         <InputText
           label="First name"
           placeholder="Jane"
@@ -143,9 +155,15 @@ class Checkout extends React.Component {
           errMsg={emailErrMsg}
         />
         <label>
-          <input id="check" type="checkbox" /> I agree to the terms and conditions and privacy
-          policy
+          <input
+            type="checkbox"
+            onChange={this.handleCheck}
+            defaultChecked={this.state.isChecked}
+          />{' '}
+          I agree to the terms and conditions and privacy policy
         </label>
+        {isCheckedErrLabel}
+        <Content.Spacing />
         <Btn primary onClick={this.toPayment}>
           Proceed to Payment
         </Btn>
@@ -154,8 +172,8 @@ class Checkout extends React.Component {
 
     const payment = (
       <div>
-        <FONTS.H2>Payment Method</FONTS.H2>
-        <p>Total price $20</p>
+        <FONTS.H2>Payment</FONTS.H2>
+        <p>Total price ${price}</p>
         <Content.Spacing />
         <PayPalCheckout
           client={CLIENT}
