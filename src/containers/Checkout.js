@@ -37,15 +37,11 @@ class Checkout extends React.Component {
 
   handleChangeFirstName = event => {
     this.setState({ firstName: event.target.value });
+    this.validateForm();
   };
 
   handleChangeLastName = event => {
     this.setState({ lastName: event.target.value });
-    if (validator.isEmpty(event.target.value)) {
-      this.setState({ lastNameErrMsg: 'Last name is required.' });
-    } else {
-      this.setState({ lastNameErrMsg: '' });
-    }
   };
 
   handleChangeEmail = event => {
@@ -59,12 +55,6 @@ class Checkout extends React.Component {
 
   handleChange = event => {
     this.setState({ textInput: event.target.value });
-  };
-
-  handleSubmit = event => {
-    alert(
-      `name is ${this.state.firstName} ${this.state.lastName} and email is ${this.state.email}`
-    );
   };
 
   onSuccess = payment => {
@@ -89,7 +79,12 @@ class Checkout extends React.Component {
     }
 
     console.log('XX FORM IS VALID');
+    this.setState({ firstNameErrMsg: '' });
     this.setState({ isFormValid: true });
+  };
+
+  showErrorMessages = () => {
+    this.setState({ firstNameErrMsg: 'First name required' });
   };
 
   render() {
@@ -131,7 +126,7 @@ class Checkout extends React.Component {
           onSuccess={this.onSuccess}
           onError={this.onError}
           onCancel={this.onCancel}
-          validateForm={this.validateForm}
+          validateForm={this.showErrorMessages}
           isFormValid={false}
         />
       </div>

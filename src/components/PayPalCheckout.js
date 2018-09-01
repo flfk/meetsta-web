@@ -105,7 +105,7 @@ class PaypalButton extends React.Component {
             onError={onError}
             style={{ size: 'responsive' }}
             validate={setUpValidation}
-            onClick={() => validateForm()}
+            onClick={validateForm}
           />
         )}
       </div>
