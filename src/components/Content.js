@@ -41,6 +41,11 @@ const Label = styled.label`
   display: inline-block;
 `;
 
+const Spacing = styled.div`
+  width: 100%;
+  height: 32px;
+`;
+
 const Divider = () => {
   return (
     <FlexContainer>
@@ -54,5 +59,6 @@ const Divider = () => {
 Content.Event = Event;
 Content.Seperator = Seperator;
 Content.Divider = Divider;
+Content.Spacing = Spacing;
 
 export default Content;

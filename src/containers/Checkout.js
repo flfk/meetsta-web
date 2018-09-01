@@ -3,6 +3,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import validator from 'validator';
 
+import Btn from '../components/Btn';
 import Content from '../components/Content';
 import validate from '../utils/Validators';
 import FONTS from '../utils/Fonts';
@@ -30,14 +31,14 @@ class Checkout extends React.Component {
     lastNameErrMsg: '',
     email: '',
     emailErrMsg: '',
-    isFormValid: false,
+    isFormValid: '',
     price: 19.99,
+    showPayment: true,
     toConfirmation: false
   };
 
   handleChangeFirstName = event => {
     this.setState({ firstName: event.target.value });
-    this.validateForm();
   };
 
   handleChangeLastName = event => {
@@ -46,11 +47,6 @@ class Checkout extends React.Component {
 
   handleChangeEmail = event => {
     this.setState({ email: event.target.value });
-    if (!validator.isEmail(event.target.value)) {
-      this.setState({ emailErrMsg: 'Please enter a valid email.' });
-    } else {
-      this.setState({ emailErrMsg: '' });
-    }
   };
 
   handleChange = event => {
@@ -70,21 +66,42 @@ class Checkout extends React.Component {
 
   validateForm = () => {
     console.log('XX VALIDATE FORM CALLED');
-    this.setState({ state: this.state });
 
-    if (this.state.firstName === '') {
-      this.setState({ isFormValid: false });
-      console.log('XX FORM INVALID');
-      return;
+    const { firstName, lastName, email } = this.state;
+
+    let isFormValid = true;
+
+    if (firstName === '') {
+      this.setState({ firstNameErrMsg: 'First name required.' });
+      isFormValid = false;
+    } else {
+      this.setState({ firstNameErrMsg: '' });
     }
 
-    console.log('XX FORM IS VALID');
-    this.setState({ firstNameErrMsg: '' });
-    this.setState({ isFormValid: true });
+    if (lastName === '') {
+      this.setState({ lastNameErrMsg: 'Last name required.' });
+      isFormValid = false;
+    } else {
+      this.setState({ lastNameErrMsg: '' });
+    }
+
+    if (!validator.isEmail(email)) {
+      this.setState({ emailErrMsg: 'Valid email address required.' });
+      isFormValid = false;
+    } else {
+      this.setState({ emailErrMsg: '' });
+    }
+
+    return isFormValid;
   };
 
-  showErrorMessages = () => {
-    this.setState({ firstNameErrMsg: 'First name required' });
+  toBasicInformation = () => this.setState({ showPayment: false });
+
+  toPayment = () => {
+    console.log('XX' + this.validateForm);
+    if (this.validateForm()) {
+      this.setState({ showPayment: true });
+    }
   };
 
   render() {
@@ -95,51 +112,14 @@ class Checkout extends React.Component {
       lastNameErrMsg,
       email,
       emailErrMsg,
-      isFormValid,
       price,
       toConfirmation
     } = this.state;
 
     if (toConfirmation === true) return <Redirect to="/confirmation" />;
 
-    const payPalBtn = isFormValid ? (
-      <PayPalCheckout
-        client={CLIENT}
-        env={ENV}
-        commit={true}
-        currency={CURRENCY}
-        total={price}
-        onSuccess={this.onSuccess}
-        onError={this.onError}
-        onCancel={this.onCancel}
-        validateForm={this.validateForm}
-        isFormValid={true}
-      />
-    ) : (
+    const basicInformation = (
       <div>
-        <PayPalCheckout
-          client={CLIENT}
-          env={ENV}
-          commit={true}
-          currency={CURRENCY}
-          total={price}
-          onSuccess={this.onSuccess}
-          onError={this.onError}
-          onCancel={this.onCancel}
-          validateForm={this.showErrorMessages}
-          isFormValid={false}
-        />
-      </div>
-    );
-
-    return (
-      <Content>
-        <FONTS.H1>Checkout</FONTS.H1>
-        <FONTS.H2>Your order</FONTS.H2>
-        <ImageTicket />
-        <FONTS.P>1 x Andre Swiley Meet & Greet, 26 August 2018, 14:00 - 16:00 PDT</FONTS.P>
-        <Content.Seperator />
-
         <FONTS.H2>Your basic information</FONTS.H2>
         <InputText
           label="First name"
@@ -162,13 +142,50 @@ class Checkout extends React.Component {
           value={email}
           errMsg={emailErrMsg}
         />
-        <Content.Seperator />
-
-        <p id="msg">Please check the checkbox</p>
         <label>
-          <input id="check" type="checkbox" /> Check here to continue
+          <input id="check" type="checkbox" /> I agree to the terms and conditions and privacy
+          policy
         </label>
-        {payPalBtn}
+        <Btn primary onClick={this.toPayment}>
+          Proceed to Payment
+        </Btn>
+      </div>
+    );
+
+    const payment = (
+      <div>
+        <FONTS.H2>Payment Method</FONTS.H2>
+        <p>Total price $20</p>
+        <Content.Spacing />
+        <PayPalCheckout
+          client={CLIENT}
+          env={ENV}
+          commit={true}
+          currency={CURRENCY}
+          total={price}
+          onSuccess={this.onSuccess}
+          onError={this.onError}
+          onCancel={this.onCancel}
+          validateForm={this.validateForm}
+          isFormValid={true}
+        />
+        <Content.Spacing />
+        <Btn.Tertiary onClick={this.toBasicInformation}>
+          {'< Back to basic information'}
+        </Btn.Tertiary>
+      </div>
+    );
+
+    const checkoutComponent = this.state.showPayment ? payment : basicInformation;
+
+    return (
+      <Content>
+        <FONTS.H1>Checkout</FONTS.H1>
+        <FONTS.H2>Your order</FONTS.H2>
+        <ImageTicket />
+        <FONTS.P>1 x Andre Swiley Meet & Greet, 26 August 2018, 14:00 - 16:00 PDT</FONTS.P>
+        <Content.Seperator />
+        {checkoutComponent}
       </Content>
     );
   }

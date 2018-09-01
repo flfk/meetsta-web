@@ -56,19 +56,22 @@ const ErrInput = Input.extend`
 const InputText = props => {
   const { value, label, onChange, placeholder, errMsg } = props;
 
-  const input = errMsg ? (
-    <div>
-      <ErrInput type="text" onChange={onChange} placeholder={placeholder} value={value} />
-      <ErrLabel>{errMsg}</ErrLabel>
-    </div>
-  ) : (
-    <Input type="text" onChange={onChange} placeholder={placeholder} value={value} />
-  );
+  // const input = errMsg ? (
+  //   <div>
+  //     <ErrInput type="text" onChange={onChange} placeholder={placeholder} value={value} />
+  //     <ErrLabel>{errMsg}</ErrLabel>
+  //   </div>
+  // ) : (
+  //   <Input type="text" onChange={onChange} placeholder={placeholder} value={value} />
+  // );
+
+  const errLabel = errMsg ? <ErrLabel>{errMsg}</ErrLabel> : null;
 
   return (
     <div>
       <Label>{label}</Label>
-      {input}
+      <Input type="text" onChange={onChange} placeholder={placeholder} value={value} />
+      {errLabel}
     </div>
   );
 };

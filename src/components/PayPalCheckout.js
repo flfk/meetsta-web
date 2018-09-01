@@ -69,15 +69,6 @@ class PaypalButton extends React.Component {
         ]
       });
 
-    const toggleButton = actions => {
-      isFormValid ? actions.enable() : actions.disable();
-    };
-
-    const setUpValidation = actions => {
-      console.log('XX SET UP VALIDATION');
-      toggleButton(actions);
-    };
-
     const onAuthorize = (data, actions) =>
       actions.payment.execute().then(() => {
         const payment = {
@@ -104,8 +95,6 @@ class PaypalButton extends React.Component {
             onCancel={onCancel}
             onError={onError}
             style={{ size: 'responsive' }}
-            validate={setUpValidation}
-            onClick={validateForm}
           />
         )}
       </div>
