@@ -13,6 +13,8 @@ import FooterSticky from '../components/FooterSticky';
 import WrapperEventImage from '../components/WrapperEventImage';
 import WrapperProfileImage from '../components/WrapperProfileImage';
 
+import db from '../data/firebase';
+
 const propTypes = {};
 
 const defaultProps = {};
@@ -29,6 +31,13 @@ const TICKETS = 25;
 class Events extends React.Component {
   constructor() {
     super();
+  }
+
+  componentDidMount() {
+    db.collection('events')
+      .doc('OU6FjdRhTH6k7I8URpUS')
+      .get()
+      .then(doc => console.log(doc.data()));
   }
 
   render() {

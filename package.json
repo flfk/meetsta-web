@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "dotenv": "^6.0.0",
+    "firebase": "^5.4.2",
     "paypal-checkout": "^4.0.215",
     "react": "^16.4.1",
     "react-async-script-loader": "^0.3.0",

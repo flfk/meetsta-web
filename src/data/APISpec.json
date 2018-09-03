@@ -27,16 +27,18 @@
         "idOrganiser": "string",
         "organiserName": "string",
         "organiserIGHandle": "string",
+        "eventImgURL": "string",
         "title": "string",
         "description": "string",
         "dateStart": "date",
         "dateEnd": "date",
-        "price": "float",
         // Tickets collection
         "tickets" : {
           // Ticket documents
-          "ticketName" : {
+          "ticketRef" : {
+            "name": "string",
             "description": "string",
+            "lengthMins": "int",
             "price": "bool",
             "total": "int",
             "sold": "int"
