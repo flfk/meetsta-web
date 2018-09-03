@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { FaDollarSign, FaCalendar, FaClock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import moment from 'moment-timezone';
 
 import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
@@ -22,20 +23,21 @@ const defaultProps = {};
 // const INFLUENCER_NAME = 'Andre Swiley';
 // const INFLUENCER_URL = 'https://www.instagram.com/andreswilley/';
 // const EVENT_IMAGE_URL = '/EventImageAndreSwilley.jpg';
-const DATE = '26 August';
-const TIME = '15:00 to 18:00 PDT';
-const PRICE = 20.0;
-const LENGTH = 5;
-const TICKETS = 25;
+// const DATE = '26 August';
+// const TIME = '15:00 to 18:00 PDT';
+// const PRICE = 20.0;
+// const LENGTH = 5;
+// const TICKETS = 25;
 
 class Events extends React.Component {
   state = {
     title: '',
+    description: '',
     influencerName: '',
     influencerIGHandle: '',
-    eventImgUrl: 'testImgUrl',
-    dateStart: 'testStartDate',
-    dateEnd: 'testEndDate',
+    eventImgUrl: '',
+    date: '',
+    timeRange: '',
     tickets: [],
     priceMin: '',
     priceMax: ''
@@ -74,15 +76,23 @@ class Events extends React.Component {
     const tickets = await this.getTicketData();
     const formattedData = {};
     formattedData.title = event.title;
+    formattedData.description = event.description;
     formattedData.influencerName = event.organiserName;
     formattedData.influencerIGHandle = event.organiserIGHandle;
     formattedData.eventImgUrl = event.eventImgUrl;
-    formattedData.dateStart = event.dateStart;
-    formattedData.dateEnd = event.dateEnd;
+    // formattedData.dateStart = event.dateStart;
+    // formattedData.dateEnd = event.dateEnd;
+    formattedData.timeRange = this.getTimeRange(event.dateStart, event.dateEnd);
+    formattedData.date = this.getDate(event.dateStart);
     formattedData.tickets = tickets;
     formattedData.priceMin = this.getPriceMin(tickets);
     formattedData.priceMax = this.getPriceMax(tickets);
     this.setState({ ...formattedData });
+
+    // const zoneName = moment.tz.guess();
+    // console.log(zoneName);
+    // const timezone = moment.tz(zoneName).zoneAbbr();
+    // console.log(timezone);
   };
 
   getIGLink = () => `https://www.instagram.com/${this.state.influencerIGHandle}`;
@@ -105,13 +115,28 @@ class Events extends React.Component {
     return priceMax;
   };
 
+  getTimeRange = (dateStart, dateEnd) => {
+    const timeStart = moment(dateStart, 'X').format('LT');
+    const timeEnd = moment(dateEnd, 'X').format('LT');
+    const utcOffset =
+      moment()
+        .tz(moment.tz.guess())
+        // .format('zz');
+        .utcOffset() / 60;
+    const timeRange = `${timeStart} - ${timeEnd} (UTC ${utcOffset})`;
+    return timeRange;
+  };
+
+  getDate = dateStart => moment(dateStart, 'X').format('MMMM Do');
+
   render() {
     const {
       title,
+      description,
       influencerName,
       eventImgUrl,
-      dateStart,
-      dateEnd,
+      timeRange,
+      date,
       priceMin,
       priceMax
     } = this.state;
@@ -137,11 +162,11 @@ class Events extends React.Component {
           <br />
 
           <FONTS.P>
-            <FaCalendar /> {DATE}
+            <FaCalendar /> {date}
           </FONTS.P>
 
           <FONTS.P>
-            <FaClock /> {TIME}
+            <FaClock /> {timeRange}
           </FONTS.P>
 
           <FONTS.P>
@@ -150,9 +175,7 @@ class Events extends React.Component {
 
           <br />
 
-          <FONTS.P>Your chance to meet {influencerName} in a 1-on-1 video call.</FONTS.P>
-          <FONTS.P>Only {TICKETS} tickets available.</FONTS.P>
-          <FONTS.P>{PRICE} per ticket - get yours now so you don't miss out!</FONTS.P>
+          <FONTS.P>{description}</FONTS.P>
         </Content.Event>
         <FooterSticky>
           <Link to="/Checkout">
