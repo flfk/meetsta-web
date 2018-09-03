@@ -2,6 +2,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import validator from 'validator';
+import queryString from 'query-string';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
@@ -94,7 +95,14 @@ class Checkout extends React.Component {
     }
   };
 
+  getEventId = () => {
+    const params = queryString.parse(this.props.location.search);
+    return params.eid;
+  };
+
   render() {
+    console.log(this.getEventId());
+
     const {
       firstName,
       firstNameErrMsg,

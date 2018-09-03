@@ -16,21 +16,15 @@ import WrapperProfileImage from '../components/WrapperProfileImage';
 
 import db from '../data/firebase';
 
+const EVENT_ID = 'OU6FjdRhTH6k7I8URpUS';
+
 const propTypes = {};
 
 const defaultProps = {};
 
-// const INFLUENCER_NAME = 'Andre Swiley';
-// const INFLUENCER_URL = 'https://www.instagram.com/andreswilley/';
-// const EVENT_IMAGE_URL = '/EventImageAndreSwilley.jpg';
-// const DATE = '26 August';
-// const TIME = '15:00 to 18:00 PDT';
-// const PRICE = 20.0;
-// const LENGTH = 5;
-// const TICKETS = 25;
-
 class Events extends React.Component {
   state = {
+    eventID: '',
     title: '',
     description: '',
     influencerName: '',
@@ -63,7 +57,7 @@ class Events extends React.Component {
     const tickets = [];
     const ticketsRef = db
       .collection('events')
-      .doc('OU6FjdRhTH6k7I8URpUS')
+      .doc(EVENT_ID)
       .collection('tickets');
     const snapshot = await ticketsRef.get();
     snapshot.forEach(ticket => tickets.push(ticket.data()));
@@ -75,13 +69,12 @@ class Events extends React.Component {
     const event = await this.getEventData();
     const tickets = await this.getTicketData();
     const formattedData = {};
+    formattedData.eventID = EVENT_ID;
     formattedData.title = event.title;
     formattedData.description = event.description;
     formattedData.influencerName = event.organiserName;
     formattedData.influencerIGHandle = event.organiserIGHandle;
     formattedData.eventImgUrl = event.eventImgUrl;
-    // formattedData.dateStart = event.dateStart;
-    // formattedData.dateEnd = event.dateEnd;
     formattedData.timeRange = this.getTimeRange(event.dateStart, event.dateEnd);
     formattedData.date = this.getDate(event.dateStart);
     formattedData.tickets = tickets;
@@ -127,7 +120,7 @@ class Events extends React.Component {
     return timeRange;
   };
 
-  getDate = dateStart => moment(dateStart, 'X').format('MMMM Do');
+  getDate = dateStart => moment(dateStart, 'X').format('dddd, MMM Do, YYYY');
 
   render() {
     const {
@@ -178,7 +171,7 @@ class Events extends React.Component {
           <FONTS.P>{description}</FONTS.P>
         </Content.Event>
         <FooterSticky>
-          <Link to="/Checkout">
+          <Link to={{ pathname: '/Checkout', search: `?eid=${EVENT_ID}`, testProp: EVENT_ID }}>
             <Btn primary>Get Ticket</Btn>
           </Link>
           <Btn secondary>Send Info To Parents</Btn>
