@@ -1,15 +1,13 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import validator from 'validator';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
-import validate from '../utils/Validators';
 import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import PayPalCheckout from '../components/PayPalCheckout';
-import PayPalInvalid from '../components/PayPalInvalid';
 import ImageTicket from '../components/ImageTicket';
 
 const CLIENT = {
@@ -48,11 +46,6 @@ class Checkout extends React.Component {
     this.setState({ email: event.target.value });
   };
 
-  handleCheck = event => {
-    const updatedState = { isChecked: !this.state.isChecked };
-    this.setState(updatedState);
-  };
-
   onSuccess = payment => {
     console.log('Successful payment!', payment);
     this.setState({ toConfirmation: true });
@@ -65,7 +58,7 @@ class Checkout extends React.Component {
   };
 
   validateForm = () => {
-    const { firstName, lastName, email, isChecked } = this.state;
+    const { firstName, lastName, email } = this.state;
 
     let isFormValid = true;
 
@@ -96,7 +89,6 @@ class Checkout extends React.Component {
   toBasicInformation = () => this.setState({ showPayment: false });
 
   toPayment = () => {
-    console.log('XX' + this.validateForm);
     if (this.validateForm()) {
       this.setState({ showPayment: true });
     }
@@ -111,7 +103,8 @@ class Checkout extends React.Component {
       email,
       emailErrMsg,
       price,
-      toConfirmation
+      toConfirmation,
+      showPayment
     } = this.state;
 
     if (toConfirmation === true) return <Redirect to="/confirmation" />;
@@ -175,7 +168,7 @@ class Checkout extends React.Component {
       </div>
     );
 
-    const checkoutComponent = this.state.showPayment ? payment : basicInformation;
+    const checkoutComponent = showPayment ? payment : basicInformation;
 
     return (
       <Content>

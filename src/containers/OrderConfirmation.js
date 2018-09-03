@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import React from 'react';
 
 import Content from '../components/Content';
@@ -10,14 +10,20 @@ const URL_APPEARIN_ANDROID = 'https://play.google.com/store/apps/details?id=appe
 const CONTACT_EMAIL = 'contact.meetsta@gmail.com';
 const CONTACT_INSTAGRAM = 'https://www.instagram.com/meetsta.app/';
 
-const propTypes = {};
+// const propTypes = {};
 
-const defaultProps = {};
+// const defaultProps = {};
 
 const OrderConfirmation = props => {
   return (
     <Content>
-      <FONTS.H1>👏 Thanks for getting a ticket!</FONTS.H1>
+      <FONTS.H1>
+        {' '}
+        <span role="img" aria-label="Clapping">
+          👏
+        </span>{' '}
+        Thanks for getting a ticket!
+      </FONTS.H1>
       <FONTS.P>1 x Andre Swiley Meet & Greet, 26 August 2018, 14:00 - 16:00 PDT</FONTS.P>
       <FONTS.P>
         Your order confirmation number is <strong>123456.</strong>
@@ -46,9 +52,8 @@ const OrderConfirmation = props => {
     </Content>
   );
 };
-<a href="" />;
 
-OrderConfirmation.propTypes = propTypes;
-OrderConfirmation.defaultProps = defaultProps;
+// OrderConfirmation.propTypes = propTypes;
+// OrderConfirmation.defaultProps = defaultProps;
 
 export default OrderConfirmation;

@@ -19,9 +19,9 @@ const propTypes = {};
 
 const defaultProps = {};
 
-const INFLUENCER_NAME = 'Andre Swiley';
-const INFLUENCER_URL = 'https://www.instagram.com/andreswilley/';
-const EVENT_IMAGE_URL = '/EventImageAndreSwilley.jpg';
+// const INFLUENCER_NAME = 'Andre Swiley';
+// const INFLUENCER_URL = 'https://www.instagram.com/andreswilley/';
+// const EVENT_IMAGE_URL = '/EventImageAndreSwilley.jpg';
 const DATE = '26 August';
 const TIME = '15:00 to 18:00 PDT';
 const PRICE = 20.0;
@@ -29,33 +29,108 @@ const LENGTH = 5;
 const TICKETS = 25;
 
 class Events extends React.Component {
-  constructor() {
-    super();
-  }
+  state = {
+    title: '',
+    influencerName: '',
+    influencerIGHandle: '',
+    eventImgUrl: 'testImgUrl',
+    dateStart: 'testStartDate',
+    dateEnd: 'testEndDate',
+    tickets: [],
+    priceMin: '',
+    priceMax: ''
+  };
 
   componentDidMount() {
-    db.collection('events')
-      .doc('OU6FjdRhTH6k7I8URpUS')
-      .get()
-      .then(doc => console.log(doc.data()));
+    try {
+      this.setFormattedData();
+    } catch (err) {
+      console.error('Error in getting documents', err);
+    }
   }
 
+  getEventData = async () => {
+    const eventRef = db.collection('events').doc('OU6FjdRhTH6k7I8URpUS');
+    const snapshot = await eventRef.get();
+    const data = await snapshot.data();
+    // console.log(data);
+    return data;
+  };
+
+  getTicketData = async () => {
+    const tickets = [];
+    const ticketsRef = db
+      .collection('events')
+      .doc('OU6FjdRhTH6k7I8URpUS')
+      .collection('tickets');
+    const snapshot = await ticketsRef.get();
+    snapshot.forEach(ticket => tickets.push(ticket.data()));
+    return tickets;
+    // console.log(tickets);
+  };
+
+  setFormattedData = async () => {
+    const event = await this.getEventData();
+    const tickets = await this.getTicketData();
+    const formattedData = {};
+    formattedData.title = event.title;
+    formattedData.influencerName = event.organiserName;
+    formattedData.influencerIGHandle = event.organiserIGHandle;
+    formattedData.eventImgUrl = event.eventImgUrl;
+    formattedData.dateStart = event.dateStart;
+    formattedData.dateEnd = event.dateEnd;
+    formattedData.tickets = tickets;
+    formattedData.priceMin = this.getPriceMin(tickets);
+    formattedData.priceMax = this.getPriceMax(tickets);
+    this.setState({ ...formattedData });
+  };
+
+  getIGLink = () => `https://www.instagram.com/${this.state.influencerIGHandle}`;
+
+  getPriceMin = tickets => {
+    let priceMin = 'N/A';
+    if (tickets) {
+      const reducer = (min, ticket) => (min < ticket.price ? min : ticket.price);
+      priceMin = tickets.reduce(reducer, tickets[0].price);
+    }
+    return priceMin;
+  };
+
+  getPriceMax = tickets => {
+    let priceMax = 'N/A';
+    if (tickets) {
+      const reducer = (max, ticket) => (max > ticket.price ? max : ticket.price);
+      priceMax = tickets.reduce(reducer, tickets[0].price);
+    }
+    return priceMax;
+  };
+
   render() {
+    const {
+      title,
+      influencerName,
+      eventImgUrl,
+      dateStart,
+      dateEnd,
+      priceMin,
+      priceMax
+    } = this.state;
+
     return (
       <div>
         <Content.Event>
-          <FONTS.H1>{INFLUENCER_NAME} - Meet & Greet Online</FONTS.H1>
+          <FONTS.H1>{title}</FONTS.H1>
 
           <WrapperEventImage>
-            <img src={EVENT_IMAGE} alt={INFLUENCER_NAME} />
+            <img src={EVENT_IMAGE} alt={influencerName} />
           </WrapperEventImage>
 
-          <FONTS.A href={INFLUENCER_URL}>
+          <FONTS.A href={this.getIGLink()}>
             <BtnProfile>
               <WrapperProfileImage>
-                <img src={PROFILE_IMAGE} alt={INFLUENCER_NAME} />
+                <img src={PROFILE_IMAGE} alt={influencerName} />
               </WrapperProfileImage>{' '}
-              <FONTS.A>{INFLUENCER_NAME}</FONTS.A>
+              {influencerName}
             </BtnProfile>
           </FONTS.A>
 
@@ -70,12 +145,12 @@ class Events extends React.Component {
           </FONTS.P>
 
           <FONTS.P>
-            <FaDollarSign /> {PRICE} per {LENGTH} mins
+            <FaDollarSign /> ${priceMin} - ${priceMax}
           </FONTS.P>
 
           <br />
 
-          <FONTS.P>Your chance to meet {INFLUENCER_NAME} in a 1-on-1 video call.</FONTS.P>
+          <FONTS.P>Your chance to meet {influencerName} in a 1-on-1 video call.</FONTS.P>
           <FONTS.P>Only {TICKETS} tickets available.</FONTS.P>
           <FONTS.P>{PRICE} per ticket - get yours now so you don't miss out!</FONTS.P>
         </Content.Event>
