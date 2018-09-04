@@ -6,7 +6,8 @@ import DARKEN from '../utils/Darken';
 // Default is secondary, for primary button use <Btn primary></Btn>
 
 const Btn = styled.button`
-  width: 100%;
+  // width: 100%;
+  flex: 1 0 0;
   margin: 8px;
   padding: 1em 1em;
   background-color: transparent;

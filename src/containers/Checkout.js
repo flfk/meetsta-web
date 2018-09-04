@@ -115,7 +115,7 @@ class Checkout extends React.Component {
       showPayment
     } = this.state;
 
-    if (toConfirmation === true) return <Redirect to="/confirmation" />;
+    if (toConfirmation === true) return <Redirect push to="/confirmation" />;
 
     const basicInformation = (
       <div>
@@ -179,14 +179,14 @@ class Checkout extends React.Component {
     const checkoutComponent = showPayment ? payment : basicInformation;
 
     return (
-      <Content>
+      <Content.PaddingBottom>
         <FONTS.H1>Checkout</FONTS.H1>
         <FONTS.H2>Your order</FONTS.H2>
         <ImageTicket />
         <FONTS.P>1 x Andre Swiley Meet & Greet, 26 August 2018, 14:00 - 16:00 PDT</FONTS.P>
         <Content.Seperator />
         {checkoutComponent}
-      </Content>
+      </Content.PaddingBottom>
     );
   }
 }

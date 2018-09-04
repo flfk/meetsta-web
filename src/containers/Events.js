@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FaDollarSign, FaCalendar, FaClock } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
 
 import Btn from '../components/Btn';
@@ -34,7 +34,8 @@ class Events extends React.Component {
     timeRange: '',
     tickets: [],
     priceMin: '',
-    priceMax: ''
+    priceMax: '',
+    toCheckout: false
   };
 
   componentDidMount() {
@@ -122,6 +123,8 @@ class Events extends React.Component {
 
   getDate = dateStart => moment(dateStart, 'X').format('dddd, MMM Do, YYYY');
 
+  toCheckout = () => this.setState({ toCheckout: true });
+
   render() {
     const {
       title,
@@ -131,12 +134,15 @@ class Events extends React.Component {
       timeRange,
       date,
       priceMin,
-      priceMax
+      priceMax,
+      toCheckout
     } = this.state;
+
+    if (toCheckout === true) return <Redirect push to="/checkout" />;
 
     return (
       <div>
-        <Content.Event>
+        <Content.PaddingBottom>
           <FONTS.H1>{title}</FONTS.H1>
 
           <WrapperEventImage>
@@ -169,12 +175,14 @@ class Events extends React.Component {
           <br />
 
           <FONTS.P>{description}</FONTS.P>
-        </Content.Event>
+        </Content.PaddingBottom>
         <FooterSticky>
-          <Link to={{ pathname: '/Checkout', search: `?eid=${EVENT_ID}`, testProp: EVENT_ID }}>
-            <Btn primary>Get Ticket</Btn>
-          </Link>
-          <Btn secondary>Send Info To Parents</Btn>
+          <Content.Row>
+            <Btn secondary>Send Info To Parents</Btn>
+            <Btn onClick={this.toCheckout} primary>
+              Get Tickets
+            </Btn>
+          </Content.Row>
         </FooterSticky>
       </div>
     );

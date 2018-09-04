@@ -8,10 +8,16 @@ const Content = styled.div`
   flex-direction: column;
   width: 600px;
   margin: auto;
-  padding-bottom: 168px;
 `;
 
-const Event = Content.extend`
+const Row = Content.extend`
+  display: flex;
+  flex-direction: row;
+  flex-basis: 600px;
+  margin: auto;
+`;
+
+const PaddingBottom = Content.extend`
   padding-bottom: 168px;
 `;
 
@@ -56,7 +62,8 @@ const Divider = () => {
   );
 };
 
-Content.Event = Event;
+Content.Row = Row;
+Content.PaddingBottom = PaddingBottom;
 Content.Seperator = Seperator;
 Content.Divider = Divider;
 Content.Spacing = Spacing;
