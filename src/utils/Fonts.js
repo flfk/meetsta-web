@@ -44,6 +44,14 @@ const P = styled.span`
   margin: 8px 0;
 `;
 
+const ERROR = styled.p`
+  font-size: ${FONT_SIZES.p};
+  font-family: ${FONT_FAMILY.body};
+  font-weight: bold;
+  color: red;
+  margin: 8px 0;
+`;
+
 const A = styled.a`
   font-size: ${FONT_SIZES.p};
   text-decoration: none;
@@ -61,6 +69,7 @@ FONTS.LOGO = LOGO;
 FONTS.H1 = H1;
 FONTS.H2 = H2;
 FONTS.P = P;
+FONTS.ERROR = ERROR;
 FONTS.A = A;
 
 export default FONTS;

@@ -32,15 +32,20 @@ class Checkout extends React.Component {
     email: '',
     emailErrMsg: '',
     price: 19.99,
-    showPayment: false,
-    toConfirmation: false
+    checkoutStep: 0,
+    ticketSelected: '',
+    toConfirmation: false,
+    paypalErrorMsg: ''
   };
 
   componentDidMount() {
-    // get the event ID
-    // retrieve the data
-    // load the data
+    const eventData = this.getEventData();
+    this.setState({ ...eventData });
   }
+
+  getEventData = () => {
+    return this.props.location.state.eventData;
+  };
 
   handleChangeFirstName = event => {
     this.setState({ firstName: event.target.value });
@@ -59,10 +64,18 @@ class Checkout extends React.Component {
     this.setState({ toConfirmation: true });
   };
 
-  onError = error => console.log('Erroneous payment OR failed to load script!', error);
+  onError = error => {
+    this.setState({
+      paypalErrorMsg: 'Oops, looks like there was a PayPal payment error. Please try again.'
+    });
+    console.error('Erroneous payment OR failed to load script', error);
+  };
 
   onCancel = data => {
-    console.log('Cancelled payment!', data);
+    this.setState({
+      paypalErrorMsg: 'Ooops, looks like the Paypal payment was cancelled. Please try again.'
+    });
+    console.error('Cancelled payment', data);
   };
 
   validateForm = () => {
@@ -94,11 +107,9 @@ class Checkout extends React.Component {
     return isFormValid;
   };
 
-  toBasicInformation = () => this.setState({ showPayment: false });
-
   toPayment = () => {
     if (this.validateForm()) {
-      this.setState({ showPayment: true });
+      this.setState({ checkoutStep: 2 });
     }
   };
 
@@ -107,9 +118,17 @@ class Checkout extends React.Component {
     return params.eventID;
   };
 
-  render() {
-    console.log(this.getEventId());
+  handleTicketSelect = event => {
+    this.setState({ ticketSelected: event.target.id, checkoutStep: 1 });
+  };
 
+  handlePrevious = () => {
+    this.setState(PrevState => {
+      return { checkoutStep: PrevState.checkoutStep - 1 };
+    });
+  };
+
+  render() {
     const {
       firstName,
       firstNameErrMsg,
@@ -119,26 +138,31 @@ class Checkout extends React.Component {
       emailErrMsg,
       price,
       toConfirmation,
-      showPayment
+      checkoutStep,
+      tickets,
+      paypalErrorMsg
     } = this.state;
 
     if (toConfirmation === true) return <Redirect push to="/confirmation" />;
 
+    let ticketCards = <div />;
+    if (tickets) {
+      ticketCards = tickets.map(ticket => (
+        <TicketCard
+          ticketID={ticket.ticketID}
+          name={ticket.name}
+          description={ticket.description}
+          lengthMins={ticket.lengthMins}
+          price={ticket.price}
+          onSelect={this.handleTicketSelect}
+        />
+      ));
+    }
+
     const selectTicket = (
       <div>
         <FONTS.H2>Select Ticket</FONTS.H2>
-        <TicketCard
-          name={'NameTest'}
-          description={'DescriptionTest'}
-          lengthMins={10}
-          price={15.0}
-        />
-        <TicketCard
-          name={'NameTest'}
-          description={'DescriptionTest'}
-          lengthMins={10}
-          price={15.0}
-        />
+        {ticketCards}
       </div>
     );
 
@@ -166,11 +190,14 @@ class Checkout extends React.Component {
           value={email}
           errMsg={emailErrMsg}
         />
+        <Btn.Tertiary onClick={this.handlePrevious}>{'< Select different ticket'}</Btn.Tertiary>
         <Btn primary onClick={this.toPayment}>
           Proceed to Payment
         </Btn>
       </div>
     );
+
+    const paypalError = paypalErrorMsg ? <FONTS.ERROR>{paypalErrorMsg}</FONTS.ERROR> : null;
 
     const payment = (
       <div>
@@ -182,6 +209,7 @@ class Checkout extends React.Component {
           Policy.
         </FONTS.P>
         <Content.Spacing />
+        {paypalError}
         <PayPalCheckout
           client={CLIENT}
           env={ENV}
@@ -195,19 +223,25 @@ class Checkout extends React.Component {
           isFormValid={true}
         />
         <Content.Spacing />
-        <Btn.Tertiary onClick={this.toBasicInformation}>
-          {'< Back to basic information'}
-        </Btn.Tertiary>
+        <Btn.Tertiary onClick={this.handlePrevious}>{'< Back to basic information'}</Btn.Tertiary>
       </div>
     );
 
-    const checkoutComponent = showPayment ? payment : basicInformation;
+    let checkoutComponent = <div />;
+    switch (checkoutStep) {
+      case 2:
+        checkoutComponent = payment;
+        break;
+      case 1:
+        checkoutComponent = basicInformation;
+        break;
+      default:
+        checkoutComponent = selectTicket;
+    }
 
     return (
       <Content.PaddingBottom>
         <FONTS.H1>Checkout</FONTS.H1>
-        <Content.Seperator />
-        {selectTicket}
         <Content.Seperator />
         {checkoutComponent}
       </Content.PaddingBottom>

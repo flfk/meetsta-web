@@ -60,9 +60,9 @@ class Events extends React.Component {
       .doc(EVENT_ID)
       .collection('tickets');
     const snapshot = await ticketsRef.get();
-    snapshot.forEach(ticket => tickets.push(ticket.data()));
-    return tickets;
+    snapshot.forEach(ticket => tickets.push({ ticketID: ticket.id, ...ticket.data() }));
     // console.log(tickets);
+    return tickets;
   };
 
   setFormattedData = async () => {
@@ -137,7 +137,16 @@ class Events extends React.Component {
     } = this.state;
 
     if (toCheckout === true)
-      return <Redirect push to={{ pathname: '/checkout', search: `?eventID=${EVENT_ID}` }} />;
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: '/checkout',
+            search: `?eventID=${EVENT_ID}`,
+            state: { eventData: this.state }
+          }}
+        />
+      );
 
     return (
       <div>

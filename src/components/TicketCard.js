@@ -9,10 +9,12 @@ import FONTS from '../utils/Fonts';
 import TicketImage from '../components/TicketImage';
 
 const propTypes = {
+  ticketID: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   lengthMins: PropTypes.number.isRequired,
-  price: PropTypes.number.isRequired
+  price: PropTypes.number.isRequired,
+  onSelect: PropTypes.func.isRequired
 };
 
 const defaultProps = {};
@@ -29,7 +31,7 @@ const Container = styled.div`
 `;
 
 const Ticket = props => {
-  const { name, description, lengthMins, price } = props;
+  const { ticketID, name, description, lengthMins, price, onSelect } = props;
 
   return (
     <Container>
@@ -40,7 +42,9 @@ const Ticket = props => {
       <FONTS.P>{description}</FONTS.P>
       <Content.Seperator />
       <div>
-        <Btn.Full primary>Get Ticket</Btn.Full>
+        <Btn.Full primary onClick={onSelect} id={ticketID}>
+          Get Ticket
+        </Btn.Full>
       </div>
     </Container>
   );
