@@ -112,12 +112,11 @@ class Events extends React.Component {
   getTimeRange = (dateStart, dateEnd) => {
     const timeStart = moment(dateStart, 'X').format('LT');
     const timeEnd = moment(dateEnd, 'X').format('LT');
-    const utcOffset =
-      moment()
-        .tz(moment.tz.guess())
-        // .format('zz');
-        .utcOffset() / 60;
-    const timeRange = `${timeStart} - ${timeEnd} (UTC ${utcOffset})`;
+    const timezone = moment()
+      .tz(moment.tz.guess())
+      .format('zz');
+    // .utcOffset() / 60;
+    const timeRange = `${timeStart} - ${timeEnd} (${timezone})`;
     return timeRange;
   };
 
@@ -138,7 +137,8 @@ class Events extends React.Component {
       toCheckout
     } = this.state;
 
-    if (toCheckout === true) return <Redirect push to="/checkout" />;
+    if (toCheckout === true)
+      return <Redirect push to={{ pathname: '/checkout', search: `?eventID=${EVENT_ID}` }} />;
 
     return (
       <div>

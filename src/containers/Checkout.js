@@ -8,8 +8,9 @@ import Btn from '../components/Btn';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
-import PayPalCheckout from '../components/PayPalCheckout';
 import ImageTicket from '../components/ImageTicket';
+import PayPalCheckout from '../components/PayPalCheckout';
+import Ticket from '../components/Ticket';
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -24,6 +25,7 @@ const defaultProps = {};
 
 class Checkout extends React.Component {
   state = {
+    eventID: '',
     firstName: '',
     firstNameErrMsg: '',
     lastName: '',
@@ -34,6 +36,12 @@ class Checkout extends React.Component {
     showPayment: false,
     toConfirmation: false
   };
+
+  componentDidMount() {
+    // get the event ID
+    // retrieve the data
+    // load the data
+  }
 
   handleChangeFirstName = event => {
     this.setState({ firstName: event.target.value });
@@ -97,7 +105,7 @@ class Checkout extends React.Component {
 
   getEventId = () => {
     const params = queryString.parse(this.props.location.search);
-    return params.eid;
+    return params.eventID;
   };
 
   render() {
@@ -116,6 +124,12 @@ class Checkout extends React.Component {
     } = this.state;
 
     if (toConfirmation === true) return <Redirect push to="/confirmation" />;
+
+    const selectTicket = (
+      <div>
+        <Ticket name={'NameTest'} description={'DescriptionTest'} lengthMins={10} price={15.0} />
+      </div>
+    );
 
     const basicInformation = (
       <div>
@@ -181,9 +195,9 @@ class Checkout extends React.Component {
     return (
       <Content.PaddingBottom>
         <FONTS.H1>Checkout</FONTS.H1>
-        <FONTS.H2>Your order</FONTS.H2>
         <ImageTicket />
-        <FONTS.P>1 x Andre Swiley Meet & Greet, 26 August 2018, 14:00 - 16:00 PDT</FONTS.P>
+        <Content.Seperator />
+        {selectTicket}
         <Content.Seperator />
         {checkoutComponent}
       </Content.PaddingBottom>
