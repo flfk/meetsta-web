@@ -51,6 +51,12 @@ const Tertiary = styled.button`
   }
 `;
 
+const Full = Btn.extend`
+  width: 100%;
+  margin: 0;
+`;
+
 Btn.Tertiary = Tertiary;
+Btn.Full = Full;
 
 export default Btn;

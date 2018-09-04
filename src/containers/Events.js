@@ -11,8 +11,7 @@ import EVENT_IMAGE from '../assets/eventImages/EventImageAndreSwilley.jpg';
 import PROFILE_IMAGE from '../assets/profileImages/ProfileImageAndreSwilley.jpg';
 import FONTS from '../utils/Fonts';
 import FooterSticky from '../components/FooterSticky';
-import WrapperEventImage from '../components/WrapperEventImage';
-import WrapperProfileImage from '../components/WrapperProfileImage';
+import Wrapper from '../components/Wrapper';
 
 import db from '../data/firebase';
 
@@ -145,15 +144,15 @@ class Events extends React.Component {
         <Content.PaddingBottom>
           <FONTS.H1>{title}</FONTS.H1>
 
-          <WrapperEventImage>
+          <Wrapper.EventImage>
             <img src={EVENT_IMAGE} alt={influencerName} />
-          </WrapperEventImage>
+          </Wrapper.EventImage>
 
           <FONTS.A href={this.getIGLink()}>
             <BtnProfile>
-              <WrapperProfileImage>
+              <Wrapper.ProfileImage>
                 <img src={PROFILE_IMAGE} alt={influencerName} />
-              </WrapperProfileImage>{' '}
+              </Wrapper.ProfileImage>{' '}
               {influencerName}
             </BtnProfile>
           </FONTS.A>

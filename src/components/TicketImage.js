@@ -9,12 +9,11 @@ const propTypes = {};
 const defaultProps = {};
 
 const WrapperEventImage = styled.div`
-  height: 280px;
-  width: 584px;
+  height: 200px;
+  width: 344px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
   border-radius: 5px;
-
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
   img {
     height: 100%;
     width: 100%;

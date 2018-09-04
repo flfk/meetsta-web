@@ -6,7 +6,7 @@ import Btn from '../Btn';
 import COLORS from '../../utils/Colors';
 import FONTS from '../../utils/Fonts';
 import StripeIcon from '../../assets/StripeIcon.png';
-import WrapperStripeIcon from '../WrapperStripeIcon';
+import Wrapper from '../Wrapper';
 import './Styles.CardElement.css';
 
 const Style = {
@@ -35,9 +35,9 @@ const CardElementStyled = props => {
         </Btn>
       </Link>
       <a href="https://stripe.com/">
-        <WrapperStripeIcon>
+        <Wrapper.StripeIcon>
           <img src={StripeIcon} alt="Powered by Stripe" />
-        </WrapperStripeIcon>
+        </Wrapper.StripeIcon>
       </a>
     </div>
   );

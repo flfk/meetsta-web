@@ -8,9 +8,8 @@ import Btn from '../components/Btn';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
-import ImageTicket from '../components/ImageTicket';
 import PayPalCheckout from '../components/PayPalCheckout';
-import Ticket from '../components/Ticket';
+import TicketCard from '../components/TicketCard';
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -127,7 +126,19 @@ class Checkout extends React.Component {
 
     const selectTicket = (
       <div>
-        <Ticket name={'NameTest'} description={'DescriptionTest'} lengthMins={10} price={15.0} />
+        <FONTS.H2>Select Ticket</FONTS.H2>
+        <TicketCard
+          name={'NameTest'}
+          description={'DescriptionTest'}
+          lengthMins={10}
+          price={15.0}
+        />
+        <TicketCard
+          name={'NameTest'}
+          description={'DescriptionTest'}
+          lengthMins={10}
+          price={15.0}
+        />
       </div>
     );
 
@@ -195,7 +206,6 @@ class Checkout extends React.Component {
     return (
       <Content.PaddingBottom>
         <FONTS.H1>Checkout</FONTS.H1>
-        <ImageTicket />
         <Content.Seperator />
         {selectTicket}
         <Content.Seperator />
