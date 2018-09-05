@@ -12,6 +12,8 @@ import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';
 import TicketCard from '../components/TicketCard';
 
+import db from '../data/firebase';
+
 const FEE = 1.65;
 
 const CLIENT = {
@@ -28,10 +30,10 @@ const defaultProps = {};
 class Checkout extends React.Component {
   state = {
     eventID: '',
-    firstName: '',
-    firstNameErrMsg: '',
-    lastName: '',
-    lastNameErrMsg: '',
+    nameFirst: '',
+    nameFirstErrMsg: '',
+    nameLast: '',
+    nameLastErrMsg: '',
     email: '',
     emailErrMsg: '',
     price: 19.99,
@@ -51,23 +53,46 @@ class Checkout extends React.Component {
   };
 
   handleChangeFirstName = event => {
-    this.setState({ firstName: event.target.value });
+    this.setState({ nameFirst: event.target.value });
   };
 
   handleChangeLastName = event => {
-    this.setState({ lastName: event.target.value });
+    this.setState({ nameLast: event.target.value });
   };
 
   handleChangeEmail = event => {
     this.setState({ email: event.target.value });
   };
 
-  createTicket = () => {
+  createTicketOrder = payPalPaymentID => {
     console.log('creatingTicket');
+    const { eventID, ticketSelected, nameFirst, nameLast, email } = this.state;
+    const ticket = {
+      eventID,
+      name: ticketSelected.name,
+      description: ticketSelected.description,
+      purchasePrice: ticketSelected.price,
+      purchaseFees: FEE,
+      purchaseNameFirst: nameFirst,
+      purchaseNameLast: nameLast,
+      purchaseEmail: email,
+      orderNumMeetsta: 1111,
+      payPalPaymentID,
+      userID: '',
+      hasStarted: false
+    };
+    this.addTicketDoc(ticket);
+    console.log(ticket);
+  };
+
+  addTicketDoc = async ticket => {
+    const ref = await db.collection('tickets').add(ticket);
+    console.log('Added ticket order with ID:', ref.id);
   };
 
   onSuccess = payment => {
     console.log('Successful payment!', payment);
+    this.createTicketOrder(payment.paymentID);
     this.setState({ toConfirmation: true });
   };
 
@@ -86,22 +111,22 @@ class Checkout extends React.Component {
   };
 
   validateForm = () => {
-    const { firstName, lastName, email } = this.state;
+    const { nameFirst, nameLast, email } = this.state;
 
     let isFormValid = true;
 
-    if (firstName === '') {
-      this.setState({ firstNameErrMsg: 'First name required.' });
+    if (nameFirst === '') {
+      this.setState({ nameFirstErrMsg: 'First name required.' });
       isFormValid = false;
     } else {
-      this.setState({ firstNameErrMsg: '' });
+      this.setState({ nameFirstErrMsg: '' });
     }
 
-    if (lastName === '') {
-      this.setState({ lastNameErrMsg: 'Last name required.' });
+    if (nameLast === '') {
+      this.setState({ nameLastErrMsg: 'Last name required.' });
       isFormValid = false;
     } else {
-      this.setState({ lastNameErrMsg: '' });
+      this.setState({ nameLastErrMsg: '' });
     }
 
     if (!validator.isEmail(email)) {
@@ -139,10 +164,10 @@ class Checkout extends React.Component {
 
   render() {
     const {
-      firstName,
-      firstNameErrMsg,
-      lastName,
-      lastNameErrMsg,
+      nameFirst,
+      nameFirstErrMsg,
+      nameLast,
+      nameLastErrMsg,
       email,
       emailErrMsg,
       price,
@@ -183,15 +208,15 @@ class Checkout extends React.Component {
           label="First name"
           placeholder="Jane"
           onChange={this.handleChangeFirstName}
-          value={firstName}
-          errMsg={firstNameErrMsg}
+          value={nameFirst}
+          errMsg={nameFirstErrMsg}
         />
         <InputText
           label="Last name"
           placeholder="Doe"
           onChange={this.handleChangeLastName}
-          value={lastName}
-          errMsg={lastNameErrMsg}
+          value={nameLast}
+          errMsg={nameLastErrMsg}
         />
         <InputText
           label="Email"
@@ -225,7 +250,7 @@ class Checkout extends React.Component {
           env={ENV}
           commit={true}
           currency={CURRENCY}
-          total={price}
+          total={ticketSelected.price + FEE}
           onSuccess={this.onSuccess}
           onError={this.onError}
           onCancel={this.onCancel}
