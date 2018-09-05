@@ -58,7 +58,7 @@
       },
     },
     // Tickets collection with ticket documents
-    "Tickets": {
+    "Orders": {
       // Ticket documents
       "idTicket": {
         "idEvent": "string",
@@ -71,7 +71,8 @@
         "orderNumMeetsta": "string",
         "orderNumPayPal": "string",
         "associatedIdUser": "string",
-        "timeslot": "date",
+        "timeslotStart": "date",
+        "timeslotEnd": "date",
         "hasStarted": "bool",
       }
     }

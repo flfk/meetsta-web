@@ -9,7 +9,10 @@ import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import PayPalCheckout from '../components/PayPalCheckout';
+import PaymentSummary from '../components/PaymentSummary';
 import TicketCard from '../components/TicketCard';
+
+const FEE = 1.65;
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -33,7 +36,7 @@ class Checkout extends React.Component {
     emailErrMsg: '',
     price: 19.99,
     checkoutStep: 0,
-    ticketSelected: '',
+    ticketSelected: {},
     toConfirmation: false,
     paypalErrorMsg: ''
   };
@@ -57,6 +60,10 @@ class Checkout extends React.Component {
 
   handleChangeEmail = event => {
     this.setState({ email: event.target.value });
+  };
+
+  createTicket = () => {
+    console.log('creatingTicket');
   };
 
   onSuccess = payment => {
@@ -119,7 +126,9 @@ class Checkout extends React.Component {
   };
 
   handleTicketSelect = event => {
-    this.setState({ ticketSelected: event.target.id, checkoutStep: 1 });
+    const { tickets } = this.state;
+    const ticketSelected = tickets.filter(ticket => ticket.ticketID === event.target.id)[0];
+    this.setState({ ticketSelected, checkoutStep: 1 });
   };
 
   handlePrevious = () => {
@@ -140,6 +149,7 @@ class Checkout extends React.Component {
       toConfirmation,
       checkoutStep,
       tickets,
+      ticketSelected,
       paypalErrorMsg
     } = this.state;
 
@@ -202,7 +212,7 @@ class Checkout extends React.Component {
     const payment = (
       <div>
         <FONTS.H2>Payment</FONTS.H2>
-        <p>Total price ${price}</p>
+        <PaymentSummary item={ticketSelected.name} price={ticketSelected.price} fees={FEE} />
         <Content.Spacing />
         <FONTS.P>
           By clicking on Checkout, you agree with Meetsta's Terms and Conditions of Use and Privacy
