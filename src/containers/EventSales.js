@@ -39,7 +39,7 @@ class EventSales extends React.Component {
     snapshot.forEach(ticket => {
       ticketsSold += 1;
       const data = ticket.data();
-      revenue += data.purchasePrice * (1 - MEETSTA_COMISSION);
+      revenue += data.price * (1 - MEETSTA_COMISSION);
       // console.log(ticketsSold, ' ', revenue);
     });
     this.setState({ ticketsSold, revenue });

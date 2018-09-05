@@ -37,12 +37,10 @@ class Checkout extends React.Component {
     nameLastErrMsg: '',
     email: '',
     emailErrMsg: '',
-    price: 19.99,
     checkoutStep: 0,
     ticketSelected: {},
     orderID: null,
     ticketOrdered: null,
-    orderNum: null,
     paid: false,
     toConfirmation: false,
     paypalErrorMsg: ''
@@ -57,9 +55,7 @@ class Checkout extends React.Component {
     this.toConfirmation();
   }
 
-  getEventData = () => {
-    return this.props.location.state.eventData;
-  };
+  getEventData = () => this.props.location.state.eventData;
 
   handleChangeFirstName = event => {
     this.setState({ nameFirst: event.target.value });
@@ -98,7 +94,7 @@ class Checkout extends React.Component {
   };
 
   getNewOrderNum = async () => {
-    const lastOrderRef = db.collection('tickets').doc('lastOrder');
+    const lastOrderRef = db.collection('utils').doc('lastOrder');
     const snapshot = await lastOrderRef.get();
     const data = await snapshot.data();
     const newOrderNum = data.orderNum + 1;
@@ -112,8 +108,8 @@ class Checkout extends React.Component {
   };
 
   toConfirmation = () => {
-    const { ticketOrdered, paid } = this.state;
-    if (typeof this.state.orderID === 'string' && paid) {
+    const { orderID, paid } = this.state;
+    if (typeof orderID === 'string' && paid) {
       this.setState({ toConfirmation: true });
     }
   };
@@ -180,7 +176,7 @@ class Checkout extends React.Component {
   handleTicketSelect = event => {
     const { tickets } = this.state;
     const ticketSelected = tickets.filter(ticket => ticket.ticketID === event.target.id)[0];
-    this.setState({ ticketSelected: ticketSelected, checkoutStep: 1 });
+    this.setState({ ticketSelected, checkoutStep: 1 });
   };
 
   handlePrevious = () => {
@@ -198,13 +194,14 @@ class Checkout extends React.Component {
       nameLastErrMsg,
       email,
       emailErrMsg,
-      price,
       toConfirmation,
       checkoutStep,
       tickets,
       ticketSelected,
       ticketOrdered,
-      paypalErrorMsg
+      orderID,
+      paypalErrorMsg,
+      paid
     } = this.state;
 
     if (toConfirmation === true)
@@ -213,7 +210,7 @@ class Checkout extends React.Component {
           push
           to={{
             pathname: '/confirmation',
-            search: `?eventID=${eventID}&orderID=${this.state.orderID}`,
+            search: `?eventID=${eventID}&orderID=${orderID}`,
             state: { ticket: ticketOrdered }
           }}
         />
@@ -274,7 +271,7 @@ class Checkout extends React.Component {
 
     const paypalError = paypalErrorMsg ? <FONTS.ERROR>{paypalErrorMsg}</FONTS.ERROR> : null;
 
-    const payPalButton = this.state.paid ? null : (
+    const payPalButton = paid ? null : (
       <PayPalCheckout
         client={CLIENT}
         env={ENV}
