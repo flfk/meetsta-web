@@ -49,7 +49,6 @@ class Events extends React.Component {
     const eventRef = db.collection('events').doc('OU6FjdRhTH6k7I8URpUS');
     const snapshot = await eventRef.get();
     const data = await snapshot.data();
-    // console.log(data);
     return data;
   };
 
@@ -61,7 +60,6 @@ class Events extends React.Component {
       .collection('tickets');
     const snapshot = await ticketsRef.get();
     snapshot.forEach(ticket => tickets.push({ ticketID: ticket.id, ...ticket.data() }));
-    // console.log(tickets);
     return tickets;
   };
 
@@ -81,23 +79,7 @@ class Events extends React.Component {
       priceMin: this.getPriceMin(tickets),
       priceMax: this.getPriceMax(tickets)
     };
-    // formattedData.eventID = EVENT_ID;
-    // formattedData.title = event.title;
-    // formattedData.description = event.description;
-    // formattedData.influencerName = event.organiserName;
-    // formattedData.influencerIGHandle = event.organiserIGHandle;
-    // formattedData.eventImgUrl = event.eventImgUrl;
-    // formattedData.timeRange = this.getTimeRange(event.dateStart, event.dateEnd);
-    // formattedData.date = this.getDate(event.dateStart);
-    // formattedData.tickets = tickets;
-    // formattedData.priceMin = this.getPriceMin(tickets);
-    // formattedData.priceMax = this.getPriceMax(tickets);
     this.setState({ ...formattedData });
-
-    // const zoneName = moment.tz.guess();
-    // console.log(zoneName);
-    // const timezone = moment.tz(zoneName).zoneAbbr();
-    // console.log(timezone);
   };
 
   getIGLink = () => `https://www.instagram.com/${this.state.influencerIGHandle}`;

@@ -9,9 +9,9 @@ import db from '../data/firebase';
 const EVENT_ID = 'OU6FjdRhTH6k7I8URpUS';
 const MEETSTA_COMISSION = 0.15;
 
-const propTypes = {};
+// const propTypes = {};
 
-const defaultProps = {};
+// const defaultProps = {};
 
 class EventSales extends React.Component {
   state = {
@@ -40,7 +40,6 @@ class EventSales extends React.Component {
       ticketsSold += 1;
       const data = ticket.data();
       revenue += data.price * (1 - MEETSTA_COMISSION);
-      // console.log(ticketsSold, ' ', revenue);
     });
     this.setState({ ticketsSold, revenue });
   };
@@ -60,7 +59,7 @@ class EventSales extends React.Component {
   }
 }
 
-EventSales.propTypes = propTypes;
-EventSales.defaultProps = defaultProps;
+// EventSales.propTypes = propTypes;
+// EventSales.defaultProps = defaultProps;
 
 export default EventSales;

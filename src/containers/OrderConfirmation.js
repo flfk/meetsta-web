@@ -22,7 +22,7 @@ class OrderConfirmation extends React.Component {
     orderID: null,
     ticket: {
       eventID: '',
-      name: 'testWORLD XX',
+      name: '',
       description: '',
       purchasePrice: null,
       purchaseFees: null,
@@ -43,7 +43,6 @@ class OrderConfirmation extends React.Component {
 
   getOrderId = () => {
     const params = queryString.parse(this.props.location.search);
-    console.log('xx orderID is, ', params.orderID);
     return params.orderID;
   };
 
@@ -76,7 +75,7 @@ class OrderConfirmation extends React.Component {
         <FONTS.H2>1. You will recieve a confirmation email</FONTS.H2>
         <FONTS.P>This will include your order number and time slot.</FONTS.P>
         <FONTS.H2>2. Download AppearIn</FONTS.H2>
-        <FONTS.P>AppearIn is the video call app (think skype) we will use for the event.</FONTS.P>
+        <FONTS.P>AppearIn is the video call app we will use for the event.</FONTS.P>
         <FONTS.P>
           iPhone users - you can download it <FONTS.A href={URL_APPEARIN_IPHONE}>here</FONTS.A>
         </FONTS.P>
