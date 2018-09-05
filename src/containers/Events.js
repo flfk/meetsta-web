@@ -68,18 +68,30 @@ class Events extends React.Component {
   setFormattedData = async () => {
     const event = await this.getEventData();
     const tickets = await this.getTicketData();
-    const formattedData = {};
-    formattedData.eventID = EVENT_ID;
-    formattedData.title = event.title;
-    formattedData.description = event.description;
-    formattedData.influencerName = event.organiserName;
-    formattedData.influencerIGHandle = event.organiserIGHandle;
-    formattedData.eventImgUrl = event.eventImgUrl;
-    formattedData.timeRange = this.getTimeRange(event.dateStart, event.dateEnd);
-    formattedData.date = this.getDate(event.dateStart);
-    formattedData.tickets = tickets;
-    formattedData.priceMin = this.getPriceMin(tickets);
-    formattedData.priceMax = this.getPriceMax(tickets);
+    const formattedData = {
+      eventID: EVENT_ID,
+      title: event.title,
+      description: event.description,
+      influencerName: event.organiserName,
+      influencerIGHandle: event.organiserIGHandle,
+      eventImgUrl: event.eventImgUrl,
+      timeRange: this.getTimeRange(event.dateStart, event.dateEnd),
+      date: this.getDate(event.dateStart),
+      tickets,
+      priceMin: this.getPriceMin(tickets),
+      priceMax: this.getPriceMax(tickets)
+    };
+    // formattedData.eventID = EVENT_ID;
+    // formattedData.title = event.title;
+    // formattedData.description = event.description;
+    // formattedData.influencerName = event.organiserName;
+    // formattedData.influencerIGHandle = event.organiserIGHandle;
+    // formattedData.eventImgUrl = event.eventImgUrl;
+    // formattedData.timeRange = this.getTimeRange(event.dateStart, event.dateEnd);
+    // formattedData.date = this.getDate(event.dateStart);
+    // formattedData.tickets = tickets;
+    // formattedData.priceMin = this.getPriceMin(tickets);
+    // formattedData.priceMax = this.getPriceMax(tickets);
     this.setState({ ...formattedData });
 
     // const zoneName = moment.tz.guess();

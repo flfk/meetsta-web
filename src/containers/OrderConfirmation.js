@@ -10,11 +10,18 @@ const URL_APPEARIN_ANDROID = 'https://play.google.com/store/apps/details?id=appe
 const CONTACT_EMAIL = 'contact.meetsta@gmail.com';
 const CONTACT_INSTAGRAM = 'https://www.instagram.com/meetsta.app/';
 
-// const propTypes = {};
+const propTypes = {};
 
 // const defaultProps = {};
 
 const OrderConfirmation = props => {
+  const getTicketData = () => {
+    console.log(props.location.state);
+    return props.location.state;
+  };
+
+  const ticket = getTicketData();
+
   return (
     <Content>
       <FONTS.H1>
@@ -24,13 +31,13 @@ const OrderConfirmation = props => {
         </span>{' '}
         Thanks for getting a ticket!
       </FONTS.H1>
-      <FONTS.P>1 x Andre Swiley Meet & Greet, 26 August 2018, 14:00 - 16:00 PDT</FONTS.P>
+      <FONTS.P>{ticket.name}</FONTS.P>
       <FONTS.P>
-        Your order confirmation number is <strong>123456.</strong>
+        Your order confirmation number is <strong>{ticket.orderNum}.</strong>
       </FONTS.P>
       <Content.Seperator />
       <FONTS.H1>What now?</FONTS.H1>
-      <FONTS.H2>1. Check you recieved a confirmation email</FONTS.H2>
+      <FONTS.H2>1. You will recieve a confirmation email</FONTS.H2>
       <FONTS.P>This will include your order number and time slot.</FONTS.P>
       <FONTS.H2>2. Download AppearIn</FONTS.H2>
       <FONTS.P>AppearIn is the video call app (think skype) we will use for the event.</FONTS.P>

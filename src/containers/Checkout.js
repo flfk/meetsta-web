@@ -39,6 +39,9 @@ class Checkout extends React.Component {
     price: 19.99,
     checkoutStep: 0,
     ticketSelected: {},
+    ticketOrdered: null,
+    orderNum: null,
+    paid: false,
     toConfirmation: false,
     paypalErrorMsg: ''
   };
@@ -46,6 +49,10 @@ class Checkout extends React.Component {
   componentDidMount() {
     const eventData = this.getEventData();
     this.setState({ ...eventData });
+  }
+
+  componentDidUpdate() {
+    this.toConfirmation();
   }
 
   getEventData = () => {
@@ -64,9 +71,9 @@ class Checkout extends React.Component {
     this.setState({ email: event.target.value });
   };
 
-  createTicketOrder = payPalPaymentID => {
-    console.log('creatingTicket');
+  createTicketOrder = async payPalPaymentID => {
     const { eventID, ticketSelected, nameFirst, nameLast, email } = this.state;
+    const orderNum = await this.getNewOrderNum();
     const ticket = {
       eventID,
       name: ticketSelected.name,
@@ -76,24 +83,40 @@ class Checkout extends React.Component {
       purchaseNameFirst: nameFirst,
       purchaseNameLast: nameLast,
       purchaseEmail: email,
-      orderNumMeetsta: 1111,
+      purchaseDate: Date.now(),
+      orderNum,
       payPalPaymentID,
       userID: '',
       hasStarted: false
     };
+    this.setState({ ticketOrdered: ticket });
     this.addTicketDoc(ticket);
-    console.log(ticket);
+  };
+
+  getNewOrderNum = async () => {
+    const lastOrderRef = db.collection('tickets').doc('lastOrder');
+    const snapshot = await lastOrderRef.get();
+    const data = await snapshot.data();
+    const newOrderNum = data.orderNum + 1;
+    await lastOrderRef.set({ orderNum: newOrderNum });
+    return data.orderNum + 1;
   };
 
   addTicketDoc = async ticket => {
     const ref = await db.collection('tickets').add(ticket);
-    console.log('Added ticket order with ID:', ref.id);
+  };
+
+  toConfirmation = () => {
+    const { ticketOrdered, paid } = this.state;
+    if (ticketOrdered && paid) {
+      this.setState({ toConfirmation: true });
+    }
   };
 
   onSuccess = payment => {
     console.log('Successful payment!', payment);
     this.createTicketOrder(payment.paymentID);
-    this.setState({ toConfirmation: true });
+    this.setState({ paid: true });
   };
 
   onError = error => {
@@ -164,6 +187,7 @@ class Checkout extends React.Component {
 
   render() {
     const {
+      eventID,
       nameFirst,
       nameFirstErrMsg,
       nameLast,
@@ -175,15 +199,27 @@ class Checkout extends React.Component {
       checkoutStep,
       tickets,
       ticketSelected,
+      ticketOrdered,
       paypalErrorMsg
     } = this.state;
 
-    if (toConfirmation === true) return <Redirect push to="/confirmation" />;
+    if (toConfirmation === true)
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: '/confirmation',
+            search: `?eventID=${eventID}&orderNum=${ticketOrdered.orderNum}`,
+            state: { ticket: ticketOrdered }
+          }}
+        />
+      );
 
     let ticketCards = <div />;
     if (tickets) {
       ticketCards = tickets.map(ticket => (
         <TicketCard
+          key={ticket.ticketID}
           ticketID={ticket.ticketID}
           name={ticket.name}
           description={ticket.description}
@@ -234,6 +270,21 @@ class Checkout extends React.Component {
 
     const paypalError = paypalErrorMsg ? <FONTS.ERROR>{paypalErrorMsg}</FONTS.ERROR> : null;
 
+    const payPalButton = this.state.paid ? null : (
+      <PayPalCheckout
+        client={CLIENT}
+        env={ENV}
+        commit={true}
+        currency={CURRENCY}
+        total={ticketSelected.price + FEE}
+        onSuccess={this.onSuccess}
+        onError={this.onError}
+        onCancel={this.onCancel}
+        validateForm={this.validateForm}
+        isFormValid={true}
+      />
+    );
+
     const payment = (
       <div>
         <FONTS.H2>Payment</FONTS.H2>
@@ -245,18 +296,7 @@ class Checkout extends React.Component {
         </FONTS.P>
         <Content.Spacing />
         {paypalError}
-        <PayPalCheckout
-          client={CLIENT}
-          env={ENV}
-          commit={true}
-          currency={CURRENCY}
-          total={ticketSelected.price + FEE}
-          onSuccess={this.onSuccess}
-          onError={this.onError}
-          onCancel={this.onCancel}
-          validateForm={this.validateForm}
-          isFormValid={true}
-        />
+        {payPalButton}
         <Content.Spacing />
         <Btn.Tertiary onClick={this.handlePrevious}>{'< Back to basic information'}</Btn.Tertiary>
       </div>
