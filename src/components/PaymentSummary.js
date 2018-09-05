@@ -8,7 +8,7 @@ import FONTS from '../utils/Fonts';
 const propTypes = {
   item: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
-  fees: PropTypes.number.isRequired
+  fee: PropTypes.number.isRequired
 };
 
 const defaultProps = {};
@@ -19,7 +19,9 @@ const Row = styled.div`
 `;
 
 const PaymentSummary = props => {
-  const { item, price, fees } = props;
+  const { item, price, fee } = props;
+
+  console.log(fee);
 
   return (
     <div>
@@ -28,13 +30,13 @@ const PaymentSummary = props => {
         <FONTS.P>${price.toFixed(2)}</FONTS.P>
       </Row>
       <Row>
-        <FONTS.P>Payment Processing Fees</FONTS.P>
-        <FONTS.P>${fees.toFixed(2)}</FONTS.P>
+        <FONTS.P>PayPal Processing Fee</FONTS.P>
+        <FONTS.P>${fee.toFixed(2)}</FONTS.P>
       </Row>
       <Content.Seperator />
       <Row>
         <FONTS.H2>Total</FONTS.H2>
-        <FONTS.H2>${(price + fees).toFixed(2)}</FONTS.H2>
+        <FONTS.H2>${(price + fee).toFixed(2)}</FONTS.H2>
       </Row>
     </div>
   );

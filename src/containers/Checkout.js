@@ -14,7 +14,8 @@ import TicketCard from '../components/TicketCard';
 
 import db from '../data/firebase';
 
-const FEE = 1.65;
+const PAYPAL_VARIABLE_FEE = 0.036;
+const PAYPAL_FIXED_FEE = 0.3;
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -72,6 +73,8 @@ class Checkout extends React.Component {
     this.setState({ email: event.target.value });
   };
 
+  calculateFee = price => price * PAYPAL_VARIABLE_FEE + PAYPAL_FIXED_FEE;
+
   createTicketOrder = async payPalPaymentID => {
     const { eventID, ticketSelected, nameFirst, nameLast, email } = this.state;
     const orderNum = await this.getNewOrderNum();
@@ -79,8 +82,8 @@ class Checkout extends React.Component {
       eventID,
       name: ticketSelected.name,
       description: ticketSelected.description,
-      purchasePrice: ticketSelected.price,
-      purchaseFees: FEE,
+      price: ticketSelected.price,
+      fee: this.calculateFee(ticketSelected.price),
       purchaseNameFirst: nameFirst,
       purchaseNameLast: nameLast,
       purchaseEmail: email,
@@ -106,22 +109,16 @@ class Checkout extends React.Component {
   addTicketDoc = async ticket => {
     const ref = await db.collection('tickets').add(ticket);
     this.setState({ orderID: ref.id });
-    console.log('ticketID is ', ref.id);
   };
 
   toConfirmation = () => {
     const { ticketOrdered, paid } = this.state;
-    // if (ticketOrdered && paid) {
-    //   this.setState({ toConfirmation: true });
-    // }
-    console.log('XX orderID type is, ', this.state.orderID);
     if (typeof this.state.orderID === 'string' && paid) {
       this.setState({ toConfirmation: true });
     }
   };
 
   onSuccess = payment => {
-    console.log('Successful payment!', payment);
     this.createTicketOrder(payment.paymentID);
     this.setState({ paid: true });
   };
@@ -183,7 +180,7 @@ class Checkout extends React.Component {
   handleTicketSelect = event => {
     const { tickets } = this.state;
     const ticketSelected = tickets.filter(ticket => ticket.ticketID === event.target.id)[0];
-    this.setState({ ticketSelected, checkoutStep: 1 });
+    this.setState({ ticketSelected: ticketSelected, checkoutStep: 1 });
   };
 
   handlePrevious = () => {
@@ -283,7 +280,7 @@ class Checkout extends React.Component {
         env={ENV}
         commit={true}
         currency={CURRENCY}
-        total={ticketSelected.price + FEE}
+        total={ticketSelected.price + this.calculateFee(ticketSelected.price)}
         onSuccess={this.onSuccess}
         onError={this.onError}
         onCancel={this.onCancel}
@@ -295,7 +292,11 @@ class Checkout extends React.Component {
     const payment = (
       <div>
         <FONTS.H2>Payment</FONTS.H2>
-        <PaymentSummary item={ticketSelected.name} price={ticketSelected.price} fees={FEE} />
+        <PaymentSummary
+          item={ticketSelected.name}
+          price={ticketSelected.price}
+          fee={this.calculateFee(ticketSelected.price)}
+        />
         <Content.Spacing />
         <FONTS.P>
           By clicking on Checkout, you agree with Meetsta's Terms and Conditions of Use and Privacy
