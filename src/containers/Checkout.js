@@ -39,6 +39,7 @@ class Checkout extends React.Component {
     price: 19.99,
     checkoutStep: 0,
     ticketSelected: {},
+    orderID: null,
     ticketOrdered: null,
     orderNum: null,
     paid: false,
@@ -104,11 +105,17 @@ class Checkout extends React.Component {
 
   addTicketDoc = async ticket => {
     const ref = await db.collection('tickets').add(ticket);
+    this.setState({ orderID: ref.id });
+    console.log('ticketID is ', ref.id);
   };
 
   toConfirmation = () => {
     const { ticketOrdered, paid } = this.state;
-    if (ticketOrdered && paid) {
+    // if (ticketOrdered && paid) {
+    //   this.setState({ toConfirmation: true });
+    // }
+    console.log('XX orderID type is, ', this.state.orderID);
+    if (typeof this.state.orderID === 'string' && paid) {
       this.setState({ toConfirmation: true });
     }
   };
@@ -209,7 +216,7 @@ class Checkout extends React.Component {
           push
           to={{
             pathname: '/confirmation',
-            search: `?eventID=${eventID}&orderNum=${ticketOrdered.orderNum}`,
+            search: `?eventID=${eventID}&orderID=${this.state.orderID}`,
             state: { ticket: ticketOrdered }
           }}
         />
