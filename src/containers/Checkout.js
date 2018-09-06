@@ -76,7 +76,7 @@ class Checkout extends React.Component {
     const orderNum = await this.getNewOrderNum();
     const ticket = {
       eventID,
-      name: ticketSelected.name,
+      eventName: ticketSelected.name,
       description: ticketSelected.description,
       price: ticketSelected.price,
       fee: this.calculateFee(ticketSelected.price),
