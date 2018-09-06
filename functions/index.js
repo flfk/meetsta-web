@@ -47,7 +47,8 @@ exports.firestoreOrderConfirmationEmail = functions.firestore
       html: '<strong>and easy to do anywhere, even with Node.js</strong>'
     };
 
-    return sgMail.send(msg);
-    // .then(() => console.log('email sent'))
-    // .catch(err => console.error(err));
+    return sgMail
+      .send(msg)
+      .then(() => console.log('email sent'))
+      .catch(err => console.error(err));
   });
