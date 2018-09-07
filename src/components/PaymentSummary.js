@@ -24,7 +24,7 @@ const PaymentSummary = props => {
   return (
     <div>
       <Row>
-        <FONTS.P>{item} x 1</FONTS.P>
+        <FONTS.P>1 x {item}</FONTS.P>
         <FONTS.P>${price.toFixed(2)}</FONTS.P>
       </Row>
       <Row>

@@ -76,7 +76,9 @@ class OrderConfirmation extends React.Component {
         </FONTS.H1>
 
         <FONTS.H2>Your time slot starts at {startTimeFormatted}.</FONTS.H2>
-        <FONTS.P>Your ordered 1 x {ticket.eventTitle}.</FONTS.P>
+        <FONTS.P>
+          You ordered <strong>1 x {ticket.name}.</strong>
+        </FONTS.P>
         <FONTS.P>
           Your order confirmation number is <strong>{ticket.orderNum}.</strong>
         </FONTS.P>

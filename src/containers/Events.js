@@ -115,7 +115,12 @@ class Events extends React.Component {
 
   getDate = dateStart => moment(dateStart).format('dddd, MMM Do, YYYY');
 
-  toCheckout = () => this.setState({ toCheckout: true });
+  toCheckout = () => {
+    const { title } = this.state;
+    if (title) {
+      this.setState({ toCheckout: true });
+    }
+  };
 
   render() {
     const {

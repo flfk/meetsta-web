@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const functions = require('firebase-functions');
 const sgMail = require('@sendgrid/mail');
+const moment = require('moment-timezone');
 
 admin.initializeApp(functions.config().firebase);
 
@@ -12,6 +13,10 @@ exports.orderConfirmationEmail = functions.firestore
   .onCreate(snap => {
     const ticket = snap.data();
 
+    const startTimeFormatted = `${moment
+      .tz(ticket.startTime, 'America/Los_Angeles')
+      .format('H:mm a, dddd, MMM Do')} PDT`;
+
     const msg = {
       to: ticket.purchaseEmail,
       from: 'contact.meetsta@gmail.com',
@@ -21,11 +26,11 @@ exports.orderConfirmationEmail = functions.firestore
       templateId: 'd-9151449bb4e4476eb06436f9574a0a01',
       dynamic_template_data: {
         orderNum: ticket.orderNum,
-        eventName: 'Testing Templates',
+        eventTitle: ticket.eventTitle,
+        ticketName: ticket.name,
+        startTime: startTimeFormatted,
         purchaseNameFirst: ticket.purchaseNameFirst,
-        influencerName: 'testInfluencer',
-        timeSlot: '12:00',
-        eventDay: '24th Dec 2018'
+        influencerName: ticket.influencerName
       }
     };
 
