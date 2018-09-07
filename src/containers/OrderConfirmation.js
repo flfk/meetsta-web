@@ -65,8 +65,6 @@ class OrderConfirmation extends React.Component {
   render() {
     const { ticket, startTimeFormatted } = this.state;
 
-    console.log(ticket);
-
     return (
       <Content>
         <FONTS.H1>
@@ -74,13 +72,11 @@ class OrderConfirmation extends React.Component {
           <span role="img" aria-label="Clapping">
             👏
           </span>{' '}
-          Thanks for getting a ticket!
+          Thanks for getting a ticket to meet {ticket.influencerName}!
         </FONTS.H1>
-        <FONTS.P>Your order is</FONTS.P>
-        <FONTS.P>1 x {ticket.eventName}</FONTS.P>
-        <FONTS.P>Your Order Confirmation Number is {ticket.orderNum}</FONTS.P>
-        <FONTS.P>Your time slot starts at</FONTS.P>
-        <FONTS.H2>{startTimeFormatted}</FONTS.H2>
+
+        <FONTS.H2>Your time slot starts at {startTimeFormatted}.</FONTS.H2>
+        <FONTS.P>Your ordered 1 x {ticket.eventTitle}.</FONTS.P>
         <FONTS.P>
           Your order confirmation number is <strong>{ticket.orderNum}.</strong>
         </FONTS.P>
