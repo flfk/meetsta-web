@@ -3,6 +3,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import validator from 'validator';
 import queryString from 'query-string';
+import moment from 'moment-timezone';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
@@ -16,6 +17,9 @@ import db from '../data/firebase';
 
 const PAYPAL_VARIABLE_FEE = 0.036;
 const PAYPAL_FIXED_FEE = 0.3;
+const TICKETS_PER_BREAK = 5;
+const BREAK_LENGTH_MINS = 5;
+const MILLISECS_PER_MIN = 60000;
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -53,6 +57,8 @@ class Checkout extends React.Component {
 
   componentDidUpdate() {
     this.toConfirmation();
+
+    this.getTimeSlot();
   }
 
   getEventData = () => this.props.location.state.eventData;
@@ -80,6 +86,8 @@ class Checkout extends React.Component {
       description: ticketSelected.description,
       price: ticketSelected.price,
       fee: this.calculateFee(ticketSelected.price),
+      timeSlotStart: '',
+      lengthMins: ticketSelected.lengthMins,
       purchaseNameFirst: nameFirst,
       purchaseNameLast: nameLast,
       purchaseEmail: email,
@@ -103,10 +111,73 @@ class Checkout extends React.Component {
     return data.orderNum + 1;
   };
 
+  getEventTickets = async () => {
+    const { eventID } = this.state;
+    const eventTickets = [];
+    const eventTicketsRef = db
+      .collection('events')
+      .doc(eventID)
+      .collection('tickets');
+    const snapshot = await eventTicketsRef.get();
+    snapshot.forEach(snap => {
+      eventTickets.push(snap.data());
+    });
+    return eventTickets;
+  };
+
+  getTicketsSold = async () => {
+    let ticketsSold = 0;
+    const eventTickets = await this.getEventTickets();
+    eventTickets.forEach(ticket => (ticketsSold += ticket.sold));
+    console.log('total tickets sold is ', ticketsSold);
+    return ticketsSold;
+  };
+
+  getMinsSold = async () => {
+    let minsSold = 0;
+    const eventTickets = await this.getEventTickets();
+    eventTickets.forEach(ticket => (minsSold += ticket.sold * ticket.lengthMins));
+    console.log('total mins sold is ', minsSold);
+    return minsSold;
+  };
+
+  getEventStart = async () => {
+    const { eventID } = this.state;
+    const eventRef = db.collection('events').doc(eventID);
+    const snapshot = await eventRef.get();
+    const data = await snapshot.data();
+    const eventStart = data.dateStart;
+    console.log('event start is at ', eventStart);
+    return eventStart;
+  };
+
+  getTimeSlot = async () => {
+    const ticketsSold = await this.getTicketsSold();
+    const minsSold = await this.getMinsSold();
+    const eventStart = await this.getEventStart();
+    let breakLengthMins = 0;
+    if (ticketsSold >= TICKETS_PER_BREAK) {
+      breakLengthMins = Math.floor(ticketsSold / TICKETS_PER_BREAK) * BREAK_LENGTH_MINS;
+      console.log('tickets sold ', ticketsSold, ' break length mins ', breakLengthMins);
+    }
+    const startTimeMins = 0;
+    const millisecsFromStart = (startTimeMins + minsSold + breakLengthMins) * MILLISECS_PER_MIN;
+    const timeSlotMillisecs = eventStart + millisecsFromStart;
+    const timeSlot = moment.tz(timeSlotMillisecs, 'America/Los_Angeles').format();
+    console.log('milliseconds from start time ', millisecsFromStart);
+    console.log('time slot is ', timeSlot);
+    console.log(
+      'event start is ',
+      moment(eventStart)
+        .tz('America/Los_Angeles')
+        .format()
+    );
+    //
+  };
+
   addTicketDoc = async ticket => {
     const newTicket = await db.collection('tickets').add(ticket);
     this.setState({ ticketID: newTicket.id });
-    console.log('xx ticketID in addTicketDoc ', newTicket.id);
   };
 
   incrementTicketsSold = async () => {
@@ -197,8 +268,6 @@ class Checkout extends React.Component {
     const { tickets } = this.state;
     const ticketSelected = tickets.filter(ticket => ticket.ticketID === event.target.id)[0];
     this.setState({ ticketSelected, checkoutStep: 1 });
-    console.log('handleTicketSelet');
-    console.log(this.state.ticketSelected);
   };
 
   handlePrevious = () => {

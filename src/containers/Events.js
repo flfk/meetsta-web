@@ -103,8 +103,8 @@ class Events extends React.Component {
   };
 
   getTimeRange = (dateStart, dateEnd) => {
-    const timeStart = moment(dateStart, 'X').format('LT');
-    const timeEnd = moment(dateEnd, 'X').format('LT');
+    const timeStart = moment(dateStart).format('LT');
+    const timeEnd = moment(dateEnd).format('LT');
     const timezone = moment()
       .tz(moment.tz.guess())
       .format('zz');
