@@ -3,7 +3,6 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import validator from 'validator';
 import queryString from 'query-string';
-import moment from 'moment-timezone';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
@@ -57,8 +56,6 @@ class Checkout extends React.Component {
 
   componentDidUpdate() {
     this.toConfirmation();
-
-    this.getTimeSlot();
   }
 
   getEventData = () => this.props.location.state.eventData;
@@ -78,12 +75,22 @@ class Checkout extends React.Component {
   calculateFee = price => price * PAYPAL_VARIABLE_FEE + PAYPAL_FIXED_FEE;
 
   createTicketOrder = async payPalPaymentID => {
-    const { eventID, ticketSelected, nameFirst, nameLast, email } = this.state;
+    const {
+      eventID,
+      title,
+      influencerName,
+      ticketSelected,
+      nameFirst,
+      nameLast,
+      email
+    } = this.state;
     const orderNum = await this.getNewOrderNum();
     const startTime = await this.getTimeSlot();
     const ticket = {
       eventID,
-      eventName: ticketSelected.name,
+      eventTitle: title,
+      influencerName,
+      name: ticketSelected.name,
       description: ticketSelected.description,
       price: ticketSelected.price,
       fee: this.calculateFee(ticketSelected.price),

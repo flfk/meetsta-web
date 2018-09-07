@@ -1,6 +1,7 @@
 // import PropTypes from 'prop-types';
 import React from 'react';
 import queryString from 'query-string';
+import moment from 'moment-timezone';
 
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
@@ -20,6 +21,7 @@ const propTypes = {};
 class OrderConfirmation extends React.Component {
   state = {
     ticketID: null,
+    startTimeFormatted: '',
     ticket: {
       eventID: '',
       name: '',
@@ -51,11 +53,19 @@ class OrderConfirmation extends React.Component {
     const ticketRef = db.collection('tickets').doc(ticketID);
     const snapshot = await ticketRef.get();
     const data = await snapshot.data();
-    this.setState({ ticket: { ...data } });
+    const startTimeFormatted = this.formatStartTime(data.startTime);
+    this.setState({ ticket: { ...data }, startTimeFormatted });
+  };
+
+  formatStartTime = startTime => {
+    const time = moment.tz(startTime, 'America/Los_Angeles').format('H:mm a, dddd, MMM Do');
+    return `${time} PDT`;
   };
 
   render() {
-    const { ticket } = this.state;
+    const { ticket, startTimeFormatted } = this.state;
+
+    console.log(ticket);
 
     return (
       <Content>
@@ -66,7 +76,11 @@ class OrderConfirmation extends React.Component {
           </span>{' '}
           Thanks for getting a ticket!
         </FONTS.H1>
-        <FONTS.P>1 x {ticket.name}</FONTS.P>
+        <FONTS.P>Your order is</FONTS.P>
+        <FONTS.P>1 x {ticket.eventName}</FONTS.P>
+        <FONTS.P>Your Order Confirmation Number is {ticket.orderNum}</FONTS.P>
+        <FONTS.P>Your time slot starts at</FONTS.P>
+        <FONTS.H2>{startTimeFormatted}</FONTS.H2>
         <FONTS.P>
           Your order confirmation number is <strong>{ticket.orderNum}.</strong>
         </FONTS.P>
