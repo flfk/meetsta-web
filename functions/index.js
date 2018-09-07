@@ -13,17 +13,17 @@ exports.orderConfirmationEmail = functions.firestore
     const ticket = snap.data();
 
     const msg = {
-      to: 'felixlkramer@gmail.com',
+      to: ticket.purchaseEmail,
       from: 'contact.meetsta@gmail.com',
       subject: 'Sending with SendGrid is Fun',
       text: 'and easy to do anywhere, even with Node.js',
       html: '<strong>and easy to do anywhere, even with Node.js</strong>',
       templateId: 'd-9151449bb4e4476eb06436f9574a0a01',
       dynamic_template_data: {
-        orderNumber: '999999',
+        orderNum: ticket.orderNum,
         eventName: 'Testing Templates',
-        purchaseNameFirst: 'Some One',
-        influencerName: 'Denver',
+        purchaseNameFirst: ticket.purchaseNameFirst,
+        influencerName: 'testInfluencer',
         timeSlot: '12:00',
         eventDay: '24th Dec 2018'
       }
