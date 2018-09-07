@@ -21,8 +21,6 @@ const Row = styled.div`
 const PaymentSummary = props => {
   const { item, price, fee } = props;
 
-  console.log(fee);
-
   return (
     <div>
       <Row>

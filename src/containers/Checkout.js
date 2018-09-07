@@ -80,14 +80,15 @@ class Checkout extends React.Component {
   createTicketOrder = async payPalPaymentID => {
     const { eventID, ticketSelected, nameFirst, nameLast, email } = this.state;
     const orderNum = await this.getNewOrderNum();
+    const startTime = await this.getTimeSlot();
     const ticket = {
       eventID,
       eventName: ticketSelected.name,
       description: ticketSelected.description,
       price: ticketSelected.price,
       fee: this.calculateFee(ticketSelected.price),
-      timeSlotStart: '',
       lengthMins: ticketSelected.lengthMins,
+      startTime,
       purchaseNameFirst: nameFirst,
       purchaseNameLast: nameLast,
       purchaseEmail: email,
@@ -158,14 +159,13 @@ class Checkout extends React.Component {
     let breakLengthMins = 0;
     if (ticketsSold >= TICKETS_PER_BREAK) {
       breakLengthMins = Math.floor(ticketsSold / TICKETS_PER_BREAK) * BREAK_LENGTH_MINS;
-      console.log('tickets sold ', ticketsSold, ' break length mins ', breakLengthMins);
     }
     const startTimeMins = 0;
     const millisecsFromStart = (startTimeMins + minsSold + breakLengthMins) * MILLISECS_PER_MIN;
-    const timeSlotMillisecs = eventStart + millisecsFromStart;
-    const timeSlot = moment.tz(timeSlotMillisecs, 'America/Los_Angeles').format();
-    console.log('milliseconds from start time ', millisecsFromStart);
-    console.log('time slot is ', timeSlot);
+    // Time slot in milliseconds
+    const timeSlot = eventStart + millisecsFromStart;
+    // const timeSlot = moment.tz(timeSlotMillisecs, 'America/Los_Angeles').format();
+    return timeSlot;
   };
 
   addTicketDoc = async ticket => {
