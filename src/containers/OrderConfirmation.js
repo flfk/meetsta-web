@@ -85,7 +85,7 @@ class OrderConfirmation extends React.Component {
         <Content.Seperator />
         <FONTS.H1>What now?</FONTS.H1>
         <FONTS.H2>1. You will recieve a confirmation email</FONTS.H2>
-        <FONTS.P>This will include your order number and time slot.</FONTS.P>
+        <FONTS.P>If you do not recieve this email please check your spam folder.</FONTS.P>
         <FONTS.H2>2. Download AppearIn</FONTS.H2>
         <FONTS.P>AppearIn is the video call app we will use for the event.</FONTS.P>
         <FONTS.P>

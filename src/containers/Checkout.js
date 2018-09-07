@@ -1,6 +1,6 @@
 // import PropTypes from 'prop-types';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import validator from 'validator';
 import queryString from 'query-string';
 
@@ -387,8 +387,15 @@ class Checkout extends React.Component {
         />
         <Content.Spacing />
         <FONTS.P>
-          By clicking on Checkout, you agree with Meetsta's Terms and Conditions of Use and Privacy
-          Policy.
+          By clicking on Checkout, you agree with Meetsta's{' '}
+          <Link to="/termsConditions" target="_blank">
+            Terms and Conditions of Use
+          </Link>{' '}
+          and{' '}
+          <Link to="/privacyPolicy" target="_blank">
+            Privacy Policy
+          </Link>
+          .
         </FONTS.P>
         <Content.Spacing />
         {paypalError}

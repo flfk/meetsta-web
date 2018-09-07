@@ -8,6 +8,8 @@ import Events from './containers/Events';
 import EventSales from './containers/EventSales';
 import Main from './components/Main';
 import NavBar from './containers/NavBar';
+import TermsConditions from './containers/TermsConditions';
+import PrivacyPolicy from './containers/PrivacyPolicy';
 import OrderConfirmation from './containers/OrderConfirmation';
 
 class App extends Component {
@@ -31,6 +33,8 @@ class App extends Component {
                 <Route path="/checkout" component={Checkout} />
                 <Route path="/confirmation" component={OrderConfirmation} />
                 <Route path="/eventSales" component={EventSales} />
+                <Route path="/termsConditions" component={TermsConditions} />
+                <Route path="/privacyPolicy" component={PrivacyPolicy} />
               </Switch>
             </Main>
           </div>
