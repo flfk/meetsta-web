@@ -19,7 +19,7 @@ const propTypes = {};
 
 class OrderConfirmation extends React.Component {
   state = {
-    orderID: null,
+    ticketID: null,
     ticket: {
       eventID: '',
       name: '',
@@ -43,12 +43,12 @@ class OrderConfirmation extends React.Component {
 
   getOrderId = () => {
     const params = queryString.parse(this.props.location.search);
-    return params.orderID;
+    return params.ticketID;
   };
 
   getTicketData = async () => {
-    const orderID = this.getOrderId();
-    const ticketRef = db.collection('tickets').doc(orderID);
+    const ticketID = this.getOrderId();
+    const ticketRef = db.collection('tickets').doc(ticketID);
     const snapshot = await ticketRef.get();
     const data = await snapshot.data();
     this.setState({ ticket: { ...data } });
