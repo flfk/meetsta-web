@@ -166,13 +166,6 @@ class Checkout extends React.Component {
     const timeSlot = moment.tz(timeSlotMillisecs, 'America/Los_Angeles').format();
     console.log('milliseconds from start time ', millisecsFromStart);
     console.log('time slot is ', timeSlot);
-    console.log(
-      'event start is ',
-      moment(eventStart)
-        .tz('America/Los_Angeles')
-        .format()
-    );
-    //
   };
 
   addTicketDoc = async ticket => {

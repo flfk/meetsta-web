@@ -113,7 +113,7 @@ class Events extends React.Component {
     return timeRange;
   };
 
-  getDate = dateStart => moment(dateStart, 'X').format('dddd, MMM Do, YYYY');
+  getDate = dateStart => moment(dateStart).format('dddd, MMM Do, YYYY');
 
   toCheckout = () => this.setState({ toCheckout: true });
 
