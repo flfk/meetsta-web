@@ -6,6 +6,7 @@ import { StripeProvider } from 'react-stripe-elements';
 import Checkout from './containers/Checkout';
 import Events from './containers/Events';
 import EventSales from './containers/EventSales';
+import LandingPage from './containers/LandingPage';
 import Main from './components/Main';
 import NavBar from './containers/NavBar';
 import TermsConditions from './containers/TermsConditions';
@@ -29,7 +30,7 @@ class App extends Component {
             <Main>
               <Switch>
                 <Route exact path="/" component={Events} />
-                <Route path="/events" component={Events} />
+                <Route path="/event" component={Events} />
                 <Route path="/checkout" component={Checkout} />
                 <Route path="/confirmation" component={OrderConfirmation} />
                 <Route path="/eventSales" component={EventSales} />

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FaDollarSign, FaCalendar, FaClock } from 'react-icons/fa';
+import queryString from 'query-string';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
 
@@ -14,8 +15,6 @@ import FooterSticky from '../components/FooterSticky';
 import Wrapper from '../components/Wrapper';
 
 import db from '../data/firebase';
-
-const EVENT_ID = 'OU6FjdRhTH6k7I8URpUS';
 
 const propTypes = {};
 
@@ -39,47 +38,69 @@ class Events extends React.Component {
 
   componentDidMount() {
     try {
+      this.getEventId();
       this.setFormattedData();
     } catch (err) {
       console.error('Error in getting documents', err);
     }
   }
 
-  getEventData = async () => {
-    const eventRef = db.collection('events').doc('OU6FjdRhTH6k7I8URpUS');
-    const snapshot = await eventRef.get();
-    const data = await snapshot.data();
-    return data;
+  getEventId = () => {
+    const params = queryString.parse(this.props.location.search);
+    const { eventID } = params;
+    console.log('get event ID, ', eventID);
+    return eventID;
   };
 
-  getTicketData = async () => {
-    const tickets = [];
-    const ticketsRef = db
-      .collection('events')
-      .doc(EVENT_ID)
-      .collection('tickets');
-    const snapshot = await ticketsRef.get();
-    snapshot.forEach(ticket => tickets.push({ ticketID: ticket.id, ...ticket.data() }));
-    return tickets;
+  getEventData = async eventID => {
+    try {
+      const eventRef = db.collection('events').doc(eventID);
+      const snapshot = await eventRef.get();
+      const data = await snapshot.data();
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getTicketData = async eventID => {
+    try {
+      const tickets = [];
+      const ticketsRef = db
+        .collection('events')
+        .doc(eventID)
+        .collection('tickets');
+      const snapshot = await ticketsRef.get();
+      snapshot.forEach(ticket => tickets.push({ ticketID: ticket.id, ...ticket.data() }));
+      return tickets;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   setFormattedData = async () => {
-    const event = await this.getEventData();
-    const tickets = await this.getTicketData();
-    const formattedData = {
-      eventID: EVENT_ID,
-      title: event.title,
-      description: event.description,
-      influencerName: event.organiserName,
-      influencerIGHandle: event.organiserIGHandle,
-      eventImgUrl: event.eventImgUrl,
-      timeRange: this.getTimeRange(event.dateStart, event.dateEnd),
-      date: this.getDate(event.dateStart),
-      tickets,
-      priceMin: this.getPriceMin(tickets),
-      priceMax: this.getPriceMax(tickets)
-    };
-    this.setState({ ...formattedData });
+    const eventID = this.getEventId();
+
+    try {
+      const event = await this.getEventData(eventID);
+      const tickets = await this.getTicketData(eventID);
+      const formattedData = {
+        eventID: eventID,
+        title: event.title,
+        description: event.description,
+        influencerName: event.organiserName,
+        influencerIGHandle: event.organiserIGHandle,
+        eventImgUrl: event.eventImgUrl,
+        timeRange: this.getTimeRange(event.dateStart, event.dateEnd),
+        date: this.getDate(event.dateStart),
+        tickets,
+        priceMin: this.getPriceMin(tickets),
+        priceMax: this.getPriceMax(tickets)
+      };
+      this.setState({ eventID, ...formattedData });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   getIGLink = () => `https://www.instagram.com/${this.state.influencerIGHandle}`;
@@ -124,6 +145,7 @@ class Events extends React.Component {
 
   render() {
     const {
+      eventID,
       title,
       description,
       influencerName,
@@ -141,7 +163,7 @@ class Events extends React.Component {
           push
           to={{
             pathname: '/checkout',
-            search: `?eventID=${EVENT_ID}`,
+            search: `?eventID=${eventID}`,
             state: { eventData: this.state }
           }}
         />
