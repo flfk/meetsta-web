@@ -16,13 +16,17 @@ import Wrapper from '../components/Wrapper';
 
 import db from '../data/firebase';
 
+
 const propTypes = {};
 
 const defaultProps = {};
 
 const DEFAULT_EVENT_ID = 'meet-mackenzie-sol';
 
+const GOOGLE_FORM_URL = 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2';
+
 class Events extends React.Component {
+
   state = {
     eventID: '',
     title: '',
@@ -45,6 +49,10 @@ class Events extends React.Component {
       console.error('Error in getting documents', err);
     }
   }
+
+  openMailForm = () => {
+    window.open(GOOGLE_FORM_URL, '_blank');
+  };
 
   getEventId = () => {
     const params = queryString.parse(this.props.location.search);
@@ -210,12 +218,13 @@ class Events extends React.Component {
         </Content.PaddingBottom>
         <FooterSticky>
           <Content.Row>
-            <Btn secondary>Send Info To Parents</Btn>
+            <Btn secondary onClick={this.openMailForm}>Send Info To Parents</Btn>
             <Btn onClick={this.toCheckout} primary>
               Get Tickets
             </Btn>
           </Content.Row>
         </FooterSticky>
+
       </div>
     );
   }
