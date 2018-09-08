@@ -1,0 +1,16 @@
+/*The only way to add a border on Stripe Elements is using CSS*/
+
+.card-element {
+  border: 1px solid #ebebeb;
+  border-radius: 3px;
+  padding: 0.4em 1em;
+  width: 100%;
+}
+
+.card-element.StripeElement--focus {
+  border: 1px solid #4cb191;
+}
+
+.card-element.StripeElement--invalid {
+  border: 1px solid red;
+}

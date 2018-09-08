@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import COLORS from '../utils/Colors';
 
 const BtnProfile = styled.button`
   display: flex;
@@ -6,6 +7,7 @@ const BtnProfile = styled.button`
   align-items: center;
   border: none;
   font-size: 16px;
+  color: ${COLORS.primary.red};
   cursor: pointer;
   :focus {
     outline: none;

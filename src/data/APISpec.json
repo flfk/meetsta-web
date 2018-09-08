@@ -1,5 +1,9 @@
 {
   "db": {
+    // Global collection
+    "Utils": {
+      "lastOrderNum": "int",
+    },
     // Users collection
     "Users": {
       // User documents
@@ -23,13 +27,23 @@
         "idOrganiser": "string",
         "organiserName": "string",
         "organiserIGHandle": "string",
+        "eventImgURL": "string",
         "title": "string",
         "description": "string",
         "dateStart": "date",
         "dateEnd": "date",
-        "price": "float",
-        "ticketsTotal": "int",
-        "ticketsSold": "int",
+        // Tickets collection
+        "tickets" : {
+          // Ticket documents
+          "ticketRef" : {
+            "name": "string",
+            "description": "string",
+            "lengthMins": "int",
+            "price": "bool",
+            "total": "int",
+            "sold": "int"
+          },
+        },
         // Call Maps
         "callsQueued": { "position": "idUser" },
         "callsCompleted": { "position": "idUser" },
@@ -44,17 +58,21 @@
       },
     },
     // Tickets collection with ticket documents
-    "Tickets": {
+    "Orders": {
       // Ticket documents
       "idTicket": {
         "idEvent": "string",
+        "name": "string",
+        "description" : "string",
+        "purchasePrice": "bool",
         "purchaseDate": "date",
         "purchaseNameFirst": "string",
         "purchaseNameLast": "string",
-        "orderNoMeetsta": "string",
-        "orderNoPayPal": "string",
+        "orderNumMeetsta": "string",
+        "orderNumPayPal": "string",
         "associatedIdUser": "string",
-        "timeslot": "date",
+        "timeslotStart": "date",
+        "timeslotEnd": "date",
         "hasStarted": "bool",
       }
     }

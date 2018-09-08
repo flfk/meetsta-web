@@ -6,10 +6,9 @@ import DARKEN from '../utils/Darken';
 // Default is secondary, for primary button use <Btn primary></Btn>
 
 const Btn = styled.button`
-  width: 100%;
-  max-width: 292px;
+  // width: 100%;
+  flex: 1 0 0;
   margin: 8px;
-
   padding: 1em 1em;
   background-color: transparent;
   border-radius: 5px;
@@ -35,5 +34,29 @@ const Btn = styled.button`
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 `;
+
+const Tertiary = styled.button`
+  padding: 1em 1em;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: transparent;
+  border: none;
+  color: ${COLORS.primary.red};
+  :hover {
+    text-decoration: underline;
+  }
+
+  :focus {
+    outline: none;
+  }
+`;
+
+const Full = Btn.extend`
+  width: 100%;
+  margin: 0;
+`;
+
+Btn.Tertiary = Tertiary;
+Btn.Full = Full;
 
 export default Btn;

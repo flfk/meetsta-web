@@ -1,83 +1,230 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FaDollarSign, FaCalendar, FaClock } from 'react-icons/fa';
+import queryString from 'query-string';
+import { Redirect } from 'react-router-dom';
+import moment from 'moment-timezone';
 
 import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
-import ContentEvent from '../components/ContentEvent';
+import Content from '../components/Content';
 import EVENT_IMAGE from '../assets/eventImages/EventImageAndreSwilley.jpg';
 import PROFILE_IMAGE from '../assets/profileImages/ProfileImageAndreSwilley.jpg';
 import FONTS from '../utils/Fonts';
-import FooterEvents from '../components/FooterEvents';
-import WrapperEventImage from '../components/WrapperEventImage';
-import WrapperProfileImage from '../components/WrapperProfileImage';
+import FooterSticky from '../components/FooterSticky';
+import Wrapper from '../components/Wrapper';
+
+import db from '../data/firebase';
+
 
 const propTypes = {};
 
 const defaultProps = {};
 
-const INFLUENCER_NAME = 'Andre Swiley';
-const INFLUENCER_URL = 'https://www.instagram.com/andreswilley/';
-const EVENT_IMAGE_URL = '/EventImageAndreSwilley.jpg';
-const DATE = '26 August';
-const TIME = '15:00 to 18:00 PDT';
-const PRICE = 20.0;
-const LENGTH = 5;
-const TICKETS = 25;
+const DEFAULT_EVENT_ID = 'meet-mackenzie-sol';
 
 const GOOGLE_FORM_URL = 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2';
 
 class Events extends React.Component {
+
+  state = {
+    eventID: '',
+    title: '',
+    description: '',
+    influencerName: '',
+    influencerIGHandle: '',
+    eventImgUrl: '',
+    date: '',
+    timeRange: '',
+    tickets: [],
+    priceMin: '',
+    priceMax: '',
+    toCheckout: false
+  };
+
+  componentDidMount() {
+    try {
+      this.setFormattedData();
+    } catch (err) {
+      console.error('Error in getting documents', err);
+    }
+  }
+
   openMailForm = () => {
     window.open(GOOGLE_FORM_URL, '_blank');
   };
 
+  getEventId = () => {
+    const params = queryString.parse(this.props.location.search);
+    let { eventID } = params;
+    if (!eventID) {
+      eventID = DEFAULT_EVENT_ID;
+    }
+    return eventID;
+  };
+
+  getEventData = async eventID => {
+    try {
+      const eventRef = db.collection('events').doc(eventID);
+      const snapshot = await eventRef.get();
+      const data = await snapshot.data();
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getTicketData = async eventID => {
+    try {
+      const tickets = [];
+      const ticketsRef = db
+        .collection('events')
+        .doc(eventID)
+        .collection('tickets');
+      const snapshot = await ticketsRef.get();
+      snapshot.forEach(ticket => tickets.push({ ticketID: ticket.id, ...ticket.data() }));
+      return tickets;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  setFormattedData = async () => {
+    const eventID = this.getEventId();
+
+    try {
+      const event = await this.getEventData(eventID);
+      const tickets = await this.getTicketData(eventID);
+      const formattedData = {
+        eventID: eventID,
+        title: event.title,
+        description: event.description,
+        influencerName: event.organiserName,
+        influencerIGHandle: event.organiserIGHandle,
+        eventImgUrl: event.eventImgUrl,
+        timeRange: this.getTimeRange(event.dateStart, event.dateEnd),
+        date: this.getDate(event.dateStart),
+        tickets,
+        priceMin: this.getPriceMin(tickets),
+        priceMax: this.getPriceMax(tickets)
+      };
+      this.setState({ eventID, ...formattedData });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getIGLink = () => `https://www.instagram.com/${this.state.influencerIGHandle}`;
+
+  getPriceMin = tickets => {
+    let priceMin = 'N/A';
+    if (tickets) {
+      const reducer = (min, ticket) => (min < ticket.price ? min : ticket.price);
+      priceMin = tickets.reduce(reducer, tickets[0].price);
+    }
+    return priceMin;
+  };
+
+  getPriceMax = tickets => {
+    let priceMax = 'N/A';
+    if (tickets) {
+      const reducer = (max, ticket) => (max > ticket.price ? max : ticket.price);
+      priceMax = tickets.reduce(reducer, tickets[0].price);
+    }
+    return priceMax;
+  };
+
+  getTimeRange = (dateStart, dateEnd) => {
+    const timeStart = moment(dateStart).format('LT');
+    const timeEnd = moment(dateEnd).format('LT');
+    const timezone = moment()
+      .tz(moment.tz.guess())
+      .format('zz');
+    // .utcOffset() / 60;
+    const timeRange = `${timeStart} - ${timeEnd} (${timezone})`;
+    return timeRange;
+  };
+
+  getDate = dateStart => moment(dateStart).format('dddd, MMM Do, YYYY');
+
+  toCheckout = () => {
+    const { title } = this.state;
+    if (title) {
+      this.setState({ toCheckout: true });
+    }
+  };
+
   render() {
+    const {
+      eventID,
+      title,
+      description,
+      influencerName,
+      eventImgUrl,
+      timeRange,
+      date,
+      priceMin,
+      priceMax,
+      toCheckout
+    } = this.state;
+
+    if (toCheckout === true)
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: '/checkout',
+            search: `?eventID=${eventID}`,
+            state: { eventData: this.state }
+          }}
+        />
+      );
+
     return (
       <div>
-        <ContentEvent>
-          <FONTS.H1>{INFLUENCER_NAME} - Meet & Greet Online</FONTS.H1>
+        <Content.PaddingBottom>
+          <FONTS.H1>{title}</FONTS.H1>
 
-          <WrapperEventImage>
-            <img src={EVENT_IMAGE} alt={INFLUENCER_NAME} />
-          </WrapperEventImage>
+          <Wrapper.EventImage>
+            <img src={EVENT_IMAGE} alt={influencerName} />
+          </Wrapper.EventImage>
 
-          <FONTS.A href={INFLUENCER_URL}>
+          <FONTS.A href={this.getIGLink()} target="_blank">
             <BtnProfile>
-              <WrapperProfileImage>
-                <img src={PROFILE_IMAGE} alt={INFLUENCER_NAME} />
-              </WrapperProfileImage>{' '}
-              <FONTS.A>{INFLUENCER_NAME}</FONTS.A>
+              <Wrapper.ProfileImage>
+                <img src={PROFILE_IMAGE} alt={influencerName} />
+              </Wrapper.ProfileImage>{' '}
+              {influencerName}
             </BtnProfile>
           </FONTS.A>
 
           <br />
 
           <FONTS.P>
-            <FaCalendar /> {DATE}
+            <FaCalendar /> {date}
           </FONTS.P>
 
           <FONTS.P>
-            <FaClock /> {TIME}
+            <FaClock /> {timeRange}
           </FONTS.P>
 
           <FONTS.P>
-            <FaDollarSign /> {PRICE} per {LENGTH} mins
+            <FaDollarSign /> ${priceMin} - ${priceMax}
           </FONTS.P>
 
           <br />
 
-          <FONTS.P>Your chance to meet {INFLUENCER_NAME} in a 1-on-1 video call.</FONTS.P>
-          <FONTS.P>Only {TICKETS} tickets available.</FONTS.P>
-          <FONTS.P>{PRICE} per ticket - get yours now so you don't miss out!</FONTS.P>
-        </ContentEvent>
+          <FONTS.P>{description}</FONTS.P>
+        </Content.PaddingBottom>
+        <FooterSticky>
+          <Content.Row>
+            <Btn secondary onClick={this.openMailForm}>Send Info To Parents</Btn>
+            <Btn onClick={this.toCheckout} primary>
+              Get Tickets
+            </Btn>
+          </Content.Row>
+        </FooterSticky>
 
-        <FooterEvents>
-          <Btn primary>Get Ticket</Btn>
-          <Btn secondary onClick={this.openMailForm}>
-            Send Info To Parents
-          </Btn>
-        </FooterEvents>
       </div>
     );
   }
