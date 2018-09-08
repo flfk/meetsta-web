@@ -295,6 +295,8 @@ class Checkout extends React.Component {
       paid
     } = this.state;
 
+    console.log(ticketSelected);
+
     if (toConfirmation === true)
       return (
         <Redirect
@@ -362,13 +364,15 @@ class Checkout extends React.Component {
 
     const paypalError = paypalErrorMsg ? <FONTS.ERROR>{paypalErrorMsg}</FONTS.ERROR> : null;
 
+    const priceTotal = (ticketSelected.price + this.calculateFee(ticketSelected.price)).toFixed(2);
+
     const payPalButton = paid ? null : (
       <PayPalCheckout
         client={CLIENT}
         env={ENV}
         commit={true}
         currency={CURRENCY}
-        total={ticketSelected.price + this.calculateFee(ticketSelected.price)}
+        total={priceTotal}
         onSuccess={this.onSuccess}
         onError={this.onError}
         onCancel={this.onCancel}
