@@ -355,10 +355,12 @@ class Checkout extends React.Component {
           value={email}
           errMsg={emailErrMsg}
         />
-        <Btn.Tertiary onClick={this.handlePrevious}>{'< Select different ticket'}</Btn.Tertiary>
-        <Btn primary onClick={this.toPayment}>
-          Proceed to Payment
-        </Btn>
+        <Content.Row>
+          <Btn.Tertiary onClick={this.handlePrevious}>{'< Select different ticket'}</Btn.Tertiary>
+          <Btn primary onClick={this.toPayment}>
+            Proceed to Payment
+          </Btn>
+        </Content.Row>
       </div>
     );
 

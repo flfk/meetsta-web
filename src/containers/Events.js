@@ -20,6 +20,8 @@ const propTypes = {};
 
 const defaultProps = {};
 
+const DEFAULT_EVENT_ID = 'meet-mackenzie-sol';
+
 class Events extends React.Component {
   state = {
     eventID: '',
@@ -38,7 +40,6 @@ class Events extends React.Component {
 
   componentDidMount() {
     try {
-      this.getEventId();
       this.setFormattedData();
     } catch (err) {
       console.error('Error in getting documents', err);
@@ -47,8 +48,10 @@ class Events extends React.Component {
 
   getEventId = () => {
     const params = queryString.parse(this.props.location.search);
-    const { eventID } = params;
-    console.log('get event ID, ', eventID);
+    let { eventID } = params;
+    if (!eventID) {
+      eventID = DEFAULT_EVENT_ID;
+    }
     return eventID;
   };
 
@@ -178,7 +181,7 @@ class Events extends React.Component {
             <img src={EVENT_IMAGE} alt={influencerName} />
           </Wrapper.EventImage>
 
-          <FONTS.A href={this.getIGLink()}>
+          <FONTS.A href={this.getIGLink()} target="_blank">
             <BtnProfile>
               <Wrapper.ProfileImage>
                 <img src={PROFILE_IMAGE} alt={influencerName} />
