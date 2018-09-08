@@ -11,11 +11,10 @@ import Content from '../components/Content';
 import EVENT_IMAGE from '../assets/eventImages/EventImageAndreSwilley.jpg';
 import PROFILE_IMAGE from '../assets/profileImages/ProfileImageAndreSwilley.jpg';
 import FONTS from '../utils/Fonts';
-import FooterSticky from '../components/FooterSticky';
+import FooterEvents from '../components/FooterEvents';
 import Wrapper from '../components/Wrapper';
 
 import db from '../data/firebase';
-
 
 const propTypes = {};
 
@@ -26,7 +25,6 @@ const DEFAULT_EVENT_ID = 'meet-mackenzie-sol';
 const GOOGLE_FORM_URL = 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2';
 
 class Events extends React.Component {
-
   state = {
     eventID: '',
     title: '',
@@ -216,15 +214,16 @@ class Events extends React.Component {
 
           <FONTS.P>{description}</FONTS.P>
         </Content.PaddingBottom>
-        <FooterSticky>
+        <FooterEvents>
           <Content.Row>
-            <Btn secondary onClick={this.openMailForm}>Send Info To Parents</Btn>
+            <Btn secondary onClick={this.openMailForm}>
+              Send Info To Parents
+            </Btn>
             <Btn onClick={this.toCheckout} primary>
               Get Tickets
             </Btn>
           </Content.Row>
-        </FooterSticky>
-
+        </FooterEvents>
       </div>
     );
   }
