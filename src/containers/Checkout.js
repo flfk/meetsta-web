@@ -137,7 +137,6 @@ class Checkout extends React.Component {
     let ticketsSold = 0;
     const eventTickets = await this.getEventTickets();
     eventTickets.forEach(ticket => (ticketsSold += ticket.sold));
-    console.log('total tickets sold is ', ticketsSold);
     return ticketsSold;
   };
 
@@ -145,7 +144,6 @@ class Checkout extends React.Component {
     let minsSold = 0;
     const eventTickets = await this.getEventTickets();
     eventTickets.forEach(ticket => (minsSold += ticket.sold * ticket.lengthMins));
-    console.log('total mins sold is ', minsSold);
     return minsSold;
   };
 
@@ -155,7 +153,6 @@ class Checkout extends React.Component {
     const snapshot = await eventRef.get();
     const data = await snapshot.data();
     const eventStart = data.dateStart;
-    console.log('event start is at ', eventStart);
     return eventStart;
   };
 
