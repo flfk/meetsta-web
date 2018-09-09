@@ -26,7 +26,7 @@ const H1 = styled.h1`
   font-size: ${FONT_SIZES.h1};
   font-family: ${FONT_FAMILY.header};
   color: ${COLORS.greys.primary};
-  font-weight: 400;
+  font-weight: 500;
 `;
 
 const H2 = styled.h2`

@@ -2,12 +2,17 @@ import styled from 'styled-components';
 import React from 'react';
 
 import COLORS from '../utils/Colors';
+import MEDIA from '../utils/Media';
 
 const Content = styled.div`
   display: flex;
   flex-direction: column;
   width: 600px;
   margin: auto;
+
+  ${MEDIA.tablet} {
+    width: auto;
+  }
 `;
 
 const Row = Content.extend`
