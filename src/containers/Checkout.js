@@ -306,7 +306,7 @@ class Checkout extends React.Component {
 
     let ticketCards = <div />;
     if (tickets) {
-      const ticketsSorted = tickets.sort((a, b) => a.price - b.price);
+      const ticketsSorted = tickets.sort((a, b) => b.price - a.price);
       ticketCards = ticketsSorted.map((ticket, index) => (
         <TicketCard
           key={ticket.ticketID}
@@ -316,7 +316,7 @@ class Checkout extends React.Component {
           lengthMins={ticket.lengthMins}
           price={ticket.price}
           onSelect={this.handleTicketSelect}
-          isPremium={!(tickets.length - (index + 1))}
+          isPremium={index === 0}
         />
       ));
     }
