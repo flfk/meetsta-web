@@ -2,11 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import Btn from '../components/Btn';
+import Btn from './Btn';
 import COLORS from '../utils/Colors';
-import Content from '../components/Content';
+import Content from './Content';
 import FONTS from '../utils/Fonts';
-import TicketImage from '../components/TicketImage';
+import TicketImage from './TicketImage';
+import MEDIA from '../utils/Media';
 
 const propTypes = {
   ticketID: PropTypes.string.isRequired,
@@ -23,12 +24,28 @@ const defaultProps = {};
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 342px;
+  // max-width: 342px;
   border: 1px solid ${COLORS.greys.light};
   border-radius: 5px;
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
   padding: 16px;
+  padding-top: 0px;
   margin-bottom: 32px;
+
+  ${MEDIA.tablet} {
+    box-shadow: none;
+    border: none;
+    margin-bottom: 16px;
+  }
+`;
+
+const H1 = FONTS.H1.extend`
+  margin-top: 16px;
+  margin-bottom: 8px;
+`;
+
+const H2 = FONTS.H2.extend`
+  margin: 8px 0;
 `;
 
 const Ticket = props => {
@@ -36,10 +53,10 @@ const Ticket = props => {
 
   return (
     <Container>
-      <FONTS.H2>{name}</FONTS.H2>
+      <H1>{name}</H1>
       <TicketImage isPremium={isPremium} />
-      <FONTS.H1>{lengthMins} mins</FONTS.H1>
-      <FONTS.H1>$ {price}</FONTS.H1>
+      <H2>{lengthMins} minute video chat</H2>
+      <H2>$ {price}</H2>
       <FONTS.P>{description}</FONTS.P>
       <Content.Seperator />
       <div>

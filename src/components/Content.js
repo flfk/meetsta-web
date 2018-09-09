@@ -37,7 +37,7 @@ const Seperator = styled.div`
   background-color: ${COLORS.greys.light};
 `;
 
-const FlexContainer = styled.div`
+const Center = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
@@ -63,11 +63,11 @@ const Spacing = styled.div`
 
 const Divider = () => {
   return (
-    <FlexContainer>
+    <Center>
       <SeperatorHalf />
       <Label>OR</Label>
       <SeperatorHalf />
-    </FlexContainer>
+    </Center>
   );
 };
 
@@ -76,5 +76,6 @@ Content.PaddingBottom = PaddingBottom;
 Content.Seperator = Seperator;
 Content.Divider = Divider;
 Content.Spacing = Spacing;
+Content.Center = Center;
 
 export default Content;
