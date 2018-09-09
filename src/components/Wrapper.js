@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import MEDIA from '../utils/Media';
+
 const EventImage = styled.div`
   height: 300px;
   width: 584px;
@@ -9,6 +11,11 @@ const EventImage = styled.div`
     height: 100%;
     width: 100%;
     border-radius: 5px;
+  }
+
+  ${MEDIA.tablet} {
+    width: auto;
+    height: auto;
   }
 `;
 

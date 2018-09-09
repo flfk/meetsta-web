@@ -215,14 +215,14 @@ class Events extends React.Component {
           <FONTS.P>{description}</FONTS.P>
         </Content.PaddingBottom>
         <FooterEvents>
-          <Content.Row>
-            <Btn secondary onClick={this.openMailForm}>
-              Send Info To Parents
-            </Btn>
+          <Content>
             <Btn onClick={this.toCheckout} primary>
               Get Tickets
             </Btn>
-          </Content.Row>
+            <Btn secondary onClick={this.openMailForm}>
+              Send Info To Parents
+            </Btn>
+          </Content>
         </FooterEvents>
       </div>
     );

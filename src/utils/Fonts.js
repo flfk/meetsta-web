@@ -26,7 +26,7 @@ const H1 = styled.h1`
   font-size: ${FONT_SIZES.h1};
   font-family: ${FONT_FAMILY.header};
   color: ${COLORS.greys.primary};
-  font-weight: 400;
+  font-weight: 500;
 `;
 
 const H2 = styled.h2`
@@ -40,7 +40,7 @@ const P = styled.span`
   font-size: ${FONT_SIZES.p};
   font-family: ${FONT_FAMILY.body};
   font-weight: 300;
-  color: ${COLORS.greys.secondary};
+  color: ${COLORS.greys.primary};
   margin: 8px 0;
 `;
 

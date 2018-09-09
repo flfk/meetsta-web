@@ -216,7 +216,7 @@ class Checkout extends React.Component {
 
   onCancel = data => {
     this.setState({
-      paypalErrorMsg: 'Ooops, looks like the Paypal payment was cancelled. Please try again.'
+      paypalErrorMsg: 'Oops, looks like the Paypal payment was cancelled. Please try again.'
     });
     console.error('Cancelled payment', data);
   };
@@ -307,8 +307,6 @@ class Checkout extends React.Component {
     let ticketCards = <div />;
     if (tickets) {
       const ticketsSorted = tickets.sort((a, b) => a.price - b.price);
-      console.log(tickets);
-      console.log(ticketsSorted);
       ticketCards = ticketsSorted.map((ticket, index) => (
         <TicketCard
           key={ticket.ticketID}
@@ -355,7 +353,7 @@ class Checkout extends React.Component {
           errMsg={emailErrMsg}
         />
         <Content.Row>
-          <Btn.Tertiary onClick={this.handlePrevious}>{'< Select different ticket'}</Btn.Tertiary>
+          <Btn.Tertiary onClick={this.handlePrevious}>{'< Back'}</Btn.Tertiary>
           <Btn primary onClick={this.toPayment}>
             Proceed to Payment
           </Btn>
@@ -367,7 +365,7 @@ class Checkout extends React.Component {
 
     const priceTotal = (ticketSelected.price + this.calculateFee(ticketSelected.price)).toFixed(2);
 
-    const payPalButton = paid ? null : (
+    const payPalCheckout = (
       <PayPalCheckout
         client={CLIENT}
         env={ENV}
@@ -381,6 +379,8 @@ class Checkout extends React.Component {
         isFormValid={true}
       />
     );
+
+    const payPalButton = paid ? null : payPalCheckout;
 
     const payment = (
       <div>
@@ -406,7 +406,7 @@ class Checkout extends React.Component {
         {paypalError}
         {payPalButton}
         <Content.Spacing />
-        <Btn.Tertiary onClick={this.handlePrevious}>{'< Back to basic information'}</Btn.Tertiary>
+        <Btn.Tertiary onClick={this.handlePrevious}>{'< Back'}</Btn.Tertiary>
       </div>
     );
 

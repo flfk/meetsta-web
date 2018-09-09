@@ -103,6 +103,7 @@ class OrderConfirmation extends React.Component {
           Or message us on Instagram at{' '}
           <FONTS.A href={CONTACT_INSTAGRAM}>{CONTACT_INSTAGRAM}</FONTS.A>
         </FONTS.P>
+        <Content.Spacing />
       </Content>
     );
   }

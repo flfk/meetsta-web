@@ -2,12 +2,21 @@ import styled from 'styled-components';
 import React from 'react';
 
 import COLORS from '../utils/Colors';
+import MEDIA from '../utils/Media';
 
 const Content = styled.div`
   display: flex;
   flex-direction: column;
   width: 600px;
   margin: auto;
+
+  padding-left: 16px;
+  padding-right: 16px;
+
+  ${MEDIA.tablet} {
+    width: auto;
+    margin: 0;
+  }
 `;
 
 const Row = Content.extend`
@@ -15,6 +24,7 @@ const Row = Content.extend`
   flex-direction: row;
   flex-basis: 600px;
   margin: auto;
+  justify-content: space-between;
 `;
 
 const PaddingBottom = Content.extend`
@@ -28,7 +38,7 @@ const Seperator = styled.div`
   background-color: ${COLORS.greys.light};
 `;
 
-const FlexContainer = styled.div`
+const Center = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
@@ -54,11 +64,11 @@ const Spacing = styled.div`
 
 const Divider = () => {
   return (
-    <FlexContainer>
+    <Center>
       <SeperatorHalf />
       <Label>OR</Label>
       <SeperatorHalf />
-    </FlexContainer>
+    </Center>
   );
 };
 
@@ -67,5 +77,6 @@ Content.PaddingBottom = PaddingBottom;
 Content.Seperator = Seperator;
 Content.Divider = Divider;
 Content.Spacing = Spacing;
+Content.Center = Center;
 
 export default Content;
