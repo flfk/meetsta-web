@@ -355,7 +355,7 @@ class Checkout extends React.Component {
           errMsg={emailErrMsg}
         />
         <Content.Row>
-          <Btn.Tertiary onClick={this.handlePrevious}>{'< Select different ticket'}</Btn.Tertiary>
+          <Btn.Tertiary onClick={this.handlePrevious}>{'< Back'}</Btn.Tertiary>
           <Btn primary onClick={this.toPayment}>
             Proceed to Payment
           </Btn>
@@ -406,7 +406,7 @@ class Checkout extends React.Component {
         {paypalError}
         {payPalButton}
         <Content.Spacing />
-        <Btn.Tertiary onClick={this.handlePrevious}>{'< Back to basic information'}</Btn.Tertiary>
+        <Btn.Tertiary onClick={this.handlePrevious}>{'< Back'}</Btn.Tertiary>
       </div>
     );
 

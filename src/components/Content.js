@@ -24,6 +24,7 @@ const Row = Content.extend`
   flex-direction: row;
   flex-basis: 600px;
   margin: auto;
+  justify-content: space-between;
 `;
 
 const PaddingBottom = Content.extend`

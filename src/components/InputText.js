@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
+import Content from './Content';
 import COLORS from '../utils/Colors';
 
 const propTypes = {
@@ -24,7 +25,6 @@ const Label = styled.label`
 `;
 
 const Input = styled.input`
-  width: 100%;
   padding: 1em 1em;
   border-radius: 3px;
   margin-bottom: 16px;
@@ -69,11 +69,11 @@ const InputText = props => {
   const errLabel = errMsg ? <ErrLabel>{errMsg}</ErrLabel> : null;
 
   return (
-    <div>
+    <Content>
       <Label>{label}</Label>
       <Input type="text" onChange={onChange} placeholder={placeholder} value={value} />
       {errLabel}
-    </div>
+    </Content>
   );
 };
 
