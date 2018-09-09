@@ -2,7 +2,7 @@
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import validator from 'validator';
-import queryString from 'query-string';
+import qs from 'qs';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
@@ -260,7 +260,7 @@ class Checkout extends React.Component {
   };
 
   getEventId = () => {
-    const params = queryString.parse(this.props.location.search);
+    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
     return params.eventID;
   };
 
@@ -294,8 +294,6 @@ class Checkout extends React.Component {
       paypalErrorMsg,
       paid
     } = this.state;
-
-    console.log(ticketSelected);
 
     if (toConfirmation === true)
       return (

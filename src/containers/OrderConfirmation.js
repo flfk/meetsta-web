@@ -1,6 +1,6 @@
 // import PropTypes from 'prop-types';
 import React from 'react';
-import queryString from 'query-string';
+import qs from 'qs';
 import moment from 'moment-timezone';
 
 import Content from '../components/Content';
@@ -44,7 +44,7 @@ class OrderConfirmation extends React.Component {
   }
 
   getOrderId = () => {
-    const params = queryString.parse(this.props.location.search);
+    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
     return params.ticketID;
   };
 

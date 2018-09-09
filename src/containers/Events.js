@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { FaDollarSign, FaCalendar, FaClock } from 'react-icons/fa';
-import queryString from 'query-string';
+import qs from 'qs';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
 
@@ -53,8 +53,10 @@ class Events extends React.Component {
   };
 
   getEventId = () => {
-    const params = queryString.parse(this.props.location.search);
+    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
     let { eventID } = params;
+    console.log(params);
+    console.log(eventID);
     if (!eventID) {
       eventID = DEFAULT_EVENT_ID;
     }
