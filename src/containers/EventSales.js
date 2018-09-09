@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import qs from 'qs';
 
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 
 import db from '../data/firebase';
 
-const EVENT_ID = 'OU6FjdRhTH6k7I8URpUS';
 const MEETSTA_COMISSION = 0.15;
 
 // const propTypes = {};
@@ -15,45 +15,116 @@ const MEETSTA_COMISSION = 0.15;
 
 class EventSales extends React.Component {
   state = {
-    name: 'Andre Swiley - Meet & Greet Online',
-    influencerName: 'Andre Swiley',
+    eventID: '',
+    title: '',
+    influencerName: '',
+    tickets: [],
     ticketsSold: 0,
     revenue: 0
   };
 
   componentDidMount() {
     try {
-      this.getSalesData();
+      this.setFormattedData();
     } catch (err) {
       console.error('Error in getting documents', err);
     }
   }
 
-  getSalesData = async () => {
-    const ticketsRef = db.collection('tickets');
-    const queryRef = ticketsRef.where('eventID', '==', EVENT_ID);
-    const snapshot = await queryRef.get();
+  getEventId = () => {
+    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+    let { eventID } = params;
+    if (!eventID) {
+      eventID = '';
+    }
+    return eventID;
+  };
 
-    let ticketsSold = 0;
+  getEventData = async eventID => {
+    try {
+      const eventRef = db.collection('events').doc(eventID);
+      const snapshot = await eventRef.get();
+      const data = await snapshot.data();
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getTicketData = async eventID => {
+    try {
+      const tickets = [];
+      const ticketsRef = db
+        .collection('events')
+        .doc(eventID)
+        .collection('tickets');
+      const snapshot = await ticketsRef.get();
+      snapshot.forEach(ticket => tickets.push({ ticketID: ticket.id, ...ticket.data() }));
+      return tickets;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  setFormattedData = async () => {
+    const eventID = this.getEventId();
+    try {
+      const event = await this.getEventData(eventID);
+      const tickets = await this.getTicketData(eventID);
+      const ticketsSold = this.getTotalTicketsSold(tickets);
+      const revenue = this.getTotalTicketRevenue(tickets);
+      const formattedData = {
+        eventID,
+        title: event.title,
+        influencerName: event.organiserName,
+        tickets
+      };
+      this.setState({ eventID, ...formattedData, ticketsSold, revenue });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getTotalTicketsSold = tickets => {
+    let sold = 0;
+    tickets.forEach(ticket => (sold += ticket.sold));
+    return sold;
+  };
+
+  getTotalTicketRevenue = tickets => {
     let revenue = 0;
-    snapshot.forEach(ticket => {
-      ticketsSold += 1;
-      const data = ticket.data();
-      revenue += data.price * (1 - MEETSTA_COMISSION);
-    });
-    this.setState({ ticketsSold, revenue });
+    tickets.forEach(ticket => (revenue += ticket.sold * ticket.price));
+    return revenue;
   };
 
   render() {
-    const { name, influencerName, ticketsSold, revenue } = this.state;
+    const { title, influencerName, ticketsSold, revenue, tickets } = this.state;
+
+    let detailedSales = <div />;
+
+    if (tickets) {
+      detailedSales = tickets.map(ticket => {
+        return (
+          <div>
+            <FONTS.H1>{ticket.name} Sales</FONTS.H1>
+            <FONTS.H2>{ticket.sold} tickets sold</FONTS.H2>
+            <FONTS.H2>${this.getTotalTicketRevenue([ticket])} earned</FONTS.H2>
+            <Content.Seperator />
+          </div>
+        );
+      });
+    }
 
     return (
       <Content>
-        <FONTS.H1>{name}</FONTS.H1>
+        <FONTS.H1>{title}</FONTS.H1>
         <FONTS.H2>{influencerName}</FONTS.H2>
         <Content.Seperator />
+        <FONTS.H1>Total Sales</FONTS.H1>
         <FONTS.H2>{ticketsSold} tickets sold</FONTS.H2>
-        <FONTS.H1>${revenue.toFixed(2)} earned</FONTS.H1>
+        <FONTS.H2>${revenue.toFixed(2)} earned</FONTS.H2>
+        <Content.Seperator />
+        {detailedSales}
       </Content>
     );
   }
