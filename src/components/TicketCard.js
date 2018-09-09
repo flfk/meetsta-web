@@ -14,7 +14,8 @@ const propTypes = {
   description: PropTypes.string.isRequired,
   lengthMins: PropTypes.number.isRequired,
   price: PropTypes.number.isRequired,
-  onSelect: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired,
+  isPremium: PropTypes.bool.isRequired
 };
 
 const defaultProps = {};
@@ -31,12 +32,12 @@ const Container = styled.div`
 `;
 
 const Ticket = props => {
-  const { ticketID, name, description, lengthMins, price, onSelect } = props;
+  const { ticketID, name, description, lengthMins, price, onSelect, isPremium } = props;
 
   return (
     <Container>
       <FONTS.H2>{name}</FONTS.H2>
-      <TicketImage />
+      <TicketImage isPremium={isPremium} />
       <FONTS.H1>{lengthMins} mins</FONTS.H1>
       <FONTS.H1>$ {price}</FONTS.H1>
       <FONTS.P>{description}</FONTS.P>

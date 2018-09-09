@@ -8,8 +8,8 @@ import moment from 'moment-timezone';
 import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
 import Content from '../components/Content';
-import EVENT_IMAGE from '../assets/eventImages/EventImageAndreSwilley.jpg';
-import PROFILE_IMAGE from '../assets/profileImages/ProfileImageAndreSwilley.jpg';
+import EVENT_IMAGE from '../assets/eventImages/EventImageMackenzieSol.jpg';
+import PROFILE_IMAGE from '../assets/profileImages/ProfileImageMackenzieSol.png';
 import FONTS from '../utils/Fonts';
 import FooterEvents from '../components/FooterEvents';
 import Wrapper from '../components/Wrapper';
@@ -55,8 +55,6 @@ class Events extends React.Component {
   getEventId = () => {
     const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
     let { eventID } = params;
-    console.log(params);
-    console.log(eventID);
     if (!eventID) {
       eventID = DEFAULT_EVENT_ID;
     }

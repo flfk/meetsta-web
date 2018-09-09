@@ -2,11 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import TICKET_IMAGE from '../assets/TicketTest.png';
+import TICKET_PREMIUM from '../assets/ticketImages/TicketPremiumMackenzieSol.png';
+import TICKET_STANDARD from '../assets/ticketImages/TicketStandardMackenzieSol.png';
 
-const propTypes = {};
+const propTypes = {
+  isPremium: PropTypes.bool
+};
 
-const defaultProps = {};
+const defaultProps = {
+  isPremium: false
+};
 
 const WrapperEventImage = styled.div`
   height: 200px;
@@ -22,11 +27,15 @@ const WrapperEventImage = styled.div`
 `;
 
 const ImageTicket = props => {
-  return (
-    <WrapperEventImage>
-      <img src={TICKET_IMAGE} alt="Event ticket" />
-    </WrapperEventImage>
+  const { isPremium } = props;
+
+  const ticketImg = isPremium ? (
+    <img src={TICKET_PREMIUM} alt="Event ticket" />
+  ) : (
+    <img src={TICKET_STANDARD} alt="Event ticket" />
   );
+
+  return <WrapperEventImage>{ticketImg}</WrapperEventImage>;
 };
 
 ImageTicket.propTypes = propTypes;
