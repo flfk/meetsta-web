@@ -10,8 +10,12 @@ const Content = styled.div`
   width: 600px;
   margin: auto;
 
+  padding-left: 16px;
+  padding-right: 16px;
+
   ${MEDIA.tablet} {
     width: auto;
+    margin: 0;
   }
 `;
 

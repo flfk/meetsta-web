@@ -40,7 +40,7 @@ const P = styled.span`
   font-size: ${FONT_SIZES.p};
   font-family: ${FONT_FAMILY.body};
   font-weight: 300;
-  color: ${COLORS.greys.secondary};
+  color: ${COLORS.greys.primary};
   margin: 8px 0;
 `;
 

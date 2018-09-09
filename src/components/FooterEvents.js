@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import COLORS from '../utils/Colors';
+import MEDIA from '../utils/Media';
 
 const FooterEvents = styled.div`
   position: fixed;
@@ -12,6 +13,12 @@ const FooterEvents = styled.div`
 
   display: flex;
   justify-content: center;
+
+  ${MEDIA.tablet} {
+    flex-direction: column;
+    // width: calc(100% -32px);
+    position-left: 0;
+  }
 `;
 
 export default FooterEvents;
