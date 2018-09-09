@@ -16,10 +16,13 @@ const propTypes = {
   lengthMins: PropTypes.number.isRequired,
   price: PropTypes.number.isRequired,
   onSelect: PropTypes.func.isRequired,
-  isPremium: PropTypes.bool.isRequired
+  isPremium: PropTypes.bool.isRequired,
+  extras: PropTypes.array
 };
 
-const defaultProps = {};
+const defaultProps = {
+  extras: []
+};
 
 const Container = styled.div`
   display: flex;
@@ -49,13 +52,20 @@ const H2 = FONTS.H2.extend`
 `;
 
 const Ticket = props => {
-  const { ticketID, name, description, lengthMins, price, onSelect, isPremium } = props;
+  const { ticketID, name, description, lengthMins, price, onSelect, isPremium, extras } = props;
+
+  let extrasDiv = <div />;
+
+  if (extras) {
+    extrasDiv = extras.map(extra => <H2>+ {extra}</H2>);
+  }
 
   return (
     <Container>
       <H1>{name}</H1>
       <TicketImage isPremium={isPremium} />
       <H2>{lengthMins} minute video chat</H2>
+      {extrasDiv}
       <H2>$ {price}</H2>
       <FONTS.P>{description}</FONTS.P>
       <Content.Seperator />

@@ -58,7 +58,11 @@ class Checkout extends React.Component {
     this.toConfirmation();
   }
 
-  getEventData = () => this.props.location.state.eventData;
+  getEventData = () => {
+    if (this.props.location.state) {
+      return this.props.location.state.eventData;
+    }
+  };
 
   handleChangeFirstName = event => {
     this.setState({ nameFirst: event.target.value });
@@ -317,6 +321,7 @@ class Checkout extends React.Component {
           price={ticket.price}
           onSelect={this.handleTicketSelect}
           isPremium={index === 0}
+          extras={ticket.extras}
         />
       ));
     }
