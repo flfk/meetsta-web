@@ -4,9 +4,11 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { StripeProvider } from 'react-stripe-elements';
 
 import Checkout from './containers/Checkout';
+import ContactUs from './containers/ContactUs';
 import Events from './containers/Events';
 import EventSales from './containers/EventSales';
 import LandingPage from './containers/LandingPage';
+import Schedule from './containers/Schedule';
 import Main from './components/Main';
 import NavBar from './containers/NavBar';
 import TermsConditions from './containers/TermsConditions';
@@ -34,8 +36,10 @@ class App extends Component {
                 <Route path="/checkout" component={Checkout} />
                 <Route path="/confirmation" component={OrderConfirmation} />
                 <Route path="/eventSales" component={EventSales} />
+                <Route path="/schedule" component={Schedule} />
                 <Route path="/termsConditions" component={TermsConditions} />
                 <Route path="/privacyPolicy" component={PrivacyPolicy} />
+                <Route path="/contactus" component={ContactUs} />
               </Switch>
             </Main>
           </div>
