@@ -91,9 +91,11 @@ class EventSales extends React.Component {
     return sold;
   };
 
+  getInfluencerRevenue = revenue => revenue * (1 - MEETSTA_COMISSION);
+
   getTotalTicketRevenue = tickets => {
     let revenue = 0;
-    tickets.forEach(ticket => (revenue += ticket.sold * ticket.price));
+    tickets.forEach(ticket => (revenue += this.getInfluencerRevenue(ticket.sold * ticket.price)));
     return revenue;
   };
 
