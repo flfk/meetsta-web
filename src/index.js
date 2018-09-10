@@ -7,7 +7,7 @@ import registerServiceWorker from './registerServiceWorker';
 import './global-styles.js';
 
 // configure dotenv file
-require('dotenv').config();
+// require('dotenv').config();
 
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
