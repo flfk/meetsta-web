@@ -6,12 +6,16 @@ import Content from './Content';
 import FONTS from '../utils/Fonts';
 
 const propTypes = {
-  item: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  fee: PropTypes.number.isRequired
+  item: PropTypes.string,
+  price: PropTypes.number,
+  fee: PropTypes.number
 };
 
-const defaultProps = {};
+const defaultProps = {
+  item: '',
+  price: 0,
+  fee: 0
+};
 
 const Row = styled.div`
   display: flex;

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import TICKET_PREMIUM from '../assets/ticketImages/TicketPremiumMackenzieSol.png';
 import TICKET_STANDARD from '../assets/ticketImages/TicketStandardMackenzieSol.png';
+import MEDIA from '../utils/Media';
 
 const propTypes = {
   isPremium: PropTypes.bool
@@ -16,13 +17,18 @@ const defaultProps = {
 const WrapperEventImage = styled.div`
   height: 200px;
   width: 344px;
-  margin-bottom: 24px;
   border-radius: 5px;
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px 0;
   img {
     height: 100%;
     width: 100%;
     border-radius: 5px;
+  }
+
+  ${MEDIA.tablet} {
+    height: 156px;
+    width: 312px;
   }
 `;
 
