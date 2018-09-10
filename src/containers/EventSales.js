@@ -107,7 +107,7 @@ class EventSales extends React.Component {
         <div key={ticket.name}>
           <FONTS.H1>{ticket.name} Sales</FONTS.H1>
           <FONTS.H2>{ticket.sold} tickets sold</FONTS.H2>
-          <FONTS.H2>${this.getTotalTicketRevenue([ticket])} earned</FONTS.H2>
+          <FONTS.H2>${this.getTotalTicketRevenue([ticket]).toFixed(2)} earned</FONTS.H2>
           <Content.Seperator />
         </div>
       ));
