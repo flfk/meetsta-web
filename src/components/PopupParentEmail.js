@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FaTimes, FaCheck } from 'react-icons/fa';
+import validator from 'validator';
 
 import Btn from './Btn';
 import Content from './Content';
@@ -39,11 +40,6 @@ const Card = styled.div`
 `;
 
 const propTypes = {
-  label: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  erroMsg: PropTypes.string,
   sendEmail: PropTypes.func.isRequired,
   closeWindow: PropTypes.func.isRequired
 };
@@ -55,11 +51,39 @@ const defaultProps = {
 
 class PopupParentEmail extends React.Component {
   state = {
-    popupStep: 0
+    popupStep: 0,
+    nameFirstErrMsg: '',
+    emailErrMsg: ''
+  };
+
+  handleSend = () => {
+    this.setState({ popupStep: 1 });
+  };
+
+  validateForm = () => {
+    const { nameFirst, email } = this.state;
+
+    let isFormValid = true;
+
+    if (nameFirst === '') {
+      this.setState({ nameFirstErrMsg: 'First name required.' });
+      isFormValid = false;
+    } else {
+      this.setState({ nameFirstErrMsg: '' });
+    }
+
+    if (!validator.isEmail(email)) {
+      this.setState({ emailErrMsg: 'Valid email address required.' });
+      isFormValid = false;
+    } else {
+      this.setState({ emailErrMsg: '' });
+    }
+
+    return isFormValid;
   };
 
   render() {
-    const { popupStep } = this.state;
+    const { popupStep, nameFirstErrMsg, emailErrMsg } = this.state;
 
     const emailFormStep = (
       <div>
@@ -69,9 +93,15 @@ class PopupParentEmail extends React.Component {
           </Btn.Tertiary>
           <Content>
             <FONTS.H1>Share Event Info</FONTS.H1>
-            <InputText label="Your name" placeholder="Jane Doe" />
-            <InputText label="Email address to send to" placeholder="Janes-Mum@gmail.com" />
-            <Btn primary>Send</Btn>
+            <InputText label="Your first name" placeholder="Jane" errorMsg={nameFirstErrMsg} />
+            <InputText
+              label="Email address to send to"
+              placeholder="Janes-Mum@gmail.com"
+              errorMsg={emailErrMsg}
+            />
+            <Btn primary onClick={this.handleSend}>
+              Send
+            </Btn>
           </Content>
         </Card>
       </div>

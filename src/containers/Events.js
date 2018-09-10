@@ -153,6 +153,12 @@ class Events extends React.Component {
     }
   };
 
+  formatText = text => {
+    const textSplit = text.split('NEWLINE');
+    const textFormatted = textSplit.map(line => <FONTS.P>{line}</FONTS.P>);
+    return textFormatted;
+  };
+
   render() {
     const {
       eventID,
@@ -178,6 +184,8 @@ class Events extends React.Component {
           }}
         />
       );
+
+    const descriptionFormatted = this.formatText(description);
 
     return (
       <div>
@@ -213,7 +221,7 @@ class Events extends React.Component {
 
           <br />
 
-          <FONTS.P>{description}</FONTS.P>
+          {descriptionFormatted}
         </Content.PaddingBottom>
         <FooterEvents>
           <Content>
@@ -225,7 +233,6 @@ class Events extends React.Component {
             </Btn>
           </Content>
         </FooterEvents>
-        <PopupParentEmail />
       </div>
     );
   }
