@@ -43,7 +43,9 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  erroMsg: PropTypes.string
+  erroMsg: PropTypes.string,
+  sendEmail: PropTypes.func.isRequired,
+  closeWindow: PropTypes.func.isRequired
 };
 
 const defaultProps = {
@@ -51,41 +53,58 @@ const defaultProps = {
   erroMsg: ''
 };
 
-const PopupParentEmail = props => {
-  const shareInfoScreen = (
-    <div>
-      <Card>
-        <Btn.Tertiary primary>
-          <FaTimes />
-        </Btn.Tertiary>
-        <Content>
-          <FONTS.H1>Share Event Info</FONTS.H1>
-          <InputText label="Your name" placeholder="Jane Doe" />
-          <InputText label="Email address to send to" placeholder="Janes-Mum@gmail.com" />
-          <Btn primary>Send</Btn>
-        </Content>
-      </Card>
-    </div>
-  );
+class PopupParentEmail extends React.Component {
+  state = {
+    popupStep: 0
+  };
 
-  const emailSentScreen = (
-    <div>
-      <Card>
-        <Content>
-          <FONTS.H1>Email was sent!</FONTS.H1>
-          <Btn primary>Back to Event</Btn>
-        </Content>
-      </Card>
-    </div>
-  );
+  render() {
+    const { popupStep } = this.state;
 
-  return (
-    <div>
-      <Background />
-      {emailSentScreen}
-    </div>
-  );
-};
+    const emailFormStep = (
+      <div>
+        <Card>
+          <Btn.Tertiary primary>
+            <FaTimes />
+          </Btn.Tertiary>
+          <Content>
+            <FONTS.H1>Share Event Info</FONTS.H1>
+            <InputText label="Your name" placeholder="Jane Doe" />
+            <InputText label="Email address to send to" placeholder="Janes-Mum@gmail.com" />
+            <Btn primary>Send</Btn>
+          </Content>
+        </Card>
+      </div>
+    );
+
+    const emailSentStep = (
+      <div>
+        <Card>
+          <Content>
+            <FONTS.H1>Email was sent!</FONTS.H1>
+            <Btn primary>Back to Event</Btn>
+          </Content>
+        </Card>
+      </div>
+    );
+
+    let popupComponent = <div />;
+    switch (popupStep) {
+      case 1:
+        popupComponent = emailSentStep;
+        break;
+      default:
+        popupComponent = emailFormStep;
+    }
+
+    return (
+      <div>
+        <Background />
+        {popupComponent}
+      </div>
+    );
+  }
+}
 
 PopupParentEmail.propTypes = propTypes;
 PopupParentEmail.defaultProps = defaultProps;
