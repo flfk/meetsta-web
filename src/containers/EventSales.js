@@ -103,22 +103,19 @@ class EventSales extends React.Component {
     let detailedSales = <div />;
 
     if (tickets) {
-      detailedSales = tickets.map(ticket => {
-        return (
-          <div>
-            <FONTS.H1>{ticket.name} Sales</FONTS.H1>
-            <FONTS.H2>{ticket.sold} tickets sold</FONTS.H2>
-            <FONTS.H2>${this.getTotalTicketRevenue([ticket])} earned</FONTS.H2>
-            <Content.Seperator />
-          </div>
-        );
-      });
+      detailedSales = tickets.map(ticket => (
+        <div key={ticket.name}>
+          <FONTS.H1>{ticket.name} Sales</FONTS.H1>
+          <FONTS.H2>{ticket.sold} tickets sold</FONTS.H2>
+          <FONTS.H2>${this.getTotalTicketRevenue([ticket])} earned</FONTS.H2>
+          <Content.Seperator />
+        </div>
+      ));
     }
 
     return (
       <Content>
         <FONTS.H1>{title}</FONTS.H1>
-        <FONTS.H2>{influencerName}</FONTS.H2>
         <Content.Seperator />
         <FONTS.H1>Total Sales</FONTS.H1>
         <FONTS.H2>{ticketsSold} tickets sold</FONTS.H2>
