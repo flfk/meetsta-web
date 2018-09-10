@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import qs from 'qs';
+import moment from 'moment-timezone';
 
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
@@ -14,6 +15,7 @@ import db from '../data/firebase';
 class EventSales extends React.Component {
   state = {
     eventID: '',
+    eventTitle: '',
     tickets: []
   };
 
@@ -46,15 +48,20 @@ class EventSales extends React.Component {
         tickets.push(ticket);
       });
       const ticketsSorted = tickets.sort((a, b) => a.startTime - b.startTime);
-      console.log(ticketsSorted);
-      this.setState({ tickets: ticketsSorted });
+      const { eventTitle } = tickets[0];
+      this.setState({ tickets: ticketsSorted, eventTitle });
     } catch (error) {
       console.error(error);
     }
   };
 
+  formatStartTime = startTime => {
+    const time = moment.tz(startTime, 'America/Los_Angeles').format('H:mm a, dddd, MMM Do');
+    return `${time} PDT`;
+  };
+
   render() {
-    const { tickets } = this.state;
+    const { tickets, eventTitle } = this.state;
 
     let schedule = <div />;
 
@@ -62,7 +69,8 @@ class EventSales extends React.Component {
       schedule = tickets.map(ticket => (
         <div key={ticket.orderNum}>
           <Content.Row>
-            <FONTS.P>{ticket.startTime}</FONTS.P>
+            <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
+            <FONTS.P>{ticket.name}</FONTS.P>
             <FONTS.P>{ticket.purchaseNameFirst}</FONTS.P>
           </Content.Row>
           <Content.Seperator />
@@ -72,7 +80,7 @@ class EventSales extends React.Component {
 
     return (
       <Content>
-        <FONTS.H1>Schedule</FONTS.H1>
+        <FONTS.H1>Schedule - {eventTitle}</FONTS.H1>
         {schedule}
       </Content>
     );

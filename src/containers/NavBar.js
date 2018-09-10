@@ -37,6 +37,9 @@ const NavBar = () => (
             <FONTS.LOGO>Meetsta</FONTS.LOGO>
           </Link>
         </li>
+        <li>
+          <Link to="/contactUs">Contact Us</Link>
+        </li>
       </NavBarList>
     </NavBarWrapper>
   </div>
