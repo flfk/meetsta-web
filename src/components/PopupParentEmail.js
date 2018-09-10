@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaCheck } from 'react-icons/fa';
 
 import Btn from './Btn';
 import Content from './Content';
@@ -54,7 +54,6 @@ const defaultProps = {
 const PopupParentEmail = props => {
   const shareInfoScreen = (
     <div>
-      <Background />
       <Card>
         <Btn.Tertiary primary>
           <FaTimes />
@@ -69,7 +68,23 @@ const PopupParentEmail = props => {
     </div>
   );
 
-  return <div>{shareInfoScreen}</div>;
+  const emailSentScreen = (
+    <div>
+      <Card>
+        <Content>
+          <FONTS.H1>Email was sent!</FONTS.H1>
+          <Btn primary>Back to Event</Btn>
+        </Content>
+      </Card>
+    </div>
+  );
+
+  return (
+    <div>
+      <Background />
+      {emailSentScreen}
+    </div>
+  );
 };
 
 PopupParentEmail.propTypes = propTypes;
