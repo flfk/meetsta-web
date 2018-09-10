@@ -16,7 +16,7 @@ const defaultProps = {
 
 const WrapperEventImage = styled.div`
   height: 200px;
-  width: 344px;
+  width: 416px;
   border-radius: 5px;
   box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
   margin: 8px 0;
