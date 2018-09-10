@@ -9,6 +9,7 @@ import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
 import Content from '../components/Content';
 import EVENT_IMAGE from '../assets/eventImages/EventImageMackenzieSol.jpg';
+import PopupParentEmail from '../components/PopupParentEmail';
 import PROFILE_IMAGE from '../assets/profileImages/ProfileImageMackenzieSol.png';
 import FONTS from '../utils/Fonts';
 import FooterEvents from '../components/FooterEvents';
@@ -224,6 +225,7 @@ class Events extends React.Component {
             </Btn>
           </Content>
         </FooterEvents>
+        <PopupParentEmail />
       </div>
     );
   }
