@@ -19,6 +19,10 @@ const Content = styled.div`
   }
 `;
 
+const CenteredBothAxis = Content.extend`
+  justify-content: center;
+`;
+
 const Row = Content.extend`
   display: flex;
   flex-direction: row;
@@ -78,5 +82,6 @@ Content.Seperator = Seperator;
 Content.Divider = Divider;
 Content.Spacing = Spacing;
 Content.Center = Center;
+Content.CenteredBothAxis = CenteredBothAxis;
 
 export default Content;

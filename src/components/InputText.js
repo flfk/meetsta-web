@@ -10,12 +10,12 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  erroMsg: PropTypes.string
+  errMsg: PropTypes.string
 };
 
 const defaultProps = {
   placeholder: '',
-  erroMsg: ''
+  errMsg: ''
 };
 
 const Label = styled.label`
@@ -26,6 +26,7 @@ const Label = styled.label`
 
 const Input = styled.input`
   padding: 1em 1em;
+  max-width: 90%;
   border-radius: 3px;
   margin-bottom: 16px;
   border: 1px solid ${COLORS.greys.light};
@@ -56,15 +57,6 @@ const ErrInput = Input.extend`
 
 const InputText = props => {
   const { value, label, onChange, placeholder, errMsg } = props;
-
-  // const input = errMsg ? (
-  //   <div>
-  //     <ErrInput type="text" onChange={onChange} placeholder={placeholder} value={value} />
-  //     <ErrLabel>{errMsg}</ErrLabel>
-  //   </div>
-  // ) : (
-  //   <Input type="text" onChange={onChange} placeholder={placeholder} value={value} />
-  // );
 
   const errLabel = errMsg ? <ErrLabel>{errMsg}</ErrLabel> : null;
 
