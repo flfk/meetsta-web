@@ -20,9 +20,6 @@ exports.orderConfirmationEmail = functions.firestore
     const msg = {
       to: ticket.purchaseEmail,
       from: 'contact.meetsta@gmail.com',
-      subject: 'Sending with SendGrid is Fun',
-      text: 'and easy to do anywhere, even with Node.js',
-      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
       templateId: 'd-9151449bb4e4476eb06436f9574a0a01',
       dynamic_template_data: {
         orderNum: ticket.orderNum,
@@ -36,8 +33,30 @@ exports.orderConfirmationEmail = functions.firestore
 
     return sgMail
       .send(msg)
-      .then(() => console.log('email sent'))
+      .then(() => console.log('Order confirmation email sent'))
       .catch(error => {
         console.error(error.toString());
       });
   });
+
+exports.parentInfoEmail = functions.firestore.document('emails/{emails}').onCreate(snap => {
+  const emailRequest = snap.data();
+
+  const msg = {
+    to: emailRequest.email,
+    from: 'contact.meetsta@gmail.com',
+    templateId: 'd-7d252bc894324c598329e60393e7c6cb',
+    dynamic_template_data: {
+      nameFirst: emailRequest.nameFirst,
+      influencerName: emailRequest.influencerName,
+      eventURL: emailRequest.eventURL
+    }
+  };
+
+  return sgMail
+    .send(msg)
+    .then(() => console.log('Parent email sent'))
+    .catch(error => {
+      console.error(error.toString());
+    });
+});

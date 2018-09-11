@@ -48,7 +48,12 @@ const H1 = FONTS.H1.extend`
   margin-bottom: 8px;
 `;
 
-const H3 = FONTS.H3.extend`
+const H2 = FONTS.H2.extend`
+  margin-top: 0;
+  margin-bottom: 16px;
+`;
+
+const P = FONTS.P.extend`
   margin: 8px 0;
 `;
 
@@ -68,18 +73,18 @@ const Ticket = props => {
   let extrasDiv = <div />;
 
   if (extras) {
-    extrasDiv = extras.map(extra => <H3>+ {extra}</H3>);
+    extrasDiv = extras.map(extra => <P>{extra}</P>);
   }
 
   return (
     <Container>
       <H1>{name}</H1>
-      <TicketImage isPremium={isPremium} eventID={eventID} />
-      <H3>{lengthMins} minute video chat</H3>
-      {extrasDiv}
-      <H3>$ {price}</H3>
+      <TicketImage isPremium={isPremium} />
+      <P>{lengthMins} minute one-on-one video call</P>
       <FONTS.P>{description}</FONTS.P>
+      {extrasDiv}
       <Content.Seperator />
+      <H2>$ {price}</H2>
       <div>
         <Btn.Full primary onClick={onSelect} id={ticketID}>
           Get Ticket
