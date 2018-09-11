@@ -45,7 +45,7 @@ const Seperator = styled.div`
 const Center = styled.div`
   display: flex;
   width: 100%;
-  align-items: center;
+  justify-content: center;
 `;
 
 const SeperatorHalf = styled.div`

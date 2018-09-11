@@ -86,7 +86,9 @@ const Ticket = props => {
       {extrasDiv}
       {descriptionDiv}
       <Content.Seperator />
-      <H2>$ {price}</H2>
+      <Content.Center>
+        <H2>$ {price}</H2>
+      </Content.Center>
       <div>
         <Btn.Full primary onClick={onSelect} id={ticketID}>
           Get Ticket
