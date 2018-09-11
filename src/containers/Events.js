@@ -185,6 +185,8 @@ class Events extends React.Component {
         />
       );
 
+    const priceRange = priceMax === priceMin ? priceMin : `${priceMin} - ${priceMax}`;
+
     const descriptionFormatted = this.formatText(description);
 
     const emailPopup = showEmailPopup ? (
@@ -224,7 +226,7 @@ class Events extends React.Component {
           </FONTS.P>
 
           <FONTS.P>
-            <FaDollarSign /> ${priceMin} - ${priceMax}
+            <FaDollarSign /> {priceRange}
           </FONTS.P>
 
           <br />
