@@ -23,8 +23,6 @@ const defaultProps = {};
 
 const DEFAULT_EVENT_ID = 'meet-mackenzie-sol';
 
-const GOOGLE_FORM_URL = 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2';
-
 class Events extends React.Component {
   state = {
     eventID: '',

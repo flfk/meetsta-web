@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { FaTimes, FaCheck } from 'react-icons/fa';
+import { FaTimes } from 'react-icons/fa';
 import validator from 'validator';
 
 import Btn from '../components/Btn';

@@ -36,8 +36,31 @@ exports.orderConfirmationEmail = functions.firestore
 
     return sgMail
       .send(msg)
-      .then(() => console.log('email sent'))
+      .then(() => console.log('Order confirmation email sent'))
       .catch(error => {
         console.error(error.toString());
       });
   });
+
+exports.parentInfoEmail = functions.firestore.document('emails/{emails}').onCreate(snap => {
+  const emailRequest = snap.data();
+
+  const msg = {
+    to: emailRequest.email,
+    from: 'contact.meetsta@gmail.com',
+    templateId: 'd-7d252bc894324c598329e60393e7c6cb',
+    dynamic_template_data: {
+      nameFirst: emailRequest.nameFirst,
+      email: emailRequest.email,
+      influencerName: temailRequest.influencerName,
+      eventURL: emailRequest.eventURL
+    }
+  };
+
+  return sgMail
+    .send(msg)
+    .then(() => console.log('Parent email sent'))
+    .catch(error => {
+      console.error(error.toString());
+    });
+});
