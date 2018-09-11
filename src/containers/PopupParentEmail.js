@@ -4,11 +4,15 @@ import styled from 'styled-components';
 import { FaTimes, FaCheck } from 'react-icons/fa';
 import validator from 'validator';
 
-import Btn from './Btn';
-import Content from './Content';
+import Btn from '../components/Btn';
+import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import MEDIA from '../utils/Media';
-import InputText from './InputText';
+import InputText from '../components/InputText';
+
+import db from '../data/firebase';
+
+const EVENT_URL_BASE = 'https://www.meetsta.com/event?eventID=';
 
 const Background = styled.div`
   position: fixed;
@@ -40,8 +44,9 @@ const Card = styled.div`
 `;
 
 const propTypes = {
-  sendEmail: PropTypes.func.isRequired,
-  closeWindow: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  eventID: PropTypes.string.isRequired,
+  influencerName: PropTypes.string.isRequired
 };
 
 const defaultProps = {
@@ -52,12 +57,38 @@ const defaultProps = {
 class PopupParentEmail extends React.Component {
   state = {
     popupStep: 0,
+    nameFirst: '',
     nameFirstErrMsg: '',
-    emailErrMsg: ''
+    email: '',
+    emailErrMsg: '',
+    emailID: ''
+  };
+
+  handleChangeFirstName = event => {
+    this.setState({ nameFirst: event.target.value });
+  };
+
+  handleChangeEmail = event => {
+    this.setState({ email: event.target.value });
   };
 
   handleSend = () => {
+    this.addParentEmailDoc();
     this.setState({ popupStep: 1 });
+  };
+
+  addParentEmailDoc = async () => {
+    const { nameFirst, email } = this.state;
+    const { influencerName, eventID } = this.props;
+    const eventURL = EVENT_URL_BASE + eventID;
+    const emailRequest = {
+      email,
+      nameFirst,
+      influencerName,
+      eventURL
+    };
+    const newEmail = await db.collection('emails').add(emailRequest);
+    this.setState({ emailID: newEmail.id });
   };
 
   validateForm = () => {
@@ -83,20 +114,29 @@ class PopupParentEmail extends React.Component {
   };
 
   render() {
-    const { popupStep, nameFirstErrMsg, emailErrMsg } = this.state;
+    const { popupStep, nameFirst, nameFirstErrMsg, email, emailErrMsg } = this.state;
+    const { handleClose } = this.props;
 
     const emailFormStep = (
       <div>
         <Card>
-          <Btn.Tertiary primary>
-            <FaTimes />
+          <Btn.Tertiary primary onClick={handleClose}>
+            <FaTimes /> Close
           </Btn.Tertiary>
           <Content>
             <FONTS.H1>Share Event Info</FONTS.H1>
-            <InputText label="Your first name" placeholder="Jane" errorMsg={nameFirstErrMsg} />
+            <InputText
+              label="Your first name"
+              placeholder="Jane"
+              onChange={this.handleChangeFirstName}
+              value={nameFirst}
+              errorMsg={nameFirstErrMsg}
+            />
             <InputText
               label="Email address to send to"
-              placeholder="Janes-Mum@gmail.com"
+              placeholder="Janes_Mum@Email.com"
+              onChange={this.handleChangeEmail}
+              value={email}
               errorMsg={emailErrMsg}
             />
             <Btn primary onClick={this.handleSend}>
@@ -112,7 +152,9 @@ class PopupParentEmail extends React.Component {
         <Card>
           <Content>
             <FONTS.H1>Email was sent!</FONTS.H1>
-            <Btn primary>Back to Event</Btn>
+            <Btn primary onClick={handleClose}>
+              Back to Event
+            </Btn>
           </Content>
         </Card>
       </div>

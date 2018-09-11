@@ -9,7 +9,7 @@ import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
 import Content from '../components/Content';
 import EVENT_IMAGE from '../assets/eventImages/EventImageMackenzieSol.jpg';
-import PopupParentEmail from '../components/PopupParentEmail';
+import PopupParentEmail from './PopupParentEmail';
 import PROFILE_IMAGE from '../assets/profileImages/ProfileImageMackenzieSol.png';
 import FONTS from '../utils/Fonts';
 import FooterEvents from '../components/FooterEvents';
@@ -38,6 +38,7 @@ class Events extends React.Component {
     tickets: [],
     priceMin: '',
     priceMax: '',
+    showEmailPopup: false,
     toCheckout: false
   };
 
@@ -48,10 +49,6 @@ class Events extends React.Component {
       console.error('Error in getting documents', err);
     }
   }
-
-  openMailForm = () => {
-    window.open(GOOGLE_FORM_URL, '_blank');
-  };
 
   getEventId = () => {
     const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
@@ -155,9 +152,13 @@ class Events extends React.Component {
 
   formatText = text => {
     const textSplit = text.split('NEWLINE');
-    const textFormatted = textSplit.map(line => <FONTS.P>{line}</FONTS.P>);
+    const textFormatted = textSplit.map(line => <FONTS.P key={line}>{line}</FONTS.P>);
     return textFormatted;
   };
+
+  handlePopupOpen = () => this.setState({ showEmailPopup: true });
+
+  handlePopupClose = () => this.setState({ showEmailPopup: false });
 
   render() {
     const {
@@ -170,6 +171,7 @@ class Events extends React.Component {
       date,
       priceMin,
       priceMax,
+      showEmailPopup,
       toCheckout
     } = this.state;
 
@@ -186,6 +188,16 @@ class Events extends React.Component {
       );
 
     const descriptionFormatted = this.formatText(description);
+
+    const emailPopup = showEmailPopup ? (
+      <PopupParentEmail
+        eventID={eventID}
+        influencerName={influencerName}
+        handleClose={this.handlePopupClose}
+      />
+    ) : null;
+
+    console.log('showEmailPopup, ', showEmailPopup);
 
     return (
       <div>
@@ -228,11 +240,12 @@ class Events extends React.Component {
             <Btn onClick={this.toCheckout} primary>
               Get Tickets
             </Btn>
-            <Btn secondary onClick={this.openMailForm}>
+            <Btn secondary onClick={this.handlePopupOpen}>
               Send Info To Parents
             </Btn>
           </Content>
         </FooterEvents>
+        {emailPopup}
       </div>
     );
   }
