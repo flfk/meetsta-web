@@ -55,6 +55,11 @@ const ImageTicket = props => {
       }
       break;
     default:
+      if (isPremium) {
+        ticketImg = TICKET_PREMIUM_MACKENZIE;
+      } else {
+        ticketImg = TICKET_STANDARD_MACKENZIE;
+      }
   }
 
   // const ticketImg = isPremium ? (

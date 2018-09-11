@@ -191,7 +191,6 @@ class Events extends React.Component {
         />
       );
 
-
     let eventImg = null;
     let profileImg = null;
     switch (eventID) {
@@ -204,8 +203,8 @@ class Events extends React.Component {
         profileImg = PROFILE_IMAGE_MACKENZIE;
         break;
       default:
-        eventImg = null;
-        profileImg = null;
+        eventImg = EVENT_IMAGE_LEXI;
+        profileImg = PROFILE_IMAGE_LEXI;
     }
 
     const priceRange = priceMax === priceMin ? priceMin : `${priceMin} - ${priceMax}`;
@@ -219,7 +218,6 @@ class Events extends React.Component {
         handleClose={this.handlePopupClose}
       />
     ) : null;
-
 
     return (
       <div>
