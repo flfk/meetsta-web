@@ -17,7 +17,7 @@ const defaultProps = {
   isPremium: false
 };
 
-const WrapperEventImage = styled.div`
+const WrapperTicketImage = styled.div`
   height: 200px;
   width: 416px;
   border-radius: 5px;
@@ -62,16 +62,10 @@ const ImageTicket = props => {
       }
   }
 
-  // const ticketImg = isPremium ? (
-  //   <img src={TICKET_PREMIUM} alt="Event ticket" />
-  // ) : (
-  //   <img src={TICKET_STANDARD} alt="Event ticket" />
-  // );
-
   return (
-    <WrapperEventImage>
+    <WrapperTicketImage>
       <img src={ticketImg} alt="Event ticket" />
-    </WrapperEventImage>
+    </WrapperTicketImage>
   );
 };
 
