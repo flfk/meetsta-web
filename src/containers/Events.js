@@ -195,8 +195,6 @@ class Events extends React.Component {
       />
     ) : null;
 
-    console.log('showEmailPopup, ', showEmailPopup);
-
     return (
       <div>
         <Content.PaddingBottom>
