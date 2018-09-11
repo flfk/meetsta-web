@@ -11,6 +11,7 @@ import MEDIA from '../utils/Media';
 
 const propTypes = {
   ticketID: PropTypes.string.isRequired,
+  eventID: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   lengthMins: PropTypes.number.isRequired,
@@ -47,26 +48,36 @@ const H1 = FONTS.H1.extend`
   margin-bottom: 8px;
 `;
 
-const H2 = FONTS.H2.extend`
+const H3 = FONTS.H3.extend`
   margin: 8px 0;
 `;
 
 const Ticket = props => {
-  const { ticketID, name, description, lengthMins, price, onSelect, isPremium, extras } = props;
+  const {
+    ticketID,
+    eventID,
+    name,
+    description,
+    lengthMins,
+    price,
+    onSelect,
+    isPremium,
+    extras
+  } = props;
 
   let extrasDiv = <div />;
 
   if (extras) {
-    extrasDiv = extras.map(extra => <H2>+ {extra}</H2>);
+    extrasDiv = extras.map(extra => <H3>+ {extra}</H3>);
   }
 
   return (
     <Container>
       <H1>{name}</H1>
-      <TicketImage isPremium={isPremium} />
-      <H2>{lengthMins} minute video chat</H2>
+      <TicketImage isPremium={isPremium} eventID={eventID} />
+      <H3>{lengthMins} minute video chat</H3>
       {extrasDiv}
-      <H2>$ {price}</H2>
+      <H3>$ {price}</H3>
       <FONTS.P>{description}</FONTS.P>
       <Content.Seperator />
       <div>

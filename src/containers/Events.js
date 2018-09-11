@@ -33,7 +33,8 @@ class Events extends React.Component {
     description: '',
     influencerName: '',
     influencerIGHandle: '',
-    eventImgUrl: '',
+    eventImgURL: '',
+    profileURL: '',
     date: '',
     timeRange: '',
     tickets: [],
@@ -101,7 +102,8 @@ class Events extends React.Component {
         description: event.description,
         influencerName: event.organiserName,
         influencerIGHandle: event.organiserIGHandle,
-        eventImgUrl: event.eventImgUrl,
+        eventImgURL: event.eventImgURL,
+        profileURL: event.profileURL,
         timeRange: this.getTimeRange(event.dateStart, event.dateEnd),
         date: this.getDate(event.dateStart),
         tickets,
@@ -160,7 +162,8 @@ class Events extends React.Component {
       title,
       description,
       influencerName,
-      eventImgUrl,
+      eventImgURL,
+      profileURL,
       timeRange,
       date,
       priceMin,
@@ -205,7 +208,7 @@ class Events extends React.Component {
             <img src={eventImg} alt={influencerName} />
           </Wrapper.EventImage>
 
-          <FONTS.A href={this.getIGLink()} target="_blank">
+          <FONTS.A href={profileURL} target="_blank">
             <BtnProfile>
               <Wrapper.ProfileImage>
                 <img src={profileImg} alt={influencerName} />
