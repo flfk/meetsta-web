@@ -8,8 +8,10 @@ import moment from 'moment-timezone';
 import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
 import Content from '../components/Content';
-import EVENT_IMAGE from '../assets/eventImages/EventImageMackenzieSol.jpg';
-import PROFILE_IMAGE from '../assets/profileImages/ProfileImageMackenzieSol.png';
+import EVENT_IMAGE_MACKENZIE from '../assets/eventImages/EventImageMackenzieSol.jpg';
+import EVENT_IMAGE_LEXI from '../assets/eventImages/EventImageLexiJayde.jpg';
+import PROFILE_IMAGE_MACKENZIE from '../assets/profileImages/ProfileImageMackenzieSol.png';
+import PROFILE_IMAGE_LEXI from '../assets/profileImages/ProfileImageLexiJayde.png';
 import FONTS from '../utils/Fonts';
 import FooterEvents from '../components/FooterEvents';
 import Wrapper from '../components/Wrapper';
@@ -20,7 +22,7 @@ const propTypes = {};
 
 const defaultProps = {};
 
-const DEFAULT_EVENT_ID = 'meet-mackenzie-sol';
+const DEFAULT_EVENT_ID = 'meet-lexi-jayde';
 
 const GOOGLE_FORM_URL = 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2';
 
@@ -178,19 +180,35 @@ class Events extends React.Component {
         />
       );
 
+    let eventImg = null;
+    let profileImg = null;
+    switch (eventID) {
+      case 'meet-lexi-jayde':
+        eventImg = EVENT_IMAGE_LEXI;
+        profileImg = PROFILE_IMAGE_LEXI;
+        break;
+      case 'meet-mackenzie-sol':
+        eventImg = EVENT_IMAGE_MACKENZIE;
+        profileImg = PROFILE_IMAGE_MACKENZIE;
+        break;
+      default:
+        eventImg = null;
+        profileImg = null;
+    }
+
     return (
       <div>
         <Content.PaddingBottom>
           <FONTS.H1>{title}</FONTS.H1>
 
           <Wrapper.EventImage>
-            <img src={EVENT_IMAGE} alt={influencerName} />
+            <img src={eventImg} alt={influencerName} />
           </Wrapper.EventImage>
 
           <FONTS.A href={this.getIGLink()} target="_blank">
             <BtnProfile>
               <Wrapper.ProfileImage>
-                <img src={PROFILE_IMAGE} alt={influencerName} />
+                <img src={profileImg} alt={influencerName} />
               </Wrapper.ProfileImage>{' '}
               {influencerName}
             </BtnProfile>
