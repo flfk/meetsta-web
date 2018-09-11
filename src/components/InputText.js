@@ -10,12 +10,12 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  erroMsg: PropTypes.string
+  errMsg: PropTypes.string
 };
 
 const defaultProps = {
   placeholder: '',
-  erroMsg: ''
+  errMsg: ''
 };
 
 const Label = styled.label`

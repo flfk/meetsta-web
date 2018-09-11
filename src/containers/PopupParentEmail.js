@@ -73,8 +73,10 @@ class PopupParentEmail extends React.Component {
   };
 
   handleSend = () => {
-    this.addParentEmailDoc();
-    this.setState({ popupStep: 1 });
+    if (this.validateForm()) {
+      this.addParentEmailDoc();
+      this.setState({ popupStep: 1 });
+    }
   };
 
   addParentEmailDoc = async () => {
@@ -130,14 +132,14 @@ class PopupParentEmail extends React.Component {
               placeholder="Jane"
               onChange={this.handleChangeFirstName}
               value={nameFirst}
-              errorMsg={nameFirstErrMsg}
+              errMsg={nameFirstErrMsg}
             />
             <InputText
               label="Email address to send to"
               placeholder="Janes_Mum@Email.com"
               onChange={this.handleChangeEmail}
               value={email}
-              errorMsg={emailErrMsg}
+              errMsg={emailErrMsg}
             />
             <Btn primary onClick={this.handleSend}>
               Send
