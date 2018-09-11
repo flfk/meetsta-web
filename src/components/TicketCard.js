@@ -73,16 +73,18 @@ const Ticket = props => {
   let extrasDiv = <div />;
 
   if (extras) {
-    extrasDiv = extras.map(extra => <P>{extra}</P>);
+    extrasDiv = extras.map(extra => <P key={extra}>{extra}</P>);
   }
+
+  const descriptionDiv = description ? <FONTS.P>{description}</FONTS.P> : null;
 
   return (
     <Container>
       <H1>{name}</H1>
-      <TicketImage isPremium={isPremium} />
+      <TicketImage isPremium={isPremium} eventID={eventID} />
       <P>{lengthMins} minute one-on-one video call</P>
-      <FONTS.P>{description}</FONTS.P>
       {extrasDiv}
+      {descriptionDiv}
       <Content.Seperator />
       <H2>$ {price}</H2>
       <div>
