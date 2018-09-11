@@ -2,11 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import TICKET_PREMIUM from '../assets/ticketImages/TicketPremiumMackenzieSol.png';
-import TICKET_STANDARD from '../assets/ticketImages/TicketStandardMackenzieSol.png';
+import TICKET_PREMIUM_MACKENZIE from '../assets/ticketImages/TicketPremiumMackenzieSol.png';
+import TICKET_STANDARD_MACKENZIE from '../assets/ticketImages/TicketStandardMackenzieSol.png';
+import TICKET_PREMIUM_LEXI from '../assets/ticketImages/TicketPremiumLexiJayde.png';
+import TICKET_STANDARD_LEXI from '../assets/ticketImages/TicketStandardLexiJayde.png';
 import MEDIA from '../utils/Media';
 
 const propTypes = {
+  eventID: PropTypes.string.isRequired,
   isPremium: PropTypes.bool
 };
 
@@ -33,15 +36,38 @@ const WrapperEventImage = styled.div`
 `;
 
 const ImageTicket = props => {
-  const { isPremium } = props;
+  const { isPremium, eventID } = props;
 
-  const ticketImg = isPremium ? (
-    <img src={TICKET_PREMIUM} alt="Event ticket" />
-  ) : (
-    <img src={TICKET_STANDARD} alt="Event ticket" />
+  let ticketImg = null;
+  switch (eventID) {
+    case 'meet-lexi-jayde':
+      if (isPremium) {
+        ticketImg = TICKET_PREMIUM_LEXI;
+      } else {
+        ticketImg = TICKET_STANDARD_LEXI;
+      }
+      break;
+    case 'meet-mackenzie-sol':
+      if (isPremium) {
+        ticketImg = TICKET_PREMIUM_MACKENZIE;
+      } else {
+        ticketImg = TICKET_STANDARD_MACKENZIE;
+      }
+      break;
+    default:
+  }
+
+  // const ticketImg = isPremium ? (
+  //   <img src={TICKET_PREMIUM} alt="Event ticket" />
+  // ) : (
+  //   <img src={TICKET_STANDARD} alt="Event ticket" />
+  // );
+
+  return (
+    <WrapperEventImage>
+      <img src={ticketImg} alt="Event ticket" />
+    </WrapperEventImage>
   );
-
-  return <WrapperEventImage>{ticketImg}</WrapperEventImage>;
 };
 
 ImageTicket.propTypes = propTypes;

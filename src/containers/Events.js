@@ -8,9 +8,12 @@ import moment from 'moment-timezone';
 import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
 import Content from '../components/Content';
-import EVENT_IMAGE from '../assets/eventImages/EventImageMackenzieSol.jpg';
+
+import EVENT_IMAGE_MACKENZIE from '../assets/eventImages/EventImageMackenzieSol.jpg';
+import EVENT_IMAGE_LEXI from '../assets/eventImages/EventImageLexiJayde.jpg';
+import PROFILE_IMAGE_MACKENZIE from '../assets/profileImages/ProfileImageMackenzieSol.png';
+import PROFILE_IMAGE_LEXI from '../assets/profileImages/ProfileImageLexiJayde.png';
 import PopupParentEmail from './PopupParentEmail';
-import PROFILE_IMAGE from '../assets/profileImages/ProfileImageMackenzieSol.png';
 import FONTS from '../utils/Fonts';
 import FooterEvents from '../components/FooterEvents';
 import Wrapper from '../components/Wrapper';
@@ -21,7 +24,7 @@ const propTypes = {};
 
 const defaultProps = {};
 
-const DEFAULT_EVENT_ID = 'meet-mackenzie-sol';
+const DEFAULT_EVENT_ID = 'meet-lexi-jayde';
 
 class Events extends React.Component {
   state = {
@@ -30,7 +33,8 @@ class Events extends React.Component {
     description: '',
     influencerName: '',
     influencerIGHandle: '',
-    eventImgUrl: '',
+    eventImgURL: '',
+    profileURL: '',
     date: '',
     timeRange: '',
     tickets: [],
@@ -95,7 +99,8 @@ class Events extends React.Component {
         description: event.description,
         influencerName: event.organiserName,
         influencerIGHandle: event.organiserIGHandle,
-        eventImgUrl: event.eventImgUrl,
+        eventImgURL: event.eventImgURL,
+        profileURL: event.profileURL,
         timeRange: this.getTimeRange(event.dateStart, event.dateEnd),
         date: this.getDate(event.dateStart),
         tickets,
@@ -164,7 +169,8 @@ class Events extends React.Component {
       title,
       description,
       influencerName,
-      eventImgUrl,
+      eventImgURL,
+      profileURL,
       timeRange,
       date,
       priceMin,
@@ -185,6 +191,23 @@ class Events extends React.Component {
         />
       );
 
+
+    let eventImg = null;
+    let profileImg = null;
+    switch (eventID) {
+      case 'meet-lexi-jayde':
+        eventImg = EVENT_IMAGE_LEXI;
+        profileImg = PROFILE_IMAGE_LEXI;
+        break;
+      case 'meet-mackenzie-sol':
+        eventImg = EVENT_IMAGE_MACKENZIE;
+        profileImg = PROFILE_IMAGE_MACKENZIE;
+        break;
+      default:
+        eventImg = null;
+        profileImg = null;
+    }
+
     const priceRange = priceMax === priceMin ? priceMin : `${priceMin} - ${priceMax}`;
 
     const descriptionFormatted = this.formatText(description);
@@ -197,19 +220,20 @@ class Events extends React.Component {
       />
     ) : null;
 
+
     return (
       <div>
         <Content.PaddingBottom>
           <FONTS.H1>{title}</FONTS.H1>
 
           <Wrapper.EventImage>
-            <img src={EVENT_IMAGE} alt={influencerName} />
+            <img src={eventImg} alt={influencerName} />
           </Wrapper.EventImage>
 
-          <FONTS.A href={this.getIGLink()} target="_blank">
+          <FONTS.A href={profileURL} target="_blank">
             <BtnProfile>
               <Wrapper.ProfileImage>
-                <img src={PROFILE_IMAGE} alt={influencerName} />
+                <img src={profileImg} alt={influencerName} />
               </Wrapper.ProfileImage>{' '}
               {influencerName}
             </BtnProfile>

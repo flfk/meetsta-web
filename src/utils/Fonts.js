@@ -13,6 +13,7 @@ const FONT_SIZES = {
   logo: '32px',
   h1: '32px',
   h2: '24px',
+  h3: '20px',
   p: '16px'
 };
 
@@ -31,6 +32,13 @@ const H1 = styled.h1`
 
 const H2 = styled.h2`
   font-size: ${FONT_SIZES.h2};
+  font-family: ${FONT_FAMILY.header};
+  color: ${COLORS.greys.primary};
+  font-weight: 400;
+`;
+
+const H3 = styled.h3`
+  font-size: ${FONT_SIZES.h3};
   font-family: ${FONT_FAMILY.header};
   color: ${COLORS.greys.primary};
   font-weight: 400;
@@ -68,6 +76,7 @@ FONTS.sizes = FONT_SIZES;
 FONTS.LOGO = LOGO;
 FONTS.H1 = H1;
 FONTS.H2 = H2;
+FONTS.H3 = H3;
 FONTS.P = P;
 FONTS.ERROR = ERROR;
 FONTS.A = A;

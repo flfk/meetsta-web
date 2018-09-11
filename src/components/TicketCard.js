@@ -11,6 +11,7 @@ import MEDIA from '../utils/Media';
 
 const propTypes = {
   ticketID: PropTypes.string.isRequired,
+  eventID: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   lengthMins: PropTypes.number.isRequired,
@@ -57,7 +58,17 @@ const P = FONTS.P.extend`
 `;
 
 const Ticket = props => {
-  const { ticketID, name, description, lengthMins, price, onSelect, isPremium, extras } = props;
+  const {
+    ticketID,
+    eventID,
+    name,
+    description,
+    lengthMins,
+    price,
+    onSelect,
+    isPremium,
+    extras
+  } = props;
 
   let extrasDiv = <div />;
 
