@@ -2,6 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import { geocodeByAddress, geocodeByPlaceId, getLatLng } from 'react-places-autocomplete';
+import styled from 'styled-components';
+
+import COLORS from '../utils/Colors';
+import FONTS from '../utils/Fonts';
+import InputText from '../components/InputText';
 
 const propTypes = {};
 
@@ -32,38 +37,49 @@ class PlacesComponent extends React.Component {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <input
+            <InputText
               {...getInputProps({
-                placeholder: 'Search Places ...',
-                className: 'location-search-input'
+                placeholder: 'Type your location here'
               })}
             />
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
+            <Dropdown>
+              {loading && <LoadingLbl>Loading...</LoadingLbl>}
               {suggestions.map(suggestion => {
-                const className = suggestion.active ? 'suggestion-item--active' : 'suggestion-item';
-                // inline style for demonstration purpose
-                const style = suggestion.active
-                  ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                      style
-                    })}
-                  >
-                    <span>{suggestion.description}</span>
-                  </div>
+                const suggestionDiv = suggestion.active ? (
+                  <SuggestionActive>{suggestion.description}</SuggestionActive>
+                ) : (
+                  <Suggestion>{suggestion.description}</Suggestion>
                 );
+                return <div {...getSuggestionItemProps(suggestion)}>{suggestionDiv}</div>;
               })}
-            </div>
+            </Dropdown>
           </div>
         )}
       </PlacesAutocomplete>
     );
   }
 }
+
+const Dropdown = styled.div`
+  padding-left: 16px;
+  padding-right: 16px;
+`;
+const LoadingLbl = FONTS.H3.extend`
+  color: ${COLORS.greys.supporting};
+  margin: 0;
+  padding: 8px;
+  font-size: ${FONTS.sizes.p};
+`;
+const Suggestion = FONTS.H3.extend`
+  background-color: white;
+  margin: 0;
+  padding: 8px;
+  cursor: pointer;
+  font-size: ${FONTS.sizes.p};
+`;
+const SuggestionActive = Suggestion.extend`
+  background-color: ${COLORS.greys.light};
+`;
 
 PlacesComponent.propTypes = propTypes;
 PlacesComponent.defaultProps = defaultProps;
