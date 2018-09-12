@@ -6,7 +6,7 @@ import Content from './Content';
 import COLORS from '../utils/Colors';
 
 const propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
@@ -14,6 +14,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  label: '',
   placeholder: '',
   errMsg: ''
 };

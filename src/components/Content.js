@@ -23,12 +23,10 @@ const CenteredBothAxis = Content.extend`
   justify-content: center;
 `;
 
-const Row = Content.extend`
+const Row = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-basis: 600px;
-  margin: auto;
   justify-content: space-between;
+  align-items: flex-end;
 `;
 
 const PaddingBottom = Content.extend`
