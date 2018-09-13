@@ -2,6 +2,8 @@ import Geocode from 'react-geocode';
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import moment from 'moment-timezone';
+
 import Content from '../components/Content';
 import InputText from '../components/InputText';
 import FONTS from '../utils/Fonts';
@@ -11,72 +13,42 @@ const propTypes = {};
 
 const defaultProps = {};
 
+const TEST_TIME = 1537120800000;
+
 class TimeConverter extends React.Component {
   state = {
-    location: ''
+    location: '',
+    startTime: ''
   };
 
   handleChangeLocation = event => {
     this.setState({ location: event.target.value });
   };
 
-  // getCityName = async () => {
-  //   // https://tutorialzine.com/2016/06/quick-tip-detecting-your-location-with-javascript
+  formatStartTime = startTime => {
+    const time = moment.tz(startTime, 'America/Los_Angeles').format('H:mm a, dddd, MMM Do');
+    return `${time} PDT`;
+  };
 
-  //   console.log('getCityName called');
-
-  //   const location = window.navigator && window.navigator.geolocation;
-
-  //   let latitude = '0';
-  //   let longitude = '0';
-
-  //   const coordinates = await location.getCurrentPosition(position => {
-  //     // console.log(position.coords);
-  //     latitude = position.coords.latitude;
-  //     longitude = position.coords.longitude;
-  //   });
-
-  // const geocode = await Geocode.fromLatLng('-34.596', '-34.596');
-  // const address = geocode.results[0].formatted_address;
-  // console.log(address);
-
-  // Geocode.fromLatLng('-34.596', '2.2922926').then(
-  //   response => {
-  //     const address = response.results[0].formatted_address;
-  //     console.log(address);
-  //   },
-  //   error => {
-  //     console.error(error);
-  //   }
-  // );
-
-  // Geocode.fromLatLng(latitude, longitude).then(
-  //   response => {
-  //     const address = response.results[0].formatted_address;
-  //     console.log(address);
-  //   },
-  //   error => {
-  //     console.error(error);
-  //   }
-  // );
-  // };
+  updateStartTime = startTime => {
+    this.setState({ startTime });
+  };
 
   render() {
-    const { location } = this.state;
+    const { startTime } = this.state;
 
     return (
       <Content>
         <FONTS.H1>Where do you live?</FONTS.H1>
-        <InputText
-          placeholder="Type location here"
-          value={location}
-          onChange={this.handleChangeLocation}
-        />
         <Content.Row>
-          <FONTS.H2>startTime</FONTS.H2>
-          <FONTS.H1>14:00 pm</FONTS.H1>
+          <FONTS.H2>startTime PDT</FONTS.H2>
+          <FONTS.H1>{this.formatStartTime(TEST_TIME)}</FONTS.H1>
         </Content.Row>
-        <PlacesAutocomplete />
+        <Content.Row>
+          <FONTS.H2>Start Time</FONTS.H2>
+          <FONTS.H1>{startTime}</FONTS.H1>
+        </Content.Row>
+        <PlacesAutocomplete dateStart={TEST_TIME} updateStartTime={this.updateStartTime} />
       </Content>
     );
   }
