@@ -14,6 +14,7 @@ import EVENT_IMAGE_LEXI from '../assets/eventImages/EventImageLexiJayde.jpg';
 import PROFILE_IMAGE_MACKENZIE from '../assets/profileImages/ProfileImageMackenzieSol.png';
 import PROFILE_IMAGE_LEXI from '../assets/profileImages/ProfileImageLexiJayde.png';
 import PopupParentEmail from './PopupParentEmail';
+import PopupTime from './PopupTime';
 import FONTS from '../utils/Fonts';
 import FooterEvents from '../components/FooterEvents';
 import Wrapper from '../components/Wrapper';
@@ -35,12 +36,15 @@ class Events extends React.Component {
     influencerIGHandle: '',
     eventImgURL: '',
     profileURL: '',
+    dateStart: null,
+    dateEnd: null,
     date: '',
     timeRange: '',
     tickets: [],
     priceMin: '',
     priceMax: '',
     showEmailPopup: false,
+    showTimePopup: false,
     toCheckout: false
   };
 
@@ -101,6 +105,8 @@ class Events extends React.Component {
         influencerIGHandle: event.organiserIGHandle,
         eventImgURL: event.eventImgURL,
         profileURL: event.profileURL,
+        dateStart: event.dateStart,
+        dateEnd: event.dateEnd,
         timeRange: this.getTimeRange(event.dateStart, event.dateEnd),
         date: this.getDate(event.dateStart),
         tickets,
@@ -159,9 +165,13 @@ class Events extends React.Component {
     return textFormatted;
   };
 
-  handlePopupOpen = () => this.setState({ showEmailPopup: true });
+  handleEmailPopupOpen = () => this.setState({ showEmailPopup: true });
 
-  handlePopupClose = () => this.setState({ showEmailPopup: false });
+  handleEmailPopupClose = () => this.setState({ showEmailPopup: false });
+
+  handleTimePopupOpen = () => this.setState({ showTimePopup: true });
+
+  handleTimePopupClose = () => this.setState({ showTimePopup: false });
 
   render() {
     const {
@@ -171,11 +181,14 @@ class Events extends React.Component {
       influencerName,
       eventImgURL,
       profileURL,
+      dateStart,
+      dateEnd,
       timeRange,
       date,
       priceMin,
       priceMax,
       showEmailPopup,
+      showTimePopup,
       toCheckout
     } = this.state;
 
@@ -215,8 +228,12 @@ class Events extends React.Component {
       <PopupParentEmail
         eventID={eventID}
         influencerName={influencerName}
-        handleClose={this.handlePopupClose}
+        handleClose={this.handleEmailPopupClose}
       />
+    ) : null;
+
+    const timePopup = showTimePopup ? (
+      <PopupTime handleClose={this.handleTimePopupClose} dateStart={dateStart} dateEnd={dateEnd} />
     ) : null;
 
     return (
@@ -240,6 +257,10 @@ class Events extends React.Component {
           <br />
 
           <FONTS.P>
+            <FaDollarSign /> {priceRange}
+          </FONTS.P>
+
+          <FONTS.P>
             <FaCalendar /> {date}
           </FONTS.P>
 
@@ -247,9 +268,7 @@ class Events extends React.Component {
             <FaClock /> {timeRange}
           </FONTS.P>
 
-          <FONTS.P>
-            <FaDollarSign /> {priceRange}
-          </FONTS.P>
+          <Btn.Tertiary onClick={this.handleTimePopupOpen}>What time is that for me?</Btn.Tertiary>
 
           <br />
 
@@ -260,12 +279,13 @@ class Events extends React.Component {
             <Btn onClick={this.toCheckout} primary>
               Get Tickets
             </Btn>
-            <Btn secondary onClick={this.handlePopupOpen}>
+            <Btn secondary onClick={this.handleEmailPopupOpen}>
               Send Info To Parents
             </Btn>
           </Content>
         </FooterEvents>
         {emailPopup}
+        {timePopup}
       </div>
     );
   }

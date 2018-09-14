@@ -1,47 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { FaTimes } from 'react-icons/fa';
 import validator from 'validator';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
-import MEDIA from '../utils/Media';
+import Popup from '../components/Popup';
 import InputText from '../components/InputText';
 
 import db from '../data/firebase';
 
 const EVENT_URL_BASE = 'https://www.meetsta.com/event?eventID=';
-
-const Background = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  background-color: black;
-  opacity: 0.2;
-`;
-
-const Card = styled.div`
-  position: fixed;
-  top: 20px;
-  // left: 20px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 632px;
-  height: 95%;
-  background-color: white;
-  opacity: 1;
-  border-radius: 5px;
-
-  ${MEDIA.tablet} {
-    width: 95%;
-    margin: 0;
-  }
-`;
 
 const propTypes = {
   handleClose: PropTypes.func.isRequired,
@@ -121,10 +91,8 @@ class PopupParentEmail extends React.Component {
 
     const emailFormStep = (
       <div>
-        <Card>
-          <Btn.Tertiary primary onClick={handleClose}>
-            <FaTimes /> Close
-          </Btn.Tertiary>
+        <Popup.Card>
+          <Popup.BtnClose handleClose={handleClose} />
           <Content>
             <FONTS.H1>Share Event Info</FONTS.H1>
             <InputText
@@ -145,20 +113,20 @@ class PopupParentEmail extends React.Component {
               Send
             </Btn>
           </Content>
-        </Card>
+        </Popup.Card>
       </div>
     );
 
     const emailSentStep = (
       <div>
-        <Card>
+        <Popup.Card>
           <Content>
             <FONTS.H1>Email was sent!</FONTS.H1>
             <Btn primary onClick={handleClose}>
               Back to Event
             </Btn>
           </Content>
-        </Card>
+        </Popup.Card>
       </div>
     );
 
@@ -173,7 +141,7 @@ class PopupParentEmail extends React.Component {
 
     return (
       <div>
-        <Background />
+        <Popup.Background />
         {popupComponent}
       </div>
     );
