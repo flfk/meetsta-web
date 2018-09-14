@@ -140,13 +140,9 @@ class Events extends React.Component {
   };
 
   getTimeRange = (dateStart, dateEnd) => {
-    const timeStart = moment(dateStart).format('LT');
-    const timeEnd = moment(dateEnd).format('LT');
-    const timezone = moment()
-      .tz(moment.tz.guess())
-      .format('zz');
-    // .utcOffset() / 60;
-    const timeRange = `${timeStart} - ${timeEnd} (${timezone})`;
+    const timeStart = moment.tz(dateStart, 'America/Los_Angeles').format('H:mm');
+    const timeEnd = moment.tz(dateEnd, 'America/Los_Angeles').format('H:mm');
+    const timeRange = `${timeStart} - ${timeEnd} Pacific Daylight Time`;
     return timeRange;
   };
 
@@ -254,23 +250,16 @@ class Events extends React.Component {
             </BtnProfile>
           </FONTS.A>
 
-          <br />
+          <Content>
+            <Btn.Tertiary onClick={this.handleTimePopupOpen}>
+              {date}
+              <br />
+              <br />
+              {timeRange}
+            </Btn.Tertiary>
+          </Content>
 
-          <FONTS.P>
-            <FaDollarSign /> {priceRange}
-          </FONTS.P>
-
-          <FONTS.P>
-            <FaCalendar /> {date}
-          </FONTS.P>
-
-          <FONTS.P>
-            <FaClock /> {timeRange}
-          </FONTS.P>
-
-          <Btn.Tertiary onClick={this.handleTimePopupOpen}>What time is that for me?</Btn.Tertiary>
-
-          <br />
+          <Content.Seperator />
 
           {descriptionFormatted}
         </Content.PaddingBottom>

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes } from 'react-icons/fa';
 
+import styled from 'styled-components';
+
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import Popup from '../components/Popup';
@@ -65,21 +67,36 @@ class TimeConverter extends React.Component {
         <Popup.Card>
           <Popup.BtnClose handleClose={handleClose} />
           <Content>
-            <FONTS.H1>Where do you live?</FONTS.H1>
+            <FONTS.H1>Local Time Calculator</FONTS.H1>
+            <DropdownFiller />
             {startRow}
             {endRow}
-            <PlacesAutocomplete
-              dateStart={dateStart}
-              updateStartTime={this.updateStartTime}
-              dateEnd={dateEnd}
-              updateEndTime={this.updateEndTime}
-            />
+            <FixedDropdown>
+              <PlacesAutocomplete
+                dateStart={dateStart}
+                updateStartTime={this.updateStartTime}
+                dateEnd={dateEnd}
+                updateEndTime={this.updateEndTime}
+              />
+            </FixedDropdown>
           </Content>
         </Popup.Card>
       </div>
     );
   }
 }
+
+const DropdownFiller = styled.div`
+  height: 104px;
+  width: 100%;
+`;
+
+const FixedDropdown = styled.div`
+  position: absolute;
+  top: 144px;
+  left: 16px;
+  width: calc(100% - 32px);
+`;
 
 TimeConverter.propTypes = propTypes;
 TimeConverter.defaultProps = defaultProps;

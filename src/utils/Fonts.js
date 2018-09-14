@@ -61,10 +61,10 @@ const ERROR = styled.p`
 `;
 
 const A = styled.a`
-  font-size: ${FONT_SIZES.p};
   text-decoration: none;
   color: ${COLORS.primary.red};
   font-weight: bold;
+  cursor: pointer;
   :hover {
     text-decoration: underline;
   }

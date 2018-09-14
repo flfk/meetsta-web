@@ -8,13 +8,14 @@ import Dropdown from './Dropdown';
 import InputText from './InputText';
 
 const propTypes = {
-  dateStart: PropTypes.number.isRequired,
+  dateStart: PropTypes.number,
   updateStartTime: PropTypes.func.isRequired,
   dateEnd: PropTypes.number,
   updateEndTime: PropTypes.func
 };
 
 const defaultProps = {
+  dateStart: 0,
   dateEnd: 0,
   updateEndTime: () => null
 };
@@ -31,15 +32,14 @@ class PlacesComponent extends React.Component {
   };
 
   handleSelect = async address => {
+    this.handleChange(address);
     const { dateStart, updateStartTime, dateEnd, updateEndTime } = this.props;
     try {
       const newStartTime = await this.getUpdatedDate(address, dateStart);
       updateStartTime(newStartTime);
-      console.log('newStartTime ', newStartTime);
       if (dateEnd) {
         const newEndTime = await this.getUpdatedDate(address, dateEnd);
         updateEndTime(newEndTime);
-        console.log('newEndTime ', newEndTime);
       }
     } catch (error) {
       console.error('Google Maps API error ', error);
