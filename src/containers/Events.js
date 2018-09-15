@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FaDollarSign, FaCalendar, FaClock } from 'react-icons/fa';
 import qs from 'qs';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
@@ -216,7 +215,7 @@ class Events extends React.Component {
         profileImg = PROFILE_IMAGE_LEXI;
     }
 
-    const priceRange = priceMax === priceMin ? priceMin : `${priceMin} - ${priceMax}`;
+    // const priceRange = priceMax === priceMin ? priceMin : `${priceMin} - ${priceMax}`;
 
     const descriptionFormatted = this.formatText(description);
 

@@ -7,6 +7,10 @@ import moment from 'moment-timezone';
 import Dropdown from './Dropdown';
 import InputText from './InputText';
 
+const googleMapsClient = require('@google/maps').createClient({
+  key: 'your API key here'
+});
+
 const propTypes = {
   dateStart: PropTypes.number,
   updateStartTime: PropTypes.func.isRequired,
