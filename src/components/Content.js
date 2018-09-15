@@ -19,16 +19,18 @@ const Content = styled.div`
   }
 `;
 
+const NoPadding = Content.extend`
+  padding: 0;
+`;
+
 const CenteredBothAxis = Content.extend`
   justify-content: center;
 `;
 
-const Row = Content.extend`
+const Row = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-basis: 600px;
-  margin: auto;
   justify-content: space-between;
+  align-items: flex-end;
 `;
 
 const PaddingBottom = Content.extend`
@@ -76,6 +78,7 @@ const Divider = () => {
   );
 };
 
+Content.NoPadding = NoPadding;
 Content.Row = Row;
 Content.PaddingBottom = PaddingBottom;
 Content.Seperator = Seperator;

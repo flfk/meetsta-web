@@ -50,6 +50,10 @@ const Tertiary = styled.button`
   }
 `;
 
+const Inline = Tertiary.extend`
+  font-size: 24px;
+`;
+
 const Full = Btn.extend`
   width: 100%;
   margin: 0;
@@ -57,5 +61,6 @@ const Full = Btn.extend`
 
 Btn.Tertiary = Tertiary;
 Btn.Full = Full;
+Btn.Inline = Inline;
 
 export default Btn;

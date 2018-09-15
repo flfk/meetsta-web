@@ -3,8 +3,10 @@ import React from 'react';
 import qs from 'qs';
 import moment from 'moment-timezone';
 
+import Btn from '../components/Btn';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
+import PopupTime from './PopupTime';
 
 import db from '../data/firebase';
 
@@ -35,7 +37,9 @@ class OrderConfirmation extends React.Component {
       orderNum: '',
       payPalPaymentID: '',
       userID: '',
-      hasStarted: false
+      hasStarted: false,
+      dateStart: '',
+      showTimePopup: false
     }
   };
 
@@ -54,16 +58,24 @@ class OrderConfirmation extends React.Component {
     const snapshot = await ticketRef.get();
     const data = await snapshot.data();
     const startTimeFormatted = this.formatStartTime(data.startTime);
-    this.setState({ ticket: { ...data }, startTimeFormatted });
+    this.setState({ ticket: { ...data }, startTimeFormatted, dateStart: data.startTime });
   };
 
   formatStartTime = startTime => {
     const time = moment.tz(startTime, 'America/Los_Angeles').format('H:mm a, dddd, MMM Do');
-    return `${time} PDT`;
+    return `${time} Pacific Daylight Time`;
   };
 
+  handleTimePopupOpen = () => this.setState({ showTimePopup: true });
+
+  handleTimePopupClose = () => this.setState({ showTimePopup: false });
+
   render() {
-    const { ticket, startTimeFormatted } = this.state;
+    const { ticket, startTimeFormatted, showTimePopup, dateStart } = this.state;
+
+    const timePopup = showTimePopup ? (
+      <PopupTime handleClose={this.handleTimePopupClose} dateStart={dateStart} />
+    ) : null;
 
     return (
       <Content>
@@ -75,7 +87,11 @@ class OrderConfirmation extends React.Component {
           Thanks for getting a ticket to meet {ticket.influencerName}!
         </FONTS.H1>
 
-        <FONTS.H2>Your time slot starts at {startTimeFormatted}.</FONTS.H2>
+        <FONTS.H2>
+          Your time slot is{' '}
+          <FONTS.A onClick={this.handleTimePopupOpen}>{startTimeFormatted}.</FONTS.A>
+        </FONTS.H2>
+
         <FONTS.P>
           You ordered <strong>1 x {ticket.name}.</strong>
         </FONTS.P>
@@ -104,6 +120,7 @@ class OrderConfirmation extends React.Component {
           <FONTS.A href={CONTACT_INSTAGRAM}>{CONTACT_INSTAGRAM}</FONTS.A>
         </FONTS.P>
         <Content.Spacing />
+        {timePopup}
       </Content>
     );
   }

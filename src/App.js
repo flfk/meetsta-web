@@ -9,6 +9,7 @@ import Events from './containers/Events';
 import EventSales from './containers/EventSales';
 import LandingPage from './containers/LandingPage';
 import Schedule from './containers/Schedule';
+import PopupTime from './containers/PopupTime';
 import Main from './components/Main';
 import NavBar from './containers/NavBar';
 import TermsConditions from './containers/TermsConditions';
@@ -37,6 +38,7 @@ class App extends Component {
                 <Route path="/confirmation" component={OrderConfirmation} />
                 <Route path="/eventSales" component={EventSales} />
                 <Route path="/schedule" component={Schedule} />
+                <Route path="/time" component={PopupTime} />
                 <Route path="/termsConditions" component={TermsConditions} />
                 <Route path="/privacyPolicy" component={PrivacyPolicy} />
                 <Route path="/contactus" component={ContactUs} />

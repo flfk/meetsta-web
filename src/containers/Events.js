@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FaDollarSign, FaCalendar, FaClock } from 'react-icons/fa';
 import qs from 'qs';
 import { Redirect } from 'react-router-dom';
 import moment from 'moment-timezone';
@@ -14,6 +13,7 @@ import EVENT_IMAGE_LEXI from '../assets/eventImages/EventImageLexiJayde.jpg';
 import PROFILE_IMAGE_MACKENZIE from '../assets/profileImages/ProfileImageMackenzieSol.png';
 import PROFILE_IMAGE_LEXI from '../assets/profileImages/ProfileImageLexiJayde.png';
 import PopupParentEmail from './PopupParentEmail';
+import PopupTime from './PopupTime';
 import FONTS from '../utils/Fonts';
 import FooterEvents from '../components/FooterEvents';
 import Wrapper from '../components/Wrapper';
@@ -35,12 +35,15 @@ class Events extends React.Component {
     influencerIGHandle: '',
     eventImgURL: '',
     profileURL: '',
+    dateStart: null,
+    dateEnd: null,
     date: '',
     timeRange: '',
     tickets: [],
     priceMin: '',
     priceMax: '',
     showEmailPopup: false,
+    showTimePopup: false,
     toCheckout: false
   };
 
@@ -101,6 +104,8 @@ class Events extends React.Component {
         influencerIGHandle: event.organiserIGHandle,
         eventImgURL: event.eventImgURL,
         profileURL: event.profileURL,
+        dateStart: event.dateStart,
+        dateEnd: event.dateEnd,
         timeRange: this.getTimeRange(event.dateStart, event.dateEnd),
         date: this.getDate(event.dateStart),
         tickets,
@@ -134,13 +139,9 @@ class Events extends React.Component {
   };
 
   getTimeRange = (dateStart, dateEnd) => {
-    const timeStart = moment(dateStart).format('LT');
-    const timeEnd = moment(dateEnd).format('LT');
-    const timezone = moment()
-      .tz(moment.tz.guess())
-      .format('zz');
-    // .utcOffset() / 60;
-    const timeRange = `${timeStart} - ${timeEnd} (${timezone})`;
+    const timeStart = moment.tz(dateStart, 'America/Los_Angeles').format('H:mm');
+    const timeEnd = moment.tz(dateEnd, 'America/Los_Angeles').format('H:mm');
+    const timeRange = `${timeStart} - ${timeEnd} Pacific Daylight Time`;
     return timeRange;
   };
 
@@ -159,9 +160,13 @@ class Events extends React.Component {
     return textFormatted;
   };
 
-  handlePopupOpen = () => this.setState({ showEmailPopup: true });
+  handleEmailPopupOpen = () => this.setState({ showEmailPopup: true });
 
-  handlePopupClose = () => this.setState({ showEmailPopup: false });
+  handleEmailPopupClose = () => this.setState({ showEmailPopup: false });
+
+  handleTimePopupOpen = () => this.setState({ showTimePopup: true });
+
+  handleTimePopupClose = () => this.setState({ showTimePopup: false });
 
   render() {
     const {
@@ -171,11 +176,14 @@ class Events extends React.Component {
       influencerName,
       eventImgURL,
       profileURL,
+      dateStart,
+      dateEnd,
       timeRange,
       date,
       priceMin,
       priceMax,
       showEmailPopup,
+      showTimePopup,
       toCheckout
     } = this.state;
 
@@ -207,7 +215,7 @@ class Events extends React.Component {
         profileImg = PROFILE_IMAGE_LEXI;
     }
 
-    const priceRange = priceMax === priceMin ? priceMin : `${priceMin} - ${priceMax}`;
+    // const priceRange = priceMax === priceMin ? priceMin : `${priceMin} - ${priceMax}`;
 
     const descriptionFormatted = this.formatText(description);
 
@@ -215,8 +223,12 @@ class Events extends React.Component {
       <PopupParentEmail
         eventID={eventID}
         influencerName={influencerName}
-        handleClose={this.handlePopupClose}
+        handleClose={this.handleEmailPopupClose}
       />
+    ) : null;
+
+    const timePopup = showTimePopup ? (
+      <PopupTime handleClose={this.handleTimePopupClose} dateStart={dateStart} dateEnd={dateEnd} />
     ) : null;
 
     return (
@@ -237,21 +249,16 @@ class Events extends React.Component {
             </BtnProfile>
           </FONTS.A>
 
-          <br />
+          <Content>
+            <Btn.Tertiary onClick={this.handleTimePopupOpen}>
+              {date}
+              <br />
+              <br />
+              {timeRange}
+            </Btn.Tertiary>
+          </Content>
 
-          <FONTS.P>
-            <FaCalendar /> {date}
-          </FONTS.P>
-
-          <FONTS.P>
-            <FaClock /> {timeRange}
-          </FONTS.P>
-
-          <FONTS.P>
-            <FaDollarSign /> {priceRange}
-          </FONTS.P>
-
-          <br />
+          <Content.Seperator />
 
           {descriptionFormatted}
         </Content.PaddingBottom>
@@ -260,12 +267,13 @@ class Events extends React.Component {
             <Btn onClick={this.toCheckout} primary>
               Get Tickets
             </Btn>
-            <Btn secondary onClick={this.handlePopupOpen}>
+            <Btn secondary onClick={this.handleEmailPopupOpen}>
               Send Info To Parents
             </Btn>
           </Content>
         </FooterEvents>
         {emailPopup}
+        {timePopup}
       </div>
     );
   }

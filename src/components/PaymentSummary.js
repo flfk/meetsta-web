@@ -17,29 +17,24 @@ const defaultProps = {
   fee: 0
 };
 
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
 const PaymentSummary = props => {
   const { item, price, fee } = props;
 
   return (
     <div>
-      <Row>
+      <Content.Row>
         <FONTS.P>1 x {item}</FONTS.P>
         <FONTS.P>${price.toFixed(2)}</FONTS.P>
-      </Row>
-      <Row>
+      </Content.Row>
+      <Content.Row>
         <FONTS.P>PayPal Processing Fee</FONTS.P>
         <FONTS.P>${fee.toFixed(2)}</FONTS.P>
-      </Row>
+      </Content.Row>
       <Content.Seperator />
-      <Row>
+      <Content.Row>
         <FONTS.H2>Total</FONTS.H2>
         <FONTS.H2>${(price + fee).toFixed(2)}</FONTS.H2>
-      </Row>
+      </Content.Row>
     </div>
   );
 };

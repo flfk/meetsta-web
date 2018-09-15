@@ -65,12 +65,15 @@ class EventSales extends React.Component {
 
     let schedule = <div />;
 
+    // const IGHandle = ticket.IGHandle ? ticket.IGHandle : 'IG missing';
+
     if (tickets) {
       schedule = tickets.map(ticket => (
         <div key={ticket.orderNum}>
           <Content.Row>
             <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
             <FONTS.P>{ticket.name}</FONTS.P>
+            <FONTS.P>{ticket.IGHandle}</FONTS.P>
             <FONTS.P>{ticket.purchaseNameFirst}</FONTS.P>
           </Content.Row>
           <Content.Seperator />
