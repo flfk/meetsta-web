@@ -121,7 +121,12 @@ class PopupParentEmail extends React.Component {
       <div>
         <Popup.Card>
           <Content>
-            <FONTS.H1>Email was sent!</FONTS.H1>
+            <FONTS.H1>
+              <span role="img" aria-label="Ok Hand">
+                👌{' '}
+              </span>
+              Email was sent!
+            </FONTS.H1>
             <Btn primary onClick={handleClose}>
               Back to Event
             </Btn>
