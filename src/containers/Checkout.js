@@ -104,6 +104,7 @@ class Checkout extends React.Component {
       purchaseNameLast: nameLast,
       purchaseEmail: email,
       purchaseDate: Date.now(),
+      instaHandle: '',
       orderNum,
       payPalPaymentID,
       userID: '',
