@@ -7,7 +7,7 @@ import DARKEN from '../utils/Darken';
 
 const Btn = styled.button`
   flex: 1 0 1;
-  margin: 8px;
+  // margin: 8px;
   padding: 1em 1em;
   background-color: transparent;
   border-radius: 5px;
@@ -41,6 +41,7 @@ const Tertiary = styled.button`
   background-color: transparent;
   border: none;
   color: ${COLORS.primary.red};
+  cursor: pointer;
   :hover {
     text-decoration: underline;
   }
