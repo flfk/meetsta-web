@@ -47,6 +47,7 @@ const H3 = styled.h3`
   color: ${COLORS.greys.primary};
   font-weight: 400;
   text-align: ${props => (props.centered ? 'center' : '')};
+  margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
 `;
 
 const P = styled.span`

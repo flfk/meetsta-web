@@ -35,6 +35,8 @@ class WinnerCountdown extends React.Component {
   state = {
     nameFirst: '',
     email: '',
+    eventID: '',
+    influencerName: '',
     isWinner: false,
     ticketNumber: null,
     hasDoneTrivia: false,
@@ -42,11 +44,18 @@ class WinnerCountdown extends React.Component {
     hasDoneInvite: false,
     showPopupInvite: false,
     hasDoneSurvey: false,
-    showPopupSurvey: false
+    showPopupSurvey: false,
+    surveyURL: 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2'
   };
 
   handleVIPSelect = () => {
     //TODO
+  };
+
+  handleSurvey = () => {
+    const { surveyURL } = this.state;
+    window.open(surveyURL, '_blank');
+    this.setState({ hasDoneSurvey: true });
   };
 
   handleShowPopup = popupName => {
@@ -66,6 +75,8 @@ class WinnerCountdown extends React.Component {
 
   render() {
     const {
+      eventID,
+      influencerName,
       hasDoneTrivia,
       showPopupTrivia,
       hasDoneInvite,
@@ -96,7 +107,7 @@ class WinnerCountdown extends React.Component {
 
     const triviaBtn = <Btn onClick={this.handleShowPopup('Trivia')}>Answer Trivia Question</Btn>;
     const triviaDone = (
-      <FONTS.H3>
+      <FONTS.H3 noMarginBottom>
         <span role="img" aria-label="Tick">
           ✅
         </span>{' '}
@@ -115,7 +126,7 @@ class WinnerCountdown extends React.Component {
 
     const inviteBtn = <Btn onClick={this.handleShowPopup('Invite')}>Invite A Friend</Btn>;
     const inviteDone = (
-      <FONTS.H3>
+      <FONTS.H3 noMarginBottom>
         <span role="img" aria-label="Tick">
           ✅
         </span>{' '}
@@ -124,12 +135,17 @@ class WinnerCountdown extends React.Component {
     );
     const invite = hasDoneInvite ? inviteDone : inviteBtn;
     const popupInvite = showPopupInvite ? (
-      <PopupInvite handleClose={this.handleClosePopup('Invite')} />
+      <PopupInvite
+        handleClose={this.handleClosePopup('Invite')}
+        handleComplete={this.handleComplete('Invite')}
+        eventID={eventID}
+        influencerName={influencerName}
+      />
     ) : null;
 
-    const surveyBtn = <Btn onClick={this.handleShowPopup('Survey')}>Answer Some Questions</Btn>;
+    const surveyBtn = <Btn onClick={this.handleSurvey}>Answer Some Questions</Btn>;
     const surveyDone = (
-      <FONTS.H3>
+      <FONTS.H3 noMarginBottom>
         <span role="img" aria-label="Tick">
           ✅
         </span>{' '}
