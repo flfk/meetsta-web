@@ -60,7 +60,9 @@ class WinnerCountdown extends React.Component {
 
     return (
       <Content>
-        <FONTS.H1>Next 5 winners announced in COUNTDOWN</FONTS.H1>
+        <FONTS.H2 centered noMarginBottom>
+          Next 5 winners announced in
+        </FONTS.H2>
         <Countdown date={1537239600000} />
         <Content.Seperator />
         <FONTS.H2>Want to boost your chance of winning?</FONTS.H2>
@@ -71,7 +73,7 @@ class WinnerCountdown extends React.Component {
         <Btn>Submit a survey</Btn>
         <br />
         <Content.Seperator />
-        <FONTS.H2>Get the VIP Package</FONTS.H2>
+        <FONTS.H2 noMarginBottom>Get the VIP Package</FONTS.H2>
         {ticketCards}
       </Content>
     );

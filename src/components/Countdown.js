@@ -1,12 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
+import moment from 'moment-timezone';
+
+import FONTS from '../utils/Fonts';
 
 class Countdown extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      date: 86400000,
       days: 0,
       hours: 0,
       min: 0,
@@ -17,8 +21,13 @@ class Countdown extends React.Component {
   componentDidMount() {
     // update every second
     this.interval = setInterval(() => {
-      const date = this.calculateCountdown(this.props.date);
-      date ? this.setState(date) : this.stop();
+      const nextAnnouncement = this.getNextAnnouncement();
+      const date = this.calculateCountdown(nextAnnouncement);
+      if (date) {
+        this.setState(date);
+      } else {
+        this.stop();
+      }
     }, 1000);
   }
 
@@ -26,7 +35,19 @@ class Countdown extends React.Component {
     this.stop();
   }
 
-  calculateCountdown(endDate) {
+  getNextAnnouncement = () => {
+    // currently set to 8am LA time
+    const dateAnnouncement = moment()
+      .tz('Etc/GMT-9')
+      .endOf('day')
+      .valueOf();
+
+    console.log(moment.tz.names());
+
+    return dateAnnouncement;
+  };
+
+  calculateCountdown = endDate => {
     let diff = (Date.parse(new Date(endDate)) - Date.parse(new Date())) / 1000;
 
     // clear countdown when date is reached
@@ -64,19 +85,19 @@ class Countdown extends React.Component {
     timeLeft.sec = diff;
 
     return timeLeft;
-  }
+  };
 
-  stop() {
+  stop = () => {
     clearInterval(this.interval);
-  }
+  };
 
-  addLeadingZeros(value) {
-    value = String(value);
-    while (value.length < 2) {
-      value = '0' + value;
+  addLeadingZeros = value => {
+    let valueUpdated = String(value);
+    while (valueUpdated.length < 2) {
+      valueUpdated = `0${valueUpdated}`;
     }
-    return value;
-  }
+    return valueUpdated;
+  };
 
   render() {
     const countDown = this.state;
@@ -85,29 +106,22 @@ class Countdown extends React.Component {
       <Container>
         <div className="Countdown-col">
           <span className="Countdown-col-element">
-            <strong>{this.addLeadingZeros(countDown.days)}</strong>
-            <div>{countDown.days === 1 ? 'Day' : 'Days'}</div>
+            <H1>{this.addLeadingZeros(countDown.hours)}</H1>
+            <FONTS.P>Hours</FONTS.P>
           </span>
         </div>
 
         <div className="Countdown-col">
           <span className="Countdown-col-element">
-            <strong>{this.addLeadingZeros(countDown.hours)}</strong>
-            <div>Hours</div>
+            <H1>{this.addLeadingZeros(countDown.min)}</H1>
+            <FONTS.P>Min</FONTS.P>
           </span>
         </div>
 
         <div className="Countdown-col">
           <span className="Countdown-col-element">
-            <strong>{this.addLeadingZeros(countDown.min)}</strong>
-            <div>Min</div>
-          </span>
-        </div>
-
-        <div className="Countdown-col">
-          <span className="Countdown-col-element">
-            <strong>{this.addLeadingZeros(countDown.sec)}</strong>
-            <div>Sec</div>
+            <H1>{this.addLeadingZeros(countDown.sec)}</H1>
+            <FONTS.P>Sec</FONTS.P>
           </span>
         </div>
       </Container>
@@ -119,6 +133,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+`;
+
+const H1 = FONTS.H1.extend`
+margin-bottom: 4px;
 `;
 
 Countdown.propTypes = {

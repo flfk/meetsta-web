@@ -28,6 +28,8 @@ const H1 = styled.h1`
   font-family: ${FONT_FAMILY.header};
   color: ${COLORS.greys.primary};
   font-weight: 500;
+  text-align: ${props => (props.centered ? 'center' : '')};
+  margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
 `;
 
 const H2 = styled.h2`
@@ -35,6 +37,8 @@ const H2 = styled.h2`
   font-family: ${FONT_FAMILY.header};
   color: ${COLORS.greys.primary};
   font-weight: 400;
+  text-align: ${props => (props.centered ? 'center' : '')};
+  margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
 `;
 
 const H3 = styled.h3`
@@ -42,6 +46,7 @@ const H3 = styled.h3`
   font-family: ${FONT_FAMILY.header};
   color: ${COLORS.greys.primary};
   font-weight: 400;
+  text-align: ${props => (props.centered ? 'center' : '')};
 `;
 
 const P = styled.span`
@@ -50,6 +55,7 @@ const P = styled.span`
   font-weight: 300;
   color: ${COLORS.greys.primary};
   margin: 8px 0;
+  text-align: ${props => (props.centered ? 'center' : '')};
 `;
 
 const ERROR = styled.p`
@@ -58,6 +64,7 @@ const ERROR = styled.p`
   font-weight: bold;
   color: red;
   margin: 8px 0;
+  text-align: ${props => (props.centered ? 'center' : '')};
 `;
 
 const A = styled.a`
@@ -68,6 +75,7 @@ const A = styled.a`
   :hover {
     text-decoration: underline;
   }
+  text-align: ${props => (props.centered ? 'center' : '')};
 `;
 
 const FONTS = {};
