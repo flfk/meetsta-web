@@ -398,21 +398,21 @@ class Checkout extends React.Component {
           fee={this.calculateFee(ticketSelected.price)}
         />
         <Content.Spacing />
-        <FONTS.P>
-          By clicking on Checkout, you agree with Meetsta's{' '}
-          <Link to="/termsConditions" target="_blank">
-            Terms and Conditions of Use
-          </Link>{' '}
-          and{' '}
-          <Link to="/privacyPolicy" target="_blank">
-            Privacy Policy
-          </Link>
-          .
-        </FONTS.P>
-        <Content.Spacing />
         {paypalError}
         {payPalButton}
-        <Content.Spacing />
+        <Content>
+          <FONTS.FinePrint>
+            By clicking on Checkout, you agree with Meetsta's{' '}
+            <Link to="/termsConditions" target="_blank">
+              Terms and Conditions of Use
+            </Link>{' '}
+            and{' '}
+            <Link to="/privacyPolicy" target="_blank">
+              Privacy Policy
+            </Link>
+            .
+          </FONTS.FinePrint>
+        </Content>
         <Btn.Tertiary onClick={this.handlePrevious}>{'< Back'}</Btn.Tertiary>
       </div>
     );

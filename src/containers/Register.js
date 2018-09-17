@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import qs from 'qs';
-import { Redirect } from 'react-router-dom';
+import React from 'react';
+import { Redirect, Link } from 'react-router-dom';
+import { PulseLoader } from 'react-spinners';
 import moment from 'moment-timezone';
+import validator from 'validator';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
@@ -26,13 +28,15 @@ class Register extends React.Component {
   state = {
     eventID: '',
     title: '',
-    description: '',
+    email: '',
+    emailErrMsg: '',
     influencerName: '',
     dateStart: null,
     dateEnd: null,
     showPopupTime: false,
     showPopupRegistered: false,
-    toWinnerCountdown: false
+    toWinnerCountdown: false,
+    isLoading: false
   };
 
   componentDidMount() {
@@ -93,12 +97,21 @@ class Register extends React.Component {
 
   getDate = dateStart => moment(dateStart).format('dddd, MMM Do, YYYY');
 
+  handleChangeEmail = event => {
+    console.log('handling change');
+    this.setState({ email: event.target.value });
+  };
+
   handleSubmit = () => {
+    this.setState({ isLoading: true });
+
     // Need to check for valid email address
 
-    // Need to check the email address hasn't already entered
-
-    this.setState({ toWinnerCountdown: true });
+    // If the email has already been submitted log them in
+    if (this.validateForm()) {
+      this.setState({ toWinnerCountdown: true });
+    }
+    this.setState({ isLoading: false });
   };
 
   handleTimePopupOpen = () => this.setState({ showPopupTime: true });
@@ -122,10 +135,24 @@ class Register extends React.Component {
     }
   };
 
+  validateForm = () => {
+    const { email } = this.state;
+    let isFormValid = true;
+    if (!validator.isEmail(email)) {
+      this.setState({ emailErrMsg: 'Valid email address required.' });
+      isFormValid = false;
+    } else {
+      this.setState({ emailErrMsg: '' });
+    }
+    return isFormValid;
+  };
+
   render() {
     const {
       eventID,
       title,
+      email,
+      emailErrMsg,
       influencerName,
       showPopupTime,
       showPopupRegistered,
@@ -133,7 +160,8 @@ class Register extends React.Component {
       timeRange,
       dateStart,
       dateEnd,
-      toWinnerCountdown
+      toWinnerCountdown,
+      isLoading
     } = this.state;
 
     if (toWinnerCountdown === true)
@@ -159,6 +187,8 @@ class Register extends React.Component {
     const popupRegistered = showPopupRegistered ? (
       <PopupRegistered handleClose={this.handleClosePopup('Registered')} />
     ) : null;
+
+    const btnText = isLoading ? <PulseLoader color="white" size={8} /> : 'Register / Log In';
 
     return (
       <div>
@@ -186,18 +216,34 @@ class Register extends React.Component {
           <br />
           <br />
           <br />
+          <br />
+          <br />
+          <br />
         </Content.PaddingBottom>
 
         <FooterEvents>
           <Content>
-            <FONTS.H2>Win 1 of 30 free tickets!</FONTS.H2>
-            <InputText placeholder="Enter your email" />
+            <FONTS.H1 centered>Win 1 of 30 free tickets!</FONTS.H1>
+            <InputText
+              placeholder="Enter your email"
+              value={email}
+              errMsg={emailErrMsg}
+              onChange={this.handleChangeEmail}
+            />
             <Btn primary onClick={this.handleSubmit}>
-              Submit
+              {btnText}
             </Btn>
-            <Btn.Tertiary onClick={this.handleShowPopup('Registered')}>
-              Already registered?
-            </Btn.Tertiary>
+            <FONTS.FinePrint>
+              By clicking on Register / Log In, you agree with Meetsta's{' '}
+              <Link to="/termsConditions" target="_blank">
+                Terms and Conditions of Use
+              </Link>{' '}
+              and{' '}
+              <Link to="/privacyPolicy" target="_blank">
+                Privacy Policy
+              </Link>
+              .
+            </FONTS.FinePrint>
           </Content>
         </FooterEvents>
         {popupTime}

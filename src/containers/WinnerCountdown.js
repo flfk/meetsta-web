@@ -38,7 +38,7 @@ class WinnerCountdown extends React.Component {
     email: '',
     eventID: '',
     influencerName: 'Cookie Cutters',
-    isWinner: true,
+    isWinner: false,
     ticketNumber: null,
     hasDoneTrivia: false,
     showPopupTrivia: false,
@@ -159,16 +159,19 @@ class WinnerCountdown extends React.Component {
     const defaultContent = (
       <Content>
         <FONTS.H2 centered noMarginBottom>
-          Next 5 winners announced in
+          You haven't won yet. <br />
+          <br />
+          The next winners will be announced in:
         </FONTS.H2>
         <Countdown date={1537239600000} />
         <Content.Seperator />
         <FONTS.H2>Want to boost your chance of winning?</FONTS.H2>
-        {trivia}
+        {survey}
         <br />
         {invite}
         <br />
-        {survey}
+        {trivia}
+        <br />
         <br />
       </Content>
     );

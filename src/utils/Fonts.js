@@ -14,7 +14,8 @@ const FONT_SIZES = {
   h1: '32px',
   h2: '24px',
   h3: '20px',
-  p: '16px'
+  p: '16px',
+  finePrint: '12px'
 };
 
 const LOGO = styled.span`
@@ -59,6 +60,15 @@ const P = styled.span`
   text-align: ${props => (props.centered ? 'center' : '')};
 `;
 
+const FinePrint = styled.span`
+  font-size: ${FONT_SIZES.finePrint};
+  font-family: ${FONT_FAMILY.body};
+  font-weight: 300;
+  color: ${COLORS.greys.secondary};
+  margin: 8px 0;
+  text-align: center;
+`;
+
 const ERROR = styled.p`
   font-size: ${FONT_SIZES.p};
   font-family: ${FONT_FAMILY.body};
@@ -87,6 +97,7 @@ FONTS.H1 = H1;
 FONTS.H2 = H2;
 FONTS.H3 = H3;
 FONTS.P = P;
+FONTS.FinePrint = FinePrint;
 FONTS.ERROR = ERROR;
 FONTS.A = A;
 
