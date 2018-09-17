@@ -27,9 +27,13 @@ const CLIENT = {
 const ENV = process.env.NODE_ENV === 'production' ? 'production' : 'sandbox';
 const CURRENCY = 'USD';
 
-const propTypes = {};
+const propTypes = {
+  selectedVIP: PropTypes.bool
+};
 
-const defaultProps = {};
+const defaultProps = {
+  selectedVIP: false
+};
 
 class Checkout extends React.Component {
   state = {
@@ -46,7 +50,8 @@ class Checkout extends React.Component {
     ticketOrdered: null,
     paid: false,
     toConfirmation: false,
-    paypalErrorMsg: ''
+    paypalErrorMsg: '',
+    selectedVIP: false
   };
 
   componentDidMount() {
@@ -61,6 +66,10 @@ class Checkout extends React.Component {
   getEventData = () => {
     const state = this.props.location.state;
     if (state) {
+      const { selectedVIP, ticket, eventID } = state;
+      if (selectedVIP) {
+        this.setState({ ticketSelected: ticket, selectedVIP: true, eventID });
+      }
       return this.props.location.state.eventData;
     }
   };
@@ -263,9 +272,13 @@ class Checkout extends React.Component {
   };
 
   handleTicketSelect = event => {
-    const { tickets } = this.state;
-    const ticketSelected = tickets.filter(ticket => ticket.ticketID === event.target.id)[0];
-    this.setState({ ticketSelected, checkoutStep: 1 });
+    const { tickets, selectedVIP } = this.state;
+    if (!selectedVIP) {
+      const ticketSelected = tickets.filter(ticket => ticket.ticketID === event.target.id)[0];
+      this.setState({ ticketSelected, checkoutStep: 1 });
+    } else {
+      this.setState({ checkoutStep: 1 });
+    }
   };
 
   handlePrevious = () => {
@@ -322,6 +335,23 @@ class Checkout extends React.Component {
           extras={ticket.extras}
         />
       ));
+    }
+
+    if (ticketSelected) {
+      ticketCards = (
+        <TicketCard
+          key={ticketSelected.ticketID}
+          eventID={eventID}
+          ticketID={ticketSelected.ticketID}
+          name={ticketSelected.name}
+          description={ticketSelected.description}
+          lengthMins={ticketSelected.lengthMins}
+          price={ticketSelected.price}
+          onSelect={this.handleTicketSelect}
+          isPremium={ticketSelected.isPremium}
+          extras={ticketSelected.extras}
+        />
+      );
     }
 
     const selectTicket = (

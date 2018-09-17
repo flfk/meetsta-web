@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
+import qs from 'qs';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
@@ -10,14 +12,18 @@ import PopupInvite from '../components/PopupInvite';
 import TicketCard from '../components/TicketCard';
 import TicketImage from '../components/TicketImage';
 
+import db from '../data/firebase';
+
 const propTypes = {};
 
 const defaultProps = {};
 
+const DEFAULT_EVENT_ID = 'cookie-cutters';
+
 const TICKET = {
   eventID: '',
   ticketID: '',
-  name: '',
+  name: 'VIP Package',
   price: 40,
   lengthMins: 7,
   description: '',
@@ -45,12 +51,56 @@ class WinnerCountdown extends React.Component {
     hasDoneInvite: false,
     showPopupInvite: false,
     hasDoneSurvey: false,
-    showPopupSurvey: false,
-    surveyURL: 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2'
+    surveyURL: 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2',
+    toCheckout: false
+  };
+
+  componentDidMount() {
+    try {
+      this.setFormattedData();
+    } catch (err) {
+      console.error('Error in getting documents', err);
+    }
+  }
+
+  getEventId = () => {
+    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+    let { eventID } = params;
+    if (!eventID) {
+      eventID = DEFAULT_EVENT_ID;
+    }
+    return eventID;
+  };
+
+  getEventData = async eventID => {
+    try {
+      const eventRef = db.collection('events').doc(eventID);
+      const snapshot = await eventRef.get();
+      const data = await snapshot.data();
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  setFormattedData = async () => {
+    const eventID = this.getEventId();
+
+    try {
+      const event = await this.getEventData(eventID);
+      const formattedData = {
+        eventID: eventID,
+        title: event.title,
+        influencerName: event.organiserName
+      };
+      this.setState({ eventID, ...formattedData });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   handleVIPSelect = () => {
-    //TODO
+    this.setState({ toCheckout: true });
   };
 
   handleSurvey = () => {
@@ -84,28 +134,35 @@ class WinnerCountdown extends React.Component {
       hasDoneInvite,
       showPopupInvite,
       hasDoneSurvey,
-      showPopupSurvey
+      toCheckout
     } = this.state;
 
-    const tickets = [TICKET];
-    let ticketCards = <div />;
-    if (tickets) {
-      const ticketsSorted = tickets.sort((a, b) => a.price - b.price);
-      ticketCards = ticketsSorted.map((ticket, index) => (
-        <TicketCard
-          key={ticket.ticketID}
-          eventID={ticket.eventID}
-          ticketID={ticket.ticketID}
-          name={ticket.name}
-          description={ticket.description}
-          lengthMins={ticket.lengthMins}
-          price={ticket.price}
-          onSelect={this.handleVIPSelect}
-          isPremium={ticket.isPremium}
-          extras={ticket.extras}
+    if (toCheckout === true)
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: '/checkout',
+            search: `?eventID=${eventID}`,
+            state: { eventID: eventID, selectedVIP: true, ticket: TICKET }
+          }}
         />
-      ));
-    }
+      );
+
+    const ticketVIPCard = (
+      <TicketCard
+        key={TICKET.ticketID}
+        eventID={TICKET.eventID}
+        ticketID={TICKET.ticketID}
+        name={TICKET.name}
+        description={TICKET.description}
+        lengthMins={TICKET.lengthMins}
+        price={TICKET.price}
+        onSelect={this.handleVIPSelect}
+        isPremium={TICKET.isPremium}
+        extras={TICKET.extras}
+      />
+    );
 
     const triviaBtn = <Btn onClick={this.handleShowPopup('Trivia')}>Answer Trivia Question</Btn>;
     const triviaDone = (
@@ -199,7 +256,7 @@ class WinnerCountdown extends React.Component {
         {status}
         <Content.Seperator />
         <FONTS.H2 noMarginBottom>Want the VIP Experience?</FONTS.H2>
-        {ticketCards}
+        {ticketVIPCard}
 
         {popupTrivia}
         {popupInvite}

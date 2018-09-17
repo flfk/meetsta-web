@@ -171,7 +171,7 @@ class Register extends React.Component {
           to={{
             pathname: '/countdown',
             search: `?eventID=${eventID}`,
-            state: { eventData: this.state }
+            state: { eventData: this.state, email: email }
           }}
         />
       );

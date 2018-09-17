@@ -78,11 +78,9 @@ const Ticket = props => {
 
   const descriptionDiv = description ? <FONTS.P>{description}</FONTS.P> : null;
 
-  const header = name ? <H1>{name}</H1> : null;
-
   return (
     <Container>
-      <H1>{header}</H1>
+      <H1>{name}</H1>
       <TicketImage isPremium={isPremium} eventID={eventID} />
       <P>{lengthMins} minute one-on-one video call</P>
       {extrasDiv}
