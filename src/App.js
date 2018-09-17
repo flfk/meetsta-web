@@ -15,6 +15,7 @@ import NavBar from './containers/NavBar';
 import TermsConditions from './containers/TermsConditions';
 import PrivacyPolicy from './containers/PrivacyPolicy';
 import OrderConfirmation from './containers/OrderConfirmation';
+import WinnerCountdown from './containers/WinnerCountdown';
 
 class App extends Component {
   constructor(props) {
@@ -42,6 +43,7 @@ class App extends Component {
                 <Route path="/termsConditions" component={TermsConditions} />
                 <Route path="/privacyPolicy" component={PrivacyPolicy} />
                 <Route path="/contactus" component={ContactUs} />
+                <Route path="/countdown" component={WinnerCountdown} />
               </Switch>
             </Main>
           </div>
