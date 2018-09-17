@@ -50,13 +50,18 @@ class WinnerCountdown extends React.Component {
   };
 
   handleShowPopup = popupName => {
-    const popupID = `showPopup${popupName}`;
-    return () => this.setState({ [popupID]: true });
+    const key = `showPopup${popupName}`;
+    return () => this.setState({ [key]: true });
   };
 
   handleClosePopup = popupName => {
-    const popupID = `showPopup${popupName}`;
-    return () => this.setState({ [popupID]: false });
+    const key = `showPopup${popupName}`;
+    return () => this.setState({ [key]: false });
+  };
+
+  handleComplete = popupName => {
+    const key = `hasDone${popupName}`;
+    return () => this.setState({ [key]: true });
   };
 
   render() {
@@ -100,7 +105,12 @@ class WinnerCountdown extends React.Component {
     );
     const trivia = hasDoneTrivia ? triviaDone : triviaBtn;
     const popupTrivia = showPopupTrivia ? (
-      <PopupTrivia handleClose={this.handleClosePopup('Trivia')} />
+      <PopupTrivia
+        handleClose={this.handleClosePopup('Trivia')}
+        question="What was Cookie Cutters first band called?"
+        answer="Urban Problems"
+        handleComplete={this.handleComplete('Trivia')}
+      />
     ) : null;
 
     const inviteBtn = <Btn onClick={this.handleShowPopup('Invite')}>Invite A Friend</Btn>;
