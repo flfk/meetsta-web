@@ -7,7 +7,6 @@ import moment from 'moment-timezone';
 import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
 import Content from '../components/Content';
-
 import EVENT_IMAGE_MACKENZIE from '../assets/eventImages/EventImageMackenzieSol.jpg';
 import EVENT_IMAGE_LEXI from '../assets/eventImages/EventImageLexiJayde.jpg';
 import PROFILE_IMAGE_MACKENZIE from '../assets/profileImages/ProfileImageMackenzieSol.png';
@@ -240,6 +239,8 @@ class Events extends React.Component {
             <img src={eventImg} alt={influencerName} />
           </Wrapper.EventImage>
 
+          <br />
+
           <FONTS.A href={profileURL} target="_blank">
             <BtnProfile>
               <Wrapper.ProfileImage>
@@ -267,7 +268,7 @@ class Events extends React.Component {
             <Btn onClick={this.toCheckout} primary>
               Get Tickets
             </Btn>
-            <br/>
+            <br />
             <Btn secondary onClick={this.handleEmailPopupOpen}>
               Send Info To Parents
             </Btn>

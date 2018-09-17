@@ -5,7 +5,7 @@ import MEDIA from '../utils/Media';
 const EventImage = styled.div`
   height: 300px;
   width: 584px;
-  margin-bottom: 24px;
+  // margin-bottom: 24px;
 
   img {
     height: 100%;
