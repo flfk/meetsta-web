@@ -267,6 +267,7 @@ class Events extends React.Component {
             <Btn onClick={this.toCheckout} primary>
               Get Tickets
             </Btn>
+            <br/>
             <Btn secondary onClick={this.handleEmailPopupOpen}>
               Send Info To Parents
             </Btn>
