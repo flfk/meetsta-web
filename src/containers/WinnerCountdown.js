@@ -52,7 +52,7 @@ class WinnerCountdown extends React.Component {
     showPopupInvite: false,
     hasDoneSurvey: false,
     surveyURL: 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2',
-    toCheckout: false
+    toCheckoutVIP: false
   };
 
   componentDidMount() {
@@ -100,7 +100,7 @@ class WinnerCountdown extends React.Component {
   };
 
   handleVIPSelect = () => {
-    this.setState({ toCheckout: true });
+    this.setState({ toCheckoutVIP: true });
   };
 
   handleSurvey = () => {
@@ -134,15 +134,15 @@ class WinnerCountdown extends React.Component {
       hasDoneInvite,
       showPopupInvite,
       hasDoneSurvey,
-      toCheckout
+      toCheckoutVIP
     } = this.state;
 
-    if (toCheckout === true)
+    if (toCheckoutVIP === true)
       return (
         <Redirect
           push
           to={{
-            pathname: '/checkout',
+            pathname: '/checkout-vip',
             search: `?eventID=${eventID}`,
             state: { eventID: eventID, selectedVIP: true, ticket: TICKET }
           }}
@@ -255,7 +255,7 @@ class WinnerCountdown extends React.Component {
       <Content>
         {status}
         <Content.Seperator />
-        <FONTS.H2 noMarginBottom>Want the VIP Experience?</FONTS.H2>
+        <FONTS.H2 noMarginBottom>Want to {influencerName} for 10 mins not 1 min?</FONTS.H2>
         {ticketVIPCard}
 
         {popupTrivia}
