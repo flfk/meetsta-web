@@ -10,6 +10,7 @@ import EVENT_IMAGE_MACKENZIE from '../assets/eventImages/EventImageMackenzieSol.
 import FooterEvents from '../components/FooterEvents';
 import FONTS from '../utils/Fonts';
 import PopupTime from './PopupTime';
+import PopupRegistered from '../components/PopupRegistered';
 import InputText from '../components/InputText';
 import Wrapper from '../components/Wrapper';
 
@@ -29,7 +30,8 @@ class Register extends React.Component {
     influencerName: '',
     dateStart: null,
     dateEnd: null,
-    showTimePopup: false,
+    showPopupTime: false,
+    showPopupRegistered: false,
     toWinnerCountdown: false
   };
 
@@ -99,9 +101,19 @@ class Register extends React.Component {
     this.setState({ toWinnerCountdown: true });
   };
 
-  handleTimePopupOpen = () => this.setState({ showTimePopup: true });
+  handleTimePopupOpen = () => this.setState({ showPopupTime: true });
 
-  handleTimePopupClose = () => this.setState({ showTimePopup: false });
+  handleTimePopupClose = () => this.setState({ showPopupTime: false });
+
+  handleShowPopup = popupName => {
+    const key = `showPopup${popupName}`;
+    return () => this.setState({ [key]: true });
+  };
+
+  handleClosePopup = popupName => {
+    const key = `showPopup${popupName}`;
+    return () => this.setState({ [key]: false });
+  };
 
   toWinnerCountdown = () => {
     const { title } = this.state;
@@ -115,7 +127,8 @@ class Register extends React.Component {
       eventID,
       title,
       influencerName,
-      showTimePopup,
+      showPopupTime,
+      showPopupRegistered,
       date,
       timeRange,
       dateStart,
@@ -135,8 +148,16 @@ class Register extends React.Component {
         />
       );
 
-    const timePopup = showTimePopup ? (
-      <PopupTime handleClose={this.handleTimePopupClose} dateStart={dateStart} dateEnd={dateEnd} />
+    const popupTime = showPopupTime ? (
+      <PopupTime
+        handleClose={this.handleClosePopup('Time')}
+        dateStart={dateStart}
+        dateEnd={dateEnd}
+      />
+    ) : null;
+
+    const popupRegistered = showPopupRegistered ? (
+      <PopupRegistered handleClose={this.handleClosePopup('Registered')} />
     ) : null;
 
     return (
@@ -148,7 +169,7 @@ class Register extends React.Component {
           </Wrapper.EventImage>
 
           <Content>
-            <Btn.Tertiary onClick={this.handleTimePopupOpen}>
+            <Btn.Tertiary onClick={this.handleShowPopup('Time')}>
               {date}
               <br />
               <br />
@@ -174,9 +195,13 @@ class Register extends React.Component {
             <Btn primary onClick={this.handleSubmit}>
               Submit
             </Btn>
+            <Btn.Tertiary onClick={this.handleShowPopup('Registered')}>
+              Already registered?
+            </Btn.Tertiary>
           </Content>
         </FooterEvents>
-        {timePopup}
+        {popupTime}
+        {popupRegistered}
       </div>
     );
   }

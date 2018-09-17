@@ -8,6 +8,7 @@ import FONTS from '../utils/Fonts';
 import PopupTrivia from '../components/PopupTrivia';
 import PopupInvite from '../components/PopupInvite';
 import TicketCard from '../components/TicketCard';
+import TicketImage from '../components/TicketImage';
 
 const propTypes = {};
 
@@ -36,8 +37,8 @@ class WinnerCountdown extends React.Component {
     nameFirst: '',
     email: '',
     eventID: '',
-    influencerName: '',
-    isWinner: false,
+    influencerName: 'Cookie Cutters',
+    isWinner: true,
     ticketNumber: null,
     hasDoneTrivia: false,
     showPopupTrivia: false,
@@ -77,6 +78,7 @@ class WinnerCountdown extends React.Component {
     const {
       eventID,
       influencerName,
+      isWinner,
       hasDoneTrivia,
       showPopupTrivia,
       hasDoneInvite,
@@ -154,7 +156,7 @@ class WinnerCountdown extends React.Component {
     );
     const survey = hasDoneSurvey ? surveyDone : surveyBtn;
 
-    return (
+    const defaultContent = (
       <Content>
         <FONTS.H2 centered noMarginBottom>
           Next 5 winners announced in
@@ -168,6 +170,30 @@ class WinnerCountdown extends React.Component {
         <br />
         {survey}
         <br />
+      </Content>
+    );
+
+    const winnerContent = (
+      <Content>
+        <FONTS.H1 centered noMarginBottom>
+          <span role="img" aria-label="Party Popper">
+            🎉
+          </span>{' '}
+          You won!
+        </FONTS.H1>
+        <br />
+        <TicketImage eventID="meet-mackenzie-sol" isPremium={false} />
+        <br />
+        <Btn>Claim Your Free 1 min Meet & Greet</Btn>
+        <br />
+      </Content>
+    );
+
+    const status = isWinner ? winnerContent : defaultContent;
+
+    return (
+      <Content>
+        {status}
         <Content.Seperator />
         <FONTS.H2 noMarginBottom>Want the VIP Experience?</FONTS.H2>
         {ticketCards}
