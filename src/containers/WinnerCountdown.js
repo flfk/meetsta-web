@@ -5,6 +5,8 @@ import Btn from '../components/Btn';
 import Content from '../components/Content';
 import Countdown from '../components/Countdown';
 import FONTS from '../utils/Fonts';
+import PopupTrivia from '../components/PopupTrivia';
+import PopupInvite from '../components/PopupInvite';
 import TicketCard from '../components/TicketCard';
 
 const propTypes = {};
@@ -30,17 +32,46 @@ const TICKET = {
 };
 
 class WinnerCountdown extends React.Component {
-  state = {};
+  state = {
+    nameFirst: '',
+    email: '',
+    isWinner: false,
+    ticketNumber: null,
+    hasDoneTrivia: false,
+    showPopupTrivia: false,
+    hasDoneInvite: false,
+    showPopupInvite: false,
+    hasDoneSurvey: false,
+    showPopupSurvey: false
+  };
 
-  handleTicketSelect = () => {
+  handleVIPSelect = () => {
     //TODO
   };
 
+  handleShowPopup = popupName => {
+    const popupID = `showPopup${popupName}`;
+    return () => this.setState({ [popupID]: true });
+  };
+
+  handleClosePopup = popupName => {
+    const popupID = `showPopup${popupName}`;
+    return () => this.setState({ [popupID]: false });
+  };
+
   render() {
+    const {
+      hasDoneTrivia,
+      showPopupTrivia,
+      hasDoneInvite,
+      showPopupInvite,
+      hasDoneSurvey,
+      showPopupSurvey
+    } = this.state;
+
     const tickets = [TICKET];
     let ticketCards = <div />;
     if (tickets) {
-      console.log('ticket exists');
       const ticketsSorted = tickets.sort((a, b) => a.price - b.price);
       ticketCards = ticketsSorted.map((ticket, index) => (
         <TicketCard
@@ -51,12 +82,51 @@ class WinnerCountdown extends React.Component {
           description={ticket.description}
           lengthMins={ticket.lengthMins}
           price={ticket.price}
-          onSelect={this.handleTicketSelect}
+          onSelect={this.handleVIPSelect}
           isPremium={ticket.isPremium}
           extras={ticket.extras}
         />
       ));
     }
+
+    const triviaBtn = <Btn onClick={this.handleShowPopup('Trivia')}>Answer Trivia Question</Btn>;
+    const triviaDone = (
+      <FONTS.H3>
+        <span role="img" aria-label="Tick">
+          ✅
+        </span>{' '}
+        Trivia completed!
+      </FONTS.H3>
+    );
+    const trivia = hasDoneTrivia ? triviaDone : triviaBtn;
+    const popupTrivia = showPopupTrivia ? (
+      <PopupTrivia handleClose={this.handleClosePopup('Trivia')} />
+    ) : null;
+
+    const inviteBtn = <Btn onClick={this.handleShowPopup('Invite')}>Invite A Friend</Btn>;
+    const inviteDone = (
+      <FONTS.H3>
+        <span role="img" aria-label="Tick">
+          ✅
+        </span>{' '}
+        Friend Invited!
+      </FONTS.H3>
+    );
+    const invite = hasDoneInvite ? inviteDone : inviteBtn;
+    const popupInvite = showPopupInvite ? (
+      <PopupInvite handleClose={this.handleClosePopup('Invite')} />
+    ) : null;
+
+    const surveyBtn = <Btn onClick={this.handleShowPopup('Survey')}>Answer Some Questions</Btn>;
+    const surveyDone = (
+      <FONTS.H3>
+        <span role="img" aria-label="Tick">
+          ✅
+        </span>{' '}
+        Questions Answered!
+      </FONTS.H3>
+    );
+    const survey = hasDoneSurvey ? surveyDone : surveyBtn;
 
     return (
       <Content>
@@ -66,15 +136,18 @@ class WinnerCountdown extends React.Component {
         <Countdown date={1537239600000} />
         <Content.Seperator />
         <FONTS.H2>Want to boost your chance of winning?</FONTS.H2>
-        <Btn>Answer a trivia question</Btn>
+        {trivia}
         <br />
-        <Btn>Invite a friend</Btn>
+        {invite}
         <br />
-        <Btn>Submit a survey</Btn>
+        {survey}
         <br />
         <Content.Seperator />
-        <FONTS.H2 noMarginBottom>Get the VIP Package</FONTS.H2>
+        <FONTS.H2 noMarginBottom>Want the VIP Experience?</FONTS.H2>
         {ticketCards}
+
+        {popupTrivia}
+        {popupInvite}
       </Content>
     );
   }

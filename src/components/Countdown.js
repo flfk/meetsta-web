@@ -41,9 +41,6 @@ class Countdown extends React.Component {
       .tz('Etc/GMT-9')
       .endOf('day')
       .valueOf();
-
-    console.log(moment.tz.names());
-
     return dateAnnouncement;
   };
 
