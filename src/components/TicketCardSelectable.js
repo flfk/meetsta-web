@@ -16,16 +16,111 @@ const propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   lengthMins: PropTypes.number.isRequired,
-  price: PropTypes.number.isRequired,
+  priceBase: PropTypes.number.isRequired,
   onSelect: PropTypes.func.isRequired,
   isPremium: PropTypes.bool.isRequired,
-  extras: PropTypes.array,
   addOns: PropTypes.array
 };
 
 const defaultProps = {
-  extras: []
+  addOns: []
 };
+
+class Ticket extends React.Component {
+  state = {
+    ticketID: '',
+    eventID: '',
+    name: '',
+    lengthMins: '',
+    priceBase: '',
+    isPremium: true,
+    addOnsSelected: [],
+    priceTotal: ''
+  };
+
+  componentDidMount() {
+    this.loadTicketDate();
+  }
+
+  loadTicketDate = () => {
+    const { name, priceBase, ticketID, eventID, lengthMins, isPremium, addOns } = this.props;
+    const state = {
+      ticketID: ticketID,
+      eventID: eventID,
+      name: name,
+      lengthMins: lengthMins,
+      priceBase: priceBase,
+      isPremium: isPremium,
+      priceTotal: priceBase
+    };
+    this.setState(state);
+  };
+
+  handleAddOnSelect = event => {
+    const { name, checked } = event.target;
+    const { addOnsSelected, priceTotal } = this.state;
+    const { addOns } = this.props;
+    let addOnsSelectedUpdated = [];
+    let priceTotalUpdated = priceTotal;
+    // handle add
+    if (checked) {
+      const addOn = addOns.filter(addOn => addOn.name === name)[0];
+      priceTotalUpdated += addOn.price;
+      addOnsSelectedUpdated = [...addOnsSelected, addOn];
+    } else {
+      // handle remove
+      const addOnRemoved = addOns.filter(addOn => addOn.name === name)[0];
+      priceTotalUpdated -= addOnRemoved.price;
+      addOnsSelectedUpdated = addOnsSelected.filter(addOn => addOn.name !== name);
+    }
+    this.setState({ addOnsSelected: addOnsSelectedUpdated, priceTotal: priceTotalUpdated });
+  };
+
+  createTicket = () => {};
+
+  render() {
+    const { ticketID, eventID, name, lengthMins, priceBase, priceTotal, isPremium } = this.state;
+
+    const { addOns, onSelect } = this.props;
+
+    let addOnsDiv = <div />;
+    if (addOns) {
+      const addOnsSorted = addOns.sort((a, b) => b.price - a.price);
+      addOnsDiv = addOnsSorted.map(addOn => (
+        <SelectableFeature
+          key={addOn.name}
+          name={addOn.name}
+          price={addOn.price}
+          handleAddOnSelect={this.handleAddOnSelect}
+        />
+      ));
+    }
+
+    return (
+      <Container>
+        <H1>{name}</H1>
+        <TicketImage isPremium={isPremium} eventID={eventID} />
+        <br />
+        <Content.Row>
+          <P>✓ {lengthMins} minute one-on-one video call</P>
+          <P>${priceBase}</P>
+        </Content.Row>
+        <Content.Seperator />
+        <H3> Optional Add-ons</H3>
+        {addOnsDiv}
+        <Content.Seperator />
+        <Content.Center>
+          <H2>$ {priceTotal}</H2>
+        </Content.Center>
+        <div>
+          <Btn.Full primary onClick={() => onSelect({ ...this.state })} id={ticketID}>
+            Get Ticket
+          </Btn.Full>
+        </div>
+      </Container>
+    );
+  }
+}
 
 const Container = styled.div`
   display: flex;
@@ -55,50 +150,14 @@ const H2 = FONTS.H2.extend`
   margin-bottom: 16px;
 `;
 
+const H3 = FONTS.H3.extend`
+  margin-top: 0;
+  margin-bottom: 16px;
+`;
+
 const P = FONTS.P.extend`
   margin: 8px 0;
 `;
-
-const Ticket = props => {
-  const {
-    ticketID,
-    eventID,
-    name,
-    description,
-    lengthMins,
-    price,
-    onSelect,
-    isPremium,
-    extras
-  } = props;
-
-  let extrasDiv = <div />;
-
-  if (extras) {
-    extrasDiv = extras.map(extra => <SelectableFeature key={extra} feature={extra} />);
-  }
-
-  const descriptionDiv = description ? <FONTS.P>{description}</FONTS.P> : null;
-
-  return (
-    <Container>
-      <H1>{name}</H1>
-      <TicketImage isPremium={isPremium} eventID={eventID} />
-      <P>{lengthMins} minute one-on-one video call</P>
-      {extrasDiv}
-      {descriptionDiv}
-      <Content.Seperator />
-      <Content.Center>
-        <H2>$ {price}</H2>
-      </Content.Center>
-      <div>
-        <Btn.Full primary onClick={onSelect} id={ticketID}>
-          Get Ticket
-        </Btn.Full>
-      </div>
-    </Container>
-  );
-};
 
 Ticket.propTypes = propTypes;
 Ticket.defaultProps = defaultProps;

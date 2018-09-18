@@ -30,7 +30,7 @@ const CenteredBothAxis = Content.extend`
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
 `;
 
 const PaddingBottom = Content.extend`

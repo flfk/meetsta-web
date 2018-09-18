@@ -20,6 +20,23 @@ const TICKETS_PER_BREAK = 5;
 const BREAK_LENGTH_MINS = 5;
 const MILLISECS_PER_MIN = 60000;
 
+const TICKET = {
+  eventID: 'meet-mackenzie-sol-II',
+  ticketID: '',
+  name: 'VIP Package',
+  priceBase: 20,
+  lengthMins: 10,
+  description: '',
+  isPremium: true,
+  addOns: [
+    { name: 'Additional 5 minutes', price: 5, isAddOn: true },
+    { name: 'Autographed selfie from your meet and greet', price: 5, isAddOn: true },
+    { name: 'Comment on your most recent photo', price: 5, isAddOn: true },
+    { name: 'Personalized thank you video', price: 5, isAddOn: true },
+    { name: 'Video recording of your meet and greet', price: 10, isAddOn: true }
+  ]
+};
+
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
   production: process.env.REACT_APP_PAYPAL_CLIENT_ID_PRODUCTION
@@ -50,13 +67,15 @@ class Checkout extends React.Component {
     ticketOrdered: null,
     paid: false,
     toConfirmation: false,
-    paypalErrorMsg: '',
-    selectedVIP: false
+    paypalErrorMsg: ''
   };
 
   componentDidMount() {
     const eventData = this.getEventData();
     this.setState({ ...eventData });
+
+    const defaultTicket = { ...TICKET };
+    this.setState({ ticketSelected: defaultTicket });
   }
 
   componentDidUpdate() {
@@ -68,7 +87,7 @@ class Checkout extends React.Component {
     if (state) {
       const { selectedVIP, ticket, eventID } = state;
       if (selectedVIP) {
-        this.setState({ ticketSelected: ticket, selectedVIP: true, eventID });
+        this.setState({ ticketSelected: ticket, eventID });
       }
       return this.props.location.state.eventData;
     }
@@ -271,14 +290,10 @@ class Checkout extends React.Component {
     return params.eventID;
   };
 
-  handleTicketSelect = event => {
-    const { tickets, selectedVIP } = this.state;
-    if (!selectedVIP) {
-      const ticketSelected = tickets.filter(ticket => ticket.ticketID === event.target.id)[0];
-      this.setState({ ticketSelected, checkoutStep: 1 });
-    } else {
-      this.setState({ checkoutStep: 1 });
-    }
+  handleTicketSelect = ticket => {
+    const ticketSelected = ticket;
+    console.log(ticketSelected);
+    this.setState({ ticketSelected, checkoutStep: 1 });
   };
 
   handlePrevious = () => {
@@ -319,29 +334,25 @@ class Checkout extends React.Component {
       );
 
     let ticketCards = <div />;
-    if (ticketSelected) {
+    if (TICKET) {
       ticketCards = (
         <TicketCardSelectable
-          key={ticketSelected.ticketID}
+          key={TICKET.ticketID}
           eventID={eventID}
-          ticketID={ticketSelected.ticketID}
-          name={ticketSelected.name}
-          description={ticketSelected.description}
-          lengthMins={ticketSelected.lengthMins}
-          price={ticketSelected.price}
+          ticketID={TICKET.ticketID}
+          name={TICKET.name}
+          description={TICKET.description}
+          lengthMins={TICKET.lengthMins}
+          priceBase={TICKET.priceBase}
           onSelect={this.handleTicketSelect}
-          isPremium={ticketSelected.isPremium}
-          extras={ticketSelected.extras}
+          isPremium={TICKET.isPremium}
+          extras={TICKET.extras}
+          addOns={TICKET.addOns}
         />
       );
     }
 
-    const selectTicket = (
-      <div>
-        <FONTS.H2>Select Ticket</FONTS.H2>
-        {ticketCards}
-      </div>
-    );
+    const selectTicket = <div>{ticketCards}</div>;
 
     const basicInformation = (
       <div>
@@ -378,7 +389,9 @@ class Checkout extends React.Component {
 
     const paypalError = paypalErrorMsg ? <FONTS.ERROR>{paypalErrorMsg}</FONTS.ERROR> : null;
 
-    const priceTotal = (ticketSelected.price + this.calculateFee(ticketSelected.price)).toFixed(2);
+    const priceTotalFeeIncl = (
+      ticketSelected.priceTotal + this.calculateFee(ticketSelected.priceTotal)
+    ).toFixed(2);
 
     const payPalCheckout = (
       <PayPalCheckout
@@ -386,7 +399,7 @@ class Checkout extends React.Component {
         env={ENV}
         commit={true}
         currency={CURRENCY}
-        total={priceTotal}
+        total={priceTotalFeeIncl}
         onSuccess={this.onSuccess}
         onError={this.onError}
         onCancel={this.onCancel}
@@ -402,8 +415,12 @@ class Checkout extends React.Component {
         <FONTS.H2>Payment</FONTS.H2>
         <PaymentSummary
           item={ticketSelected.name}
-          price={ticketSelected.price}
-          fee={this.calculateFee(ticketSelected.price)}
+          lengthMins={ticketSelected.lengthMins}
+          priceBase={ticketSelected.priceBase}
+          priceTotal={ticketSelected.priceTotal}
+          addOns={ticketSelected.addOnsSelected}
+          fee={this.calculateFee(ticketSelected.priceTotal)}
+          priceTotalFeeIncl={priceTotalFeeIncl}
         />
         <Content.Spacing />
         {paypalError}

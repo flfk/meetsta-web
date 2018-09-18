@@ -35,25 +35,27 @@ class SelectableFeature extends React.Component {
     isChecked: false
   };
 
-  handleChange = () => {
+  handleChange = event => {
+    const { handleAddOnSelect } = this.props;
+    handleAddOnSelect(event);
     this.setState(prevState => ({ isChecked: !prevState.isChecked }));
   };
 
   render() {
     const { isChecked } = this.state;
-    const { feature } = this.props;
+    const { name, price } = this.props;
 
     return (
       <Container>
         <Item>
           <Checkbox>
-            <input type="checkbox" checked={isChecked} onChange={this.handleChange} />
+            <input type="checkbox" checked={isChecked} onChange={this.handleChange} name={name} />
           </Checkbox>
           <div>
-            <FONTS.P>{feature}</FONTS.P>
+            <FONTS.P>{name}</FONTS.P>
           </div>
         </Item>
-        <Price>$5</Price>
+        <Price>${price}</Price>
       </Container>
     );
   }

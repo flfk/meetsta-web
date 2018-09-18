@@ -24,7 +24,7 @@ const TICKET = {
   eventID: '',
   ticketID: '',
   name: 'VIP Package',
-  price: 40,
+  price: 20,
   lengthMins: 7,
   description: '',
   isPremium: true,
@@ -151,7 +151,7 @@ class WinnerCountdown extends React.Component {
           to={{
             pathname: '/checkout-vip',
             search: `?eventID=${eventID}`,
-            state: { eventID: eventID, selectedVIP: true, ticket: TICKET }
+            state: { eventID: eventID, ticket: TICKET }
           }}
         />
       );

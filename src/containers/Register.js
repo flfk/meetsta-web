@@ -98,7 +98,6 @@ class Register extends React.Component {
   getDate = dateStart => moment(dateStart).format('dddd, MMM Do, YYYY');
 
   handleChangeEmail = event => {
-    console.log('handling change');
     this.setState({ email: event.target.value });
   };
 
