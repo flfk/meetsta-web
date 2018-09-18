@@ -10,7 +10,7 @@ import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';
-import TicketCard from '../components/TicketCard';
+import TicketCardSelectable from '../components/TicketCardSelectable';
 
 import db from '../data/firebase';
 
@@ -321,7 +321,7 @@ class Checkout extends React.Component {
     let ticketCards = <div />;
     if (ticketSelected) {
       ticketCards = (
-        <TicketCard
+        <TicketCardSelectable
           key={ticketSelected.ticketID}
           eventID={eventID}
           ticketID={ticketSelected.ticketID}

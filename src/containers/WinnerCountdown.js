@@ -35,6 +35,13 @@ const TICKET = {
     'Comment on your most recent photo',
     'Personalized thank you video',
     'Video recording of your meet and greet'
+  ],
+  addOns: [
+    { name: 'Additional 5 minutes', price: 5 },
+    { name: 'Autographed selfie from your meet and greet', price: 5 },
+    { name: 'Comment on your most recent photo', price: 5 },
+    { name: 'Personalized thank you video', price: 5 },
+    { name: 'Video recording of your meet and greet', price: 10 }
   ]
 };
 
