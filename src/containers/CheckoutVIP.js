@@ -21,7 +21,7 @@ const BREAK_LENGTH_MINS = 5;
 const MILLISECS_PER_MIN = 60000;
 
 const TICKET = {
-  eventID: 'meet-mackenzie-sol-II',
+  eventID: 'freemium-test',
   ticketID: '',
   name: 'VIP Package',
   priceBase: 20,
@@ -141,7 +141,7 @@ class Checkout extends React.Component {
     };
     this.setState({ ticketOrdered: ticket });
     this.incrementTicketsSold();
-    this.addTicketDoc(ticket);
+    this.addDocTicket(ticket);
   };
 
   getNewOrderNum = async () => {
@@ -206,7 +206,7 @@ class Checkout extends React.Component {
     return timeSlot;
   };
 
-  addTicketDoc = async ticket => {
+  addDocTicket = async ticket => {
     const newTicket = await db.collection('tickets').add(ticket);
     this.setState({ ticketID: newTicket.id });
   };

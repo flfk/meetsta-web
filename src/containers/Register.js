@@ -31,6 +31,7 @@ class Register extends React.Component {
     email: '',
     emailErrMsg: '',
     influencerName: '',
+    registrationID: '',
     dateStart: null,
     dateEnd: null,
     showPopupTime: false,
@@ -41,10 +42,14 @@ class Register extends React.Component {
 
   componentDidMount() {
     try {
-      this.setFormattedData();
+      this.loadFormattedData();
     } catch (err) {
       console.error('Error in getting documents', err);
     }
+  }
+
+  componentDidUpdate() {
+    this.goToWinnerCountdown();
   }
 
   getEventId = () => {
@@ -67,7 +72,7 @@ class Register extends React.Component {
     }
   };
 
-  setFormattedData = async () => {
+  loadFormattedData = async () => {
     const eventID = this.getEventId();
 
     try {
@@ -101,16 +106,52 @@ class Register extends React.Component {
     this.setState({ email: event.target.value });
   };
 
-  handleSubmit = () => {
+  testExistingRegistration = async email => {
+    const registrationsRef = db.collection('registrations');
+    const snapshot = await registrationsRef.get();
+    let isExistingUser = false;
+    await snapshot.forEach(snap => {
+      const data = snap.data();
+      if (data.email === email) {
+        isExistingUser = true;
+        this.setState({ registrationID: snap.id });
+      }
+    });
+    return isExistingUser;
+  };
+
+  addDocRegistration = async email => {
+    const { eventID } = this.state;
+    const registration = {
+      email,
+      eventID,
+      hasDoneTrivia: false,
+      hasDoneInvite: false,
+      hasDoneSurvey: false
+    };
+    const newRegistration = await db.collection('registrations').add(registration);
+    this.setState({ registrationID: newRegistration.id });
+  };
+
+  handleSubmit = async () => {
     this.setState({ isLoading: true });
+    const { email } = this.state;
 
-    // Need to check for valid email address
-
-    // If the email has already been submitted log them in
+    // Validating email is correct
     if (this.validateForm()) {
-      this.setState({ toWinnerCountdown: true });
+      // If the email has already been submitted set the rego ID in state and log them in
+      try {
+        const isExistingRegistration = await this.testExistingRegistration(email);
+        // Else create a new registration
+        if (!isExistingRegistration) {
+          const newRegistration = await this.addDocRegistration(email);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      this.setState({ isLoading: false });
     }
-    this.setState({ isLoading: false });
   };
 
   handleTimePopupOpen = () => this.setState({ showPopupTime: true });
@@ -127,9 +168,9 @@ class Register extends React.Component {
     return () => this.setState({ [key]: false });
   };
 
-  toWinnerCountdown = () => {
-    const { title } = this.state;
-    if (title) {
+  goToWinnerCountdown = () => {
+    const { registrationID } = this.state;
+    if (registrationID) {
       this.setState({ toWinnerCountdown: true });
     }
   };
@@ -150,6 +191,7 @@ class Register extends React.Component {
     const {
       eventID,
       title,
+      registrationID,
       email,
       emailErrMsg,
       influencerName,
@@ -169,8 +211,7 @@ class Register extends React.Component {
           push
           to={{
             pathname: '/countdown',
-            search: `?eventID=${eventID}`,
-            state: { eventData: this.state, email: email }
+            search: `?id=${registrationID}`
           }}
         />
       );

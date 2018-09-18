@@ -18,10 +18,12 @@ const propTypes = {};
 
 const defaultProps = {};
 
-const DEFAULT_EVENT_ID = 'cookie-cutters';
+const DEFAULT_EVENT_ID = 'freemium-test';
+
+const DEFAULT_REGISTRATION_ID = 'oops';
 
 const TICKET = {
-  eventID: '',
+  eventID: 'meet-cookie-cutters',
   ticketID: '',
   name: 'VIP Package',
   price: 20,
@@ -47,6 +49,7 @@ const TICKET = {
 
 class WinnerCountdown extends React.Component {
   state = {
+    registrationID: '',
     nameFirst: '',
     email: '',
     eventID: '',
@@ -58,51 +61,85 @@ class WinnerCountdown extends React.Component {
     hasDoneInvite: false,
     showPopupInvite: false,
     hasDoneSurvey: false,
-    surveyURL: 'https://goo.gl/forms/ArwJQbyWM0nkEfzN2',
+    surveyURL: 'https://goo.gl/forms/lAbNKLOjzHx4Tamx1',
     toCheckoutVIP: false
   };
 
   componentDidMount() {
     try {
-      this.setFormattedData();
+      this.loadFormattedData();
     } catch (err) {
       console.error('Error in getting documents', err);
     }
   }
 
-  getEventId = () => {
+  componentDidUpdate() {
+    this.updateDocRegistration();
+  }
+
+  getRegistrationID = () => {
     const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-    let { eventID } = params;
-    if (!eventID) {
-      eventID = DEFAULT_EVENT_ID;
+    let { id } = params;
+    if (!id) {
+      id = DEFAULT_REGISTRATION_ID;
     }
-    return eventID;
+    return id;
   };
 
-  getEventData = async eventID => {
+  getDocEvent = async eventID => {
     try {
       const eventRef = db.collection('events').doc(eventID);
       const snapshot = await eventRef.get();
       const data = await snapshot.data();
       return data;
     } catch (error) {
-      console.error(error);
+      console.error('error getting event ', error);
     }
   };
 
-  setFormattedData = async () => {
-    const eventID = this.getEventId();
+  getDocRegistration = async registrationID => {
+    try {
+      const registrationRef = db.collection('registrations').doc(registrationID);
+      const snapshot = await registrationRef.get();
+      const data = await snapshot.data();
+      return data;
+    } catch (error) {
+      console.error('error loading registration ', error);
+    }
+    return {};
+  };
+
+  updateDocRegistration = async () => {
+    const { registrationID, hasDoneTrivia, hasDoneSurvey, hasDoneInvite } = this.state;
+    const registrationRef = db.collection('registrations').doc(registrationID);
+    const updateDocRegistration = registrationRef.update({
+      hasDoneTrivia,
+      hasDoneSurvey,
+      hasDoneInvite
+    });
+  };
+
+  loadFormattedData = async () => {
+    const registrationID = this.getRegistrationID();
+    console.log('registration ID is ', registrationID);
 
     try {
-      const event = await this.getEventData(eventID);
-      const formattedData = {
-        eventID: eventID,
-        title: event.title,
+      const registration = await this.getDocRegistration(registrationID);
+      const formattedDataRegistration = {
+        email: registration.email,
+        eventID: registration.eventID,
+        hasDoneTrivia: registration.hasDoneTrivia,
+        hasDoneInvite: registration.hasDoneInvite,
+        hasDoneSurvey: registration.hasDoneSurvey
+      };
+
+      const event = await this.getDocEvent(formattedDataRegistration.eventID);
+      const formattedDataEvent = {
         influencerName: event.organiserName
       };
-      this.setState({ eventID, ...formattedData });
+      this.setState({ registrationID, ...formattedDataRegistration, ...formattedDataEvent });
     } catch (error) {
-      console.error(error);
+      console.error('error formatting Data', error);
     }
   };
 
@@ -151,7 +188,7 @@ class WinnerCountdown extends React.Component {
           to={{
             pathname: '/checkout-vip',
             search: `?eventID=${eventID}`,
-            state: { eventID: eventID, ticket: TICKET }
+            state: { eventID: eventID }
           }}
         />
       );
