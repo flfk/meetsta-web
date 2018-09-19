@@ -23,11 +23,11 @@ const MILLISECS_PER_MIN = 60000;
 const DEFAULT_EVENT_ID = 'default-event-id';
 
 const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 5, isAddOn: true },
-  { name: 'Autographed selfie from your meet and greet', price: 5, isAddOn: true },
-  { name: 'Comment on your most recent photo', price: 5, isAddOn: true },
-  { name: 'Personalized thank you video', price: 5, isAddOn: true },
-  { name: 'Video recording of your meet and greet', price: 10, isAddOn: true }
+  { name: 'Additional 5 minutes', price: 8 },
+  { name: 'Autographed selfie from your meet and greet', price: 2 },
+  { name: 'Follow back and comment on your most recent', price: 5 },
+  { name: 'Personalized thank you video', price: 5 },
+  { name: 'Video recording of your meet and greet', price: 10 }
 ];
 
 const CLIENT = {
@@ -197,7 +197,7 @@ class Checkout extends React.Component {
       name: ticketSelected.name,
       priceTotal: ticketSelected.priceTotal,
       priceBase: ticketSelected.priceBase,
-      fee: this.calculateFee(ticketSelected.price),
+      fee: this.calculateFee(ticketSelected.priceTotal),
       lengthMins: ticketSelected.lengthMins,
       startTime,
       purchaseNameFirst: nameFirst,

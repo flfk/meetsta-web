@@ -18,41 +18,14 @@ const propTypes = {};
 
 const defaultProps = {};
 
-// const DEFAULT_EVENT_ID = 'freemium-test';
-
 const DEFAULT_REGISTRATION_ID = 'oops';
 
-// const TICKET = {
-//   eventID: 'meet-cookie-cutters',
-//   ticketID: '',
-//   name: 'VIP Package',
-//   price: 20,
-//   lengthMins: 10,
-//   description: '',
-//   isPremium: true,
-//   extras: [
-//     'Garaunteed Ticket to Meet & Greet',
-//     '10 minute one-on-one video call',
-//     'Autographed selfie from your meet and greet',
-//     'Comment on your most recent photo',
-//     'Personalized thank you video',
-//     'Video recording of your meet and greet'
-//   ],
-//   addOns: [
-//     { name: 'Additional 5 minutes', price: 5 },
-//     { name: 'Autographed selfie from your meet and greet', price: 5 },
-//     { name: 'Comment on your most recent photo', price: 5 },
-//     { name: 'Personalized thank you video', price: 5 },
-//     { name: 'Video recording of your meet and greet', price: 10 }
-//   ]
-// };
-
 const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 5, isAddOn: true },
-  { name: 'Autographed selfie from your meet and greet', price: 5, isAddOn: true },
-  { name: 'Comment on your most recent photo', price: 5, isAddOn: true },
-  { name: 'Personalized thank you video', price: 5, isAddOn: true },
-  { name: 'Video recording of your meet and greet', price: 10, isAddOn: true }
+  { name: 'Additional 5 minutes', price: 8 },
+  { name: 'Autographed selfie from your meet and greet', price: 2 },
+  { name: 'Follow back and comment on your most recent', price: 5 },
+  { name: 'Personalized thank you video', price: 5 },
+  { name: 'Video recording of your meet and greet', price: 10 }
 ];
 
 class WinnerCountdown extends React.Component {
