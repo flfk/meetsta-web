@@ -35,6 +35,7 @@ class WinnerCountdown extends React.Component {
     nameFirst: '',
     email: '',
     eventID: '',
+    dateStart: 0,
     influencerName: '',
     isWinner: false,
     ticketNumber: null,
@@ -95,7 +96,8 @@ class WinnerCountdown extends React.Component {
       const formattedDataEvent = {
         influencerName: event.organiserName,
         triviaQuestion: event.triviaQuestion,
-        triviaAnswer: event.triviaAnswer
+        triviaAnswer: event.triviaAnswer,
+        dateStart: event.dateStart
       };
 
       const tickets = await actions.getCollEventTickets(formattedDataRegistration.eventID);
@@ -140,6 +142,8 @@ class WinnerCountdown extends React.Component {
   render() {
     const {
       eventID,
+      dateStart,
+      email,
       influencerName,
       isWinner,
       triviaQuestion,
@@ -219,6 +223,8 @@ class WinnerCountdown extends React.Component {
         handleComplete={this.handleComplete('Invite')}
         eventID={eventID}
         influencerName={influencerName}
+        dateStart={dateStart}
+        email={email}
       />
     ) : null;
 
@@ -232,10 +238,6 @@ class WinnerCountdown extends React.Component {
       </FONTS.H3>
     );
     const survey = hasDoneSurvey ? surveyDone : surveyBtn;
-
-    // TO DO INVITE
-    // <br />
-    // {invite}
 
     const defaultContent = (
       <Content>
@@ -269,7 +271,8 @@ class WinnerCountdown extends React.Component {
         <Content.Seperator />
         <FONTS.H2>Want to boost your chance of winning?</FONTS.H2>
         {survey}
-
+        <br />
+        {invite}
         <br />
         {trivia}
         <br />

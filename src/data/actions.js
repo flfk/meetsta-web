@@ -1,6 +1,7 @@
 import db from './firebase';
 
 // Collection and document Names
+const COLL_EMAILS = 'emails';
 const COLL_EVENTS = 'events';
 const COLL_TICKETS = 'tickets';
 const COLL_UTILS = 'utils';
@@ -114,15 +115,25 @@ const getDocsTicketsSold = async eventID => {
   return ticketsSold;
 };
 
+const addDocEmailRequest = async emailRequest => {
+  const email = await db.collection(COLL_EMAILS).add(emailRequest);
+  return email;
+};
+
 const actions = {};
+
 actions.getDocEvent = getDocEvent;
+actions.getCollEventTickets = getCollEventTickets;
+
 actions.getDocsRegistrations = getDocsRegistrations;
 actions.addDocRegistration = addDocRegistration;
 actions.getDocRegistration = getDocRegistration;
 actions.updateDocRegistration = updateDocRegistration;
-actions.getCollEventTickets = getCollEventTickets;
+
 actions.addDocTicket = addDocTicket;
 actions.getNewOrderNum = getNewOrderNum;
 actions.getDocsTicketsSold = getDocsTicketsSold;
+
+actions.addDocEmailRequest = addDocEmailRequest;
 
 export default actions;

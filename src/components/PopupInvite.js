@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FaTimes } from 'react-icons/fa';
+import moment from 'moment-timezone';
 import validator from 'validator';
 
 import Btn from '../components/Btn';
@@ -9,30 +10,44 @@ import FONTS from '../utils/Fonts';
 import Popup from '../components/Popup';
 import InputText from '../components/InputText';
 
-import db from '../data/firebase';
+import actions from '../data/actions';
 
-const EVENT_URL_BASE = 'https://www.meetsta.com/event?eventID=';
+const EVENT_URL_BASE = 'https://www.meetsta.com/register?eventID=';
+const EMAIL_TYPE = 'invite';
 
 const propTypes = {
   handleClose: PropTypes.func.isRequired,
   handleComplete: PropTypes.func.isRequired,
   eventID: PropTypes.string.isRequired,
-  influencerName: PropTypes.string.isRequired
+  influencerName: PropTypes.string.isRequired,
+  dateStart: PropTypes.number.isRequired,
+  email: PropTypes.string.isRequired
 };
 
-const defaultProps = {
-  placeholder: '',
-  erroMsg: ''
-};
+const defaultProps = {};
 
 class PopupInvite extends React.Component {
   state = {
     popupStep: 0,
+    daysLeft: 0,
     nameFirst: '',
     nameFirstErrMsg: '',
     email: '',
+    refereesEmail: '',
     emailErrMsg: '',
     emailID: ''
+  };
+
+  componentDidMount() {
+    const { dateStart, email } = this.props;
+    const daysLeft = this.getDaysLeft(dateStart);
+    this.setState({ daysLeft, refereesEmail: email });
+  }
+
+  getDaysLeft = dateStart => {
+    const dateCurrent = moment();
+    const daysLeft = moment(dateStart).diff(dateCurrent, 'days');
+    return daysLeft;
   };
 
   handleChangeFirstName = event => {
@@ -43,48 +58,59 @@ class PopupInvite extends React.Component {
     this.setState({ email: event.target.value });
   };
 
+  emailRequestInvite = async () => {
+    const { nameFirst, email, daysLeft } = this.state;
+    const { influencerName, eventID } = this.props;
+    const eventURL = EVENT_URL_BASE + eventID;
+    const emailRequest = {
+      type: EMAIL_TYPE,
+      eventID,
+      email,
+      nameFirst,
+      influencerName,
+      eventURL,
+      daysLeft
+    };
+    const newEmail = await actions.addDocEmailRequest(emailRequest);
+    this.setState({ emailID: newEmail.id });
+  };
+
   handleSend = () => {
     if (this.validateForm()) {
       const { handleComplete } = this.props;
-      // this.addParentEmailDoc();
       // TODO MAKE SURE THAT YOU ENABLE EMAIL
+      this.emailRequestInvite();
       handleComplete();
       this.setState({ popupStep: 1 });
     }
   };
 
-  addParentEmailDoc = async () => {
-    const { nameFirst, email } = this.state;
-    const { influencerName, eventID } = this.props;
-    const eventURL = EVENT_URL_BASE + eventID;
-    const emailRequest = {
-      email,
-      nameFirst,
-      influencerName,
-      eventURL
-    };
-    const newEmail = await db.collection('emails').add(emailRequest);
-    this.setState({ emailID: newEmail.id });
-  };
-
   validateForm = () => {
-    const { nameFirst, email } = this.state;
+    const { nameFirst, email, refereesEmail } = this.state;
 
     let isFormValid = true;
 
     if (nameFirst === '') {
       this.setState({ nameFirstErrMsg: 'First name required.' });
       isFormValid = false;
-    } else {
-      this.setState({ nameFirstErrMsg: '' });
+      return isFormValid;
+    }
+    this.setState({ nameFirstErrMsg: '' });
+
+    if (refereesEmail === email) {
+      this.setState({
+        emailErrMsg: "You can't invite yourself. Why not share this with a friend instead?"
+      });
+      isFormValid = false;
+      return isFormValid;
     }
 
     if (!validator.isEmail(email)) {
       this.setState({ emailErrMsg: 'Valid email address required.' });
       isFormValid = false;
-    } else {
-      this.setState({ emailErrMsg: '' });
+      return isFormValid;
     }
+    this.setState({ emailErrMsg: '' });
 
     return isFormValid;
   };
@@ -98,7 +124,7 @@ class PopupInvite extends React.Component {
         <Popup.Card>
           <Popup.BtnClose handleClose={handleClose} />
           <Content>
-            <FONTS.H1>Invite a friend</FONTS.H1>
+            <FONTS.H1>Invite a friend {this.state.refereesEmail}</FONTS.H1>
             <InputText
               label="Your first name"
               placeholder="Jane"
@@ -107,8 +133,8 @@ class PopupInvite extends React.Component {
               errMsg={nameFirstErrMsg}
             />
             <InputText
-              label="Email address to send to"
-              placeholder="my-bffle@example.com"
+              label="Email address of person you are inviting"
+              placeholder="my-best-friend@example.com"
               onChange={this.handleChangeEmail}
               value={email}
               errMsg={emailErrMsg}
