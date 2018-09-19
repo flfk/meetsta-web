@@ -6,9 +6,7 @@ const propTypes = {};
 const defaultProps = {};
 
 class XX extends React.Component {
-  constructor() {
-    super();
-  }
+  state = {};
 
   render() {
     return <div />;

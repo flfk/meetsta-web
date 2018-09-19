@@ -7,7 +7,6 @@ import moment from 'moment-timezone';
 import Btn from '../components/Btn';
 import BtnProfile from '../components/BtnProfile';
 import Content from '../components/Content';
-
 import EVENT_IMAGE_MACKENZIE from '../assets/eventImages/EventImageMackenzieSol.jpg';
 import EVENT_IMAGE_LEXI from '../assets/eventImages/EventImageLexiJayde.jpg';
 import PROFILE_IMAGE_MACKENZIE from '../assets/profileImages/ProfileImageMackenzieSol.png';
@@ -239,6 +238,8 @@ class Events extends React.Component {
           <Wrapper.EventImage>
             <img src={eventImg} alt={influencerName} />
           </Wrapper.EventImage>
+
+          <br />
 
           <FONTS.A href={profileURL} target="_blank">
             <BtnProfile>

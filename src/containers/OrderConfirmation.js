@@ -97,7 +97,6 @@ class OrderConfirmation extends React.Component {
     if (instaHandle) {
       this.updateInstaHandle(instaHandle);
       this.setState({ submittedInsta: true });
-      console.log('updating data');
     }
   };
 

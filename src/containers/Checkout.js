@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import validator from 'validator';
@@ -59,7 +59,8 @@ class Checkout extends React.Component {
   }
 
   getEventData = () => {
-    if (this.props.location.state) {
+    const state = this.props.location.state;
+    if (state) {
       return this.props.location.state.eventData;
     }
   };
@@ -112,7 +113,7 @@ class Checkout extends React.Component {
     };
     this.setState({ ticketOrdered: ticket });
     this.incrementTicketsSold();
-    this.addTicketDoc(ticket);
+    this.addDocTicket(ticket);
   };
 
   getNewOrderNum = async () => {
@@ -177,7 +178,7 @@ class Checkout extends React.Component {
     return timeSlot;
   };
 
-  addTicketDoc = async ticket => {
+  addDocTicket = async ticket => {
     const newTicket = await db.collection('tickets').add(ticket);
     this.setState({ ticketID: newTicket.id });
   };
@@ -228,30 +229,25 @@ class Checkout extends React.Component {
 
   validateForm = () => {
     const { nameFirst, nameLast, email } = this.state;
-
     let isFormValid = true;
-
     if (nameFirst === '') {
       this.setState({ nameFirstErrMsg: 'First name required.' });
       isFormValid = false;
     } else {
       this.setState({ nameFirstErrMsg: '' });
     }
-
     if (nameLast === '') {
       this.setState({ nameLastErrMsg: 'Last name required.' });
       isFormValid = false;
     } else {
       this.setState({ nameLastErrMsg: '' });
     }
-
     if (!validator.isEmail(email)) {
       this.setState({ emailErrMsg: 'Valid email address required.' });
       isFormValid = false;
     } else {
       this.setState({ emailErrMsg: '' });
     }
-
     return isFormValid;
   };
 
@@ -398,21 +394,21 @@ class Checkout extends React.Component {
           fee={this.calculateFee(ticketSelected.price)}
         />
         <Content.Spacing />
-        <FONTS.P>
-          By clicking on Checkout, you agree with Meetsta's{' '}
-          <Link to="/termsConditions" target="_blank">
-            Terms and Conditions of Use
-          </Link>{' '}
-          and{' '}
-          <Link to="/privacyPolicy" target="_blank">
-            Privacy Policy
-          </Link>
-          .
-        </FONTS.P>
-        <Content.Spacing />
         {paypalError}
         {payPalButton}
-        <Content.Spacing />
+        <Content>
+          <FONTS.FinePrint>
+            By clicking on Checkout, you agree with Meetsta's{' '}
+            <Link to="/termsConditions" target="_blank">
+              Terms and Conditions of Use
+            </Link>{' '}
+            and{' '}
+            <Link to="/privacyPolicy" target="_blank">
+              Privacy Policy
+            </Link>
+            .
+          </FONTS.FinePrint>
+        </Content>
         <Btn.Tertiary onClick={this.handlePrevious}>{'< Back'}</Btn.Tertiary>
       </div>
     );
