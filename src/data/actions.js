@@ -28,10 +28,21 @@ const getDocEvent = async eventID => {
   }
 };
 
+const getDocsRegistrations = async eventID => {
+  const registrations = [];
+  const registrationsRef = db.collection(COLL_REGISTRATIONS);
+  const snapshot = await registrationsRef.where('eventID', '==', eventID).get();
+  snapshot.forEach(snap => {
+    const registration = snap.data();
+    registration.id = snap.id;
+    registrations.push(registration);
+  });
+  return registrations;
+};
+
 const addDocRegistration = async registration => {
   const newRegistration = await db.collection(COLL_REGISTRATIONS).add(registration);
   return newRegistration;
-  // this.setState({ registrationID: newRegistration.id });
 };
 
 const getDocRegistration = async registrationID => {
@@ -93,7 +104,7 @@ const getNewOrderNum = async () => {
 };
 
 const getDocsTicketsSold = async eventID => {
-  let ticketsSold = [];
+  const ticketsSold = [];
   const ticketsRef = db.collection(COLL_TICKETS);
   const snapshot = await ticketsRef.get();
   snapshot.forEach(snap => {
@@ -107,6 +118,7 @@ const getDocsTicketsSold = async eventID => {
 
 const actions = {};
 actions.getDocEvent = getDocEvent;
+actions.getDocsRegistrations = getDocsRegistrations;
 actions.addDocRegistration = addDocRegistration;
 actions.getDocRegistration = getDocRegistration;
 actions.updateDocRegistration = updateDocRegistration;

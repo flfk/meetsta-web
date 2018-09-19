@@ -98,18 +98,14 @@ class Register extends React.Component {
     this.setState({ email: event.target.value });
   };
 
-  testExistingRegistration = async email => {
-    const registrationsRef = db.collection('registrations');
-    const snapshot = await registrationsRef.get();
-    let isExistingUser = false;
-    await snapshot.forEach(snap => {
-      const data = snap.data();
-      if (data.email === email) {
-        isExistingUser = true;
-        this.setState({ registrationID: snap.id });
+  testExisting = (email, registrations) => {
+    let isExisting = false;
+    registrations.reduce((bool, registration) => {
+      if (registration.email === email) {
+        isExisting = true;
       }
-    });
-    return isExistingUser;
+    }, isExisting);
+    return isExisting;
   };
 
   handleSubmit = async () => {
@@ -118,12 +114,15 @@ class Register extends React.Component {
     // Validating email is correct
     if (this.validateForm()) {
       // If the email has already been submitted set the rego ID in state and log them in
+      let registrationID = '';
       try {
-        const isExistingRegistration = await this.testExistingRegistration(email);
+        const registrations = await actions.getDocsRegistrations(eventID);
+        const isExisting = this.testExisting(email, registrations);
         // Else create a new registration
-        if (!isExistingRegistration) {
+        if (!isExisting) {
           const newRegistration = {
             email,
+            dateCreated: Date.now(),
             eventID,
             hasDoneTrivia: false,
             hasDoneInvite: false,
@@ -131,10 +130,14 @@ class Register extends React.Component {
             isWinner: false
           };
           const addedRegistration = await actions.addDocRegistration(newRegistration);
-          this.setState({ registrationID: addedRegistration.id });
+          registrationID = addedRegistration.id;
+        } else {
+          const registration = registrations.filter(rego => rego.email === email)[0];
+          registrationID = registration.id;
         }
-      } catch (err) {
-        console.error(err);
+        this.setState({ registrationID });
+      } catch (error) {
+        console.error('Error handling registration submit ', error);
       }
     } else {
       this.setState({ isLoading: false });
