@@ -18,6 +18,7 @@ import InputText from '../components/InputText';
 import Wrapper from '../components/Wrapper';
 
 import db from '../data/firebase';
+import actions from '../data/actions';
 
 const propTypes = {};
 
@@ -62,22 +63,11 @@ class Register extends React.Component {
     return eventID;
   };
 
-  getEventData = async eventID => {
-    try {
-      const eventRef = db.collection('events').doc(eventID);
-      const snapshot = await eventRef.get();
-      const data = await snapshot.data();
-      return data;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   loadFormattedData = async () => {
     const eventID = this.getEventId();
 
     try {
-      const event = await this.getEventData(eventID);
+      const event = await actions.getDocEvent(eventID);
       const formattedData = {
         eventID: eventID,
         title: event.title,
@@ -121,23 +111,9 @@ class Register extends React.Component {
     return isExistingUser;
   };
 
-  addDocRegistration = async email => {
-    const { eventID } = this.state;
-    const registration = {
-      email,
-      eventID,
-      hasDoneTrivia: false,
-      hasDoneInvite: false,
-      hasDoneSurvey: false,
-      isWinner: false
-    };
-    const newRegistration = await db.collection('registrations').add(registration);
-    this.setState({ registrationID: newRegistration.id });
-  };
-
   handleSubmit = async () => {
     this.setState({ isLoading: true });
-    const { email } = this.state;
+    const { email, eventID } = this.state;
 
     // Validating email is correct
     if (this.validateForm()) {
@@ -146,7 +122,16 @@ class Register extends React.Component {
         const isExistingRegistration = await this.testExistingRegistration(email);
         // Else create a new registration
         if (!isExistingRegistration) {
-          const newRegistration = await this.addDocRegistration(email);
+          const newRegistration = {
+            email,
+            eventID,
+            hasDoneTrivia: false,
+            hasDoneInvite: false,
+            hasDoneSurvey: false,
+            isWinner: false
+          };
+          const addedRegistration = await actions.addDocRegistration(newRegistration);
+          this.setState({ registrationID: addedRegistration.id });
         }
       } catch (err) {
         console.error(err);
