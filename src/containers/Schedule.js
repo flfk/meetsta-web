@@ -6,13 +6,13 @@ import moment from 'moment-timezone';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 
-import db from '../data/firebase';
+import actions from '../data/actions';
 
 // const propTypes = {};
 
 // const defaultProps = {};
 
-class EventSales extends React.Component {
+class Schedule extends React.Component {
   state = {
     eventID: '',
     eventTitle: '',
@@ -21,7 +21,7 @@ class EventSales extends React.Component {
 
   componentDidMount() {
     try {
-      this.getTicketData();
+      this.loadFormattedData();
     } catch (err) {
       console.error('Error in getting documents', err);
     }
@@ -36,22 +36,17 @@ class EventSales extends React.Component {
     return eventID;
   };
 
-  getTicketData = async () => {
+  loadFormattedData = async () => {
     const eventID = this.getEventId();
     try {
-      const ticketsRef = db.collection('tickets');
-      const queryRef = ticketsRef.where('eventID', '==', eventID);
-      const snapshot = await queryRef.get();
-      const tickets = [];
-      snapshot.forEach(snap => {
-        const ticket = snap.data();
-        tickets.push(ticket);
-      });
+      const event = await actions.getDocEvent(eventID);
+      const eventTitle = event.title;
+
+      const tickets = await actions.getDocsTicketsSold(eventID);
       const ticketsSorted = tickets.sort((a, b) => a.startTime - b.startTime);
-      const { eventTitle } = tickets[0];
       this.setState({ tickets: ticketsSorted, eventTitle });
     } catch (error) {
-      console.error(error);
+      console.error('Error loading formatted data ', error);
     }
   };
 
@@ -72,7 +67,12 @@ class EventSales extends React.Component {
         <div key={ticket.orderNum}>
           <Content.Row>
             <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
-            <FONTS.P>{ticket.name}</FONTS.P>
+            <div>
+              <FONTS.P>{ticket.name}</FONTS.P>
+              {ticket.addOns.map(addOn => (
+                <div key={addOn}>{addOn}</div>
+              ))}
+            </div>
             <FONTS.P>{ticket.IGHandle}</FONTS.P>
             <FONTS.P>{ticket.purchaseNameFirst}</FONTS.P>
           </Content.Row>
@@ -90,7 +90,7 @@ class EventSales extends React.Component {
   }
 }
 
-// EventSales.propTypes = propTypes;
-// EventSales.defaultProps = defaultProps;
+// Schedule.propTypes = propTypes;
+// Schedule.defaultProps = defaultProps;
 
-export default EventSales;
+export default Schedule;

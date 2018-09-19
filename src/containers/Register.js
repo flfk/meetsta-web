@@ -18,6 +18,7 @@ import InputText from '../components/InputText';
 import Wrapper from '../components/Wrapper';
 
 import db from '../data/firebase';
+import actions from '../data/actions';
 
 const propTypes = {};
 
@@ -29,6 +30,7 @@ class Register extends React.Component {
   state = {
     eventID: '',
     title: '',
+    freeTicketTotal: '',
     email: '',
     emailErrMsg: '',
     influencerName: '',
@@ -62,25 +64,14 @@ class Register extends React.Component {
     return eventID;
   };
 
-  getEventData = async eventID => {
-    try {
-      const eventRef = db.collection('events').doc(eventID);
-      const snapshot = await eventRef.get();
-      const data = await snapshot.data();
-      return data;
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   loadFormattedData = async () => {
     const eventID = this.getEventId();
-
     try {
-      const event = await this.getEventData(eventID);
+      const event = await actions.getDocEvent(eventID);
       const formattedData = {
         eventID: eventID,
         title: event.title,
+        freeTicketTotal: event.freeTicketTotal,
         description: event.description,
         influencerName: event.organiserName,
         dateStart: event.dateStart,
@@ -107,49 +98,46 @@ class Register extends React.Component {
     this.setState({ email: event.target.value });
   };
 
-  testExistingRegistration = async email => {
-    const registrationsRef = db.collection('registrations');
-    const snapshot = await registrationsRef.get();
-    let isExistingUser = false;
-    await snapshot.forEach(snap => {
-      const data = snap.data();
-      if (data.email === email) {
-        isExistingUser = true;
-        this.setState({ registrationID: snap.id });
+  testExisting = (email, registrations) => {
+    let isExisting = false;
+    registrations.reduce((bool, registration) => {
+      if (registration.email === email) {
+        isExisting = true;
       }
-    });
-    return isExistingUser;
-  };
-
-  addDocRegistration = async email => {
-    const { eventID } = this.state;
-    const registration = {
-      email,
-      eventID,
-      hasDoneTrivia: false,
-      hasDoneInvite: false,
-      hasDoneSurvey: false,
-      isWinner: false
-    };
-    const newRegistration = await db.collection('registrations').add(registration);
-    this.setState({ registrationID: newRegistration.id });
+    }, isExisting);
+    return isExisting;
   };
 
   handleSubmit = async () => {
     this.setState({ isLoading: true });
-    const { email } = this.state;
-
+    const { email, eventID } = this.state;
     // Validating email is correct
     if (this.validateForm()) {
       // If the email has already been submitted set the rego ID in state and log them in
+      let registrationID = '';
       try {
-        const isExistingRegistration = await this.testExistingRegistration(email);
+        const registrations = await actions.getDocsRegistrations(eventID);
+        const isExisting = this.testExisting(email, registrations);
         // Else create a new registration
-        if (!isExistingRegistration) {
-          const newRegistration = await this.addDocRegistration(email);
+        if (!isExisting) {
+          const newRegistration = {
+            email,
+            dateCreated: Date.now(),
+            eventID,
+            hasDoneTrivia: false,
+            hasDoneInvite: false,
+            hasDoneSurvey: false,
+            isWinner: false
+          };
+          const addedRegistration = await actions.addDocRegistration(newRegistration);
+          registrationID = addedRegistration.id;
+        } else {
+          const registration = registrations.filter(rego => rego.email === email)[0];
+          registrationID = registration.id;
         }
-      } catch (err) {
-        console.error(err);
+        this.setState({ registrationID });
+      } catch (error) {
+        console.error('Error handling registration submit ', error);
       }
     } else {
       this.setState({ isLoading: false });
@@ -193,6 +181,7 @@ class Register extends React.Component {
     const {
       eventID,
       title,
+      freeTicketTotal,
       registrationID,
       email,
       emailErrMsg,
@@ -261,8 +250,8 @@ class Register extends React.Component {
 
           <FONTS.P>
             {' '}
-            Join the running to win one of thirty free tickets to meet {influencerName} on a 1-on-1
-            video call for one minute.
+            Claim one of the {freeTicketTotal} free tickets to meet {influencerName} for a
+            one-on-one video call for 1 minute OR get a full ticket for 10 minutes.
           </FONTS.P>
 
           <br />
@@ -275,7 +264,7 @@ class Register extends React.Component {
 
         <FooterEvents>
           <Content>
-            <FONTS.H1 centered>Win 1 of 30 free tickets!</FONTS.H1>
+            <FONTS.H1 centered>Claim 1 of {freeTicketTotal} free tickets!</FONTS.H1>
             <InputText
               placeholder="Enter your email"
               value={email}

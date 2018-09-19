@@ -139,7 +139,7 @@ class Checkout extends React.Component {
     return eventTickets;
   };
 
-  getTicketsSold = async () => {
+  getDocsTicketsSold = async () => {
     let ticketsSold = 0;
     const eventTickets = await this.getEventTickets();
     eventTickets.forEach(ticket => (ticketsSold += ticket.sold));
@@ -163,7 +163,7 @@ class Checkout extends React.Component {
   };
 
   getTimeSlot = async () => {
-    const ticketsSold = await this.getTicketsSold();
+    const ticketsSold = await this.getDocsTicketsSold();
     const minsSold = await this.getMinsSold();
     const eventStart = await this.getEventStart();
     let breakLengthMins = 0;
