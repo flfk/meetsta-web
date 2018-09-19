@@ -240,18 +240,11 @@ class WinnerCountdown extends React.Component {
     const defaultContent = (
       <Content>
         <FONTS.H2 centered noMarginBottom>
-          You haven't won yet. <br />
+          You haven't won a 1 minute ticket yet. <br />
           <br />
           The next winners will be announced in:
         </FONTS.H2>
         <Countdown date={1537239600000} />
-        <Content.Seperator />
-        <FONTS.H2>Want to boost your chance of winning?</FONTS.H2>
-        {survey}
-
-        <br />
-        {trivia}
-        <br />
       </Content>
     );
 
@@ -271,17 +264,43 @@ class WinnerCountdown extends React.Component {
       </Content>
     );
 
+    const activitiesContent = (
+      <Content>
+        <Content.Seperator />
+        <FONTS.H2>Want to boost your chance of winning?</FONTS.H2>
+        {survey}
+
+        <br />
+        {trivia}
+        <br />
+      </Content>
+    );
+
     const status = isWinner ? winnerContent : defaultContent;
+
+    const activities = isWinner ? null : activitiesContent;
+
+    const fullTicket = (
+      <Content>
+        <Content.Seperator />
+        <FONTS.H2 noMarginBottom>1 minute too short? </FONTS.H2>
+        <FONTS.H3 noMarginBottom>
+          Garauntee your ticket AND talk to {influencerName} for 10 minutes.{' '}
+        </FONTS.H3>
+        <br />
+        <Btn primary onClick={this.handleVIPSelect}>
+          Get FULL ticket
+        </Btn>
+        <br />
+      </Content>
+    );
 
     return (
       <Content>
         {status}
-        <Content.Seperator />
-        <FONTS.H2 noMarginBottom>Want to talk to {influencerName} for 10 mins not 1 min?</FONTS.H2>
-        <br />
-        <Btn primary onClick={this.handleVIPSelect}>
-          Get VIP Package
-        </Btn>
+        {fullTicket}
+        {activities}
+
         <br />
         <br />
 

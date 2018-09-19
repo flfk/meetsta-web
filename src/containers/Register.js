@@ -30,6 +30,7 @@ class Register extends React.Component {
   state = {
     eventID: '',
     title: '',
+    freeTicketTotal: '',
     email: '',
     emailErrMsg: '',
     influencerName: '',
@@ -70,6 +71,7 @@ class Register extends React.Component {
       const formattedData = {
         eventID: eventID,
         title: event.title,
+        freeTicketTotal: event.freeTicketTotal,
         description: event.description,
         influencerName: event.organiserName,
         dateStart: event.dateStart,
@@ -176,6 +178,7 @@ class Register extends React.Component {
     const {
       eventID,
       title,
+      freeTicketTotal,
       registrationID,
       email,
       emailErrMsg,
@@ -244,8 +247,8 @@ class Register extends React.Component {
 
           <FONTS.P>
             {' '}
-            Join the running to win one of thirty free tickets to meet {influencerName} on a 1-on-1
-            video call for one minute.
+            Claim one of the {freeTicketTotal} free tickets to meet {influencerName} for a
+            one-on-one video call for 1 minute OR get a full ticket for 10 minutes.
           </FONTS.P>
 
           <br />
@@ -258,7 +261,7 @@ class Register extends React.Component {
 
         <FooterEvents>
           <Content>
-            <FONTS.H1 centered>Win 1 of 30 free tickets!</FONTS.H1>
+            <FONTS.H1 centered>Claim 1 of {freeTicketTotal} free tickets!</FONTS.H1>
             <InputText
               placeholder="Enter your email"
               value={email}
