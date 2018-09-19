@@ -18,34 +18,42 @@ const propTypes = {};
 
 const defaultProps = {};
 
-const DEFAULT_EVENT_ID = 'freemium-test';
+// const DEFAULT_EVENT_ID = 'freemium-test';
 
 const DEFAULT_REGISTRATION_ID = 'oops';
 
-const TICKET = {
-  eventID: 'meet-cookie-cutters',
-  ticketID: '',
-  name: 'VIP Package',
-  price: 20,
-  lengthMins: 7,
-  description: '',
-  isPremium: true,
-  extras: [
-    'Garaunteed Ticket to Meet & Greet',
-    '10 minute one-on-one video call',
-    'Autographed selfie from your meet and greet',
-    'Comment on your most recent photo',
-    'Personalized thank you video',
-    'Video recording of your meet and greet'
-  ],
-  addOns: [
-    { name: 'Additional 5 minutes', price: 5 },
-    { name: 'Autographed selfie from your meet and greet', price: 5 },
-    { name: 'Comment on your most recent photo', price: 5 },
-    { name: 'Personalized thank you video', price: 5 },
-    { name: 'Video recording of your meet and greet', price: 10 }
-  ]
-};
+// const TICKET = {
+//   eventID: 'meet-cookie-cutters',
+//   ticketID: '',
+//   name: 'VIP Package',
+//   price: 20,
+//   lengthMins: 10,
+//   description: '',
+//   isPremium: true,
+//   extras: [
+//     'Garaunteed Ticket to Meet & Greet',
+//     '10 minute one-on-one video call',
+//     'Autographed selfie from your meet and greet',
+//     'Comment on your most recent photo',
+//     'Personalized thank you video',
+//     'Video recording of your meet and greet'
+//   ],
+//   addOns: [
+//     { name: 'Additional 5 minutes', price: 5 },
+//     { name: 'Autographed selfie from your meet and greet', price: 5 },
+//     { name: 'Comment on your most recent photo', price: 5 },
+//     { name: 'Personalized thank you video', price: 5 },
+//     { name: 'Video recording of your meet and greet', price: 10 }
+//   ]
+// };
+
+const ADD_ONS = [
+  { name: 'Additional 5 minutes', price: 5, isAddOn: true },
+  { name: 'Autographed selfie from your meet and greet', price: 5, isAddOn: true },
+  { name: 'Comment on your most recent photo', price: 5, isAddOn: true },
+  { name: 'Personalized thank you video', price: 5, isAddOn: true },
+  { name: 'Video recording of your meet and greet', price: 10, isAddOn: true }
+];
 
 class WinnerCountdown extends React.Component {
   state = {
@@ -53,7 +61,7 @@ class WinnerCountdown extends React.Component {
     nameFirst: '',
     email: '',
     eventID: '',
-    influencerName: 'Cookie Cutters',
+    influencerName: '',
     isWinner: false,
     ticketNumber: null,
     triviaQuestion: '',
@@ -64,7 +72,8 @@ class WinnerCountdown extends React.Component {
     showPopupInvite: false,
     hasDoneSurvey: false,
     surveyURL: 'https://goo.gl/forms/lAbNKLOjzHx4Tamx1',
-    toCheckoutVIP: false
+    toCheckoutVIP: false,
+    ticketVIP: {}
   };
 
   componentDidMount() {
@@ -111,6 +120,27 @@ class WinnerCountdown extends React.Component {
     return {};
   };
 
+  getCollTickets = async eventID => {
+    try {
+      const ticketsRef = db
+        .collection('events')
+        .doc(eventID)
+        .collection('tickets');
+      const snapshot = await ticketsRef.get();
+      const tickets = [];
+      snapshot.forEach(snap => {
+        const ticket = snap.data();
+        const { id } = snap;
+        ticket.ticketID = id;
+        ticket['addOns'] = ADD_ONS;
+        tickets.push(ticket);
+      });
+      return tickets;
+    } catch (error) {
+      console.error('Error getting tickets ', error);
+    }
+  };
+
   updateDocRegistration = async () => {
     const { registrationID, hasDoneTrivia, hasDoneSurvey, hasDoneInvite } = this.state;
     const registrationRef = db.collection('registrations').doc(registrationID);
@@ -137,12 +167,22 @@ class WinnerCountdown extends React.Component {
       };
 
       const event = await this.getDocEvent(formattedDataRegistration.eventID);
+      console.log('eventID is ', formattedDataRegistration.eventID);
       const formattedDataEvent = {
         influencerName: event.organiserName,
         triviaQuestion: event.triviaQuestion,
         triviaAnswer: event.triviaAnswer
       };
-      this.setState({ registrationID, ...formattedDataRegistration, ...formattedDataEvent });
+
+      const tickets = await this.getCollTickets(formattedDataRegistration.eventID);
+      const ticketVIP = tickets[0];
+      ticketVIP['addOns'] = ADD_ONS;
+      this.setState({
+        registrationID,
+        ...formattedDataRegistration,
+        ...formattedDataEvent,
+        ticketVIP
+      });
     } catch (error) {
       console.error('error formatting Data', error);
     }
@@ -185,7 +225,8 @@ class WinnerCountdown extends React.Component {
       hasDoneInvite,
       showPopupInvite,
       hasDoneSurvey,
-      toCheckoutVIP
+      toCheckoutVIP,
+      ticketVIP
     } = this.state;
 
     if (toCheckoutVIP === true)
@@ -200,20 +241,24 @@ class WinnerCountdown extends React.Component {
         />
       );
 
-    const ticketVIPCard = (
-      <TicketCard
-        key={TICKET.ticketID}
-        eventID={TICKET.eventID}
-        ticketID={TICKET.ticketID}
-        name={TICKET.name}
-        description={TICKET.description}
-        lengthMins={TICKET.lengthMins}
-        price={TICKET.price}
-        onSelect={this.handleVIPSelect}
-        isPremium={TICKET.isPremium}
-        extras={TICKET.extras}
-      />
-    );
+    // let ticketVIPCard = <div />;
+
+    // if (ticketVIP.name) {
+    //   ticketVIPCard = (
+    //     <TicketCard
+    //       key={ticketVIP.ticketID}
+    //       eventID={ticketVIP.eventID}
+    //       ticketID={ticketVIP.ticketID}
+    //       name={ticketVIP.name}
+    //       description={ticketVIP.description}
+    //       lengthMins={ticketVIP.lengthMins}
+    //       price={ticketVIP.price}
+    //       onSelect={this.handleVIPSelect}
+    //       isPremium={ticketVIP.isPremium}
+    //       extras={ticketVIP.addOns}
+    //     />
+    //   );
+    // }
 
     const triviaBtn = <Btn onClick={this.handleShowPopup('Trivia')}>Answer Trivia Question</Btn>;
     const triviaDone = (
@@ -264,6 +309,10 @@ class WinnerCountdown extends React.Component {
     );
     const survey = hasDoneSurvey ? surveyDone : surveyBtn;
 
+    // TO DO INVITE
+    // <br />
+    // {invite}
+
     const defaultContent = (
       <Content>
         <FONTS.H2 centered noMarginBottom>
@@ -275,11 +324,9 @@ class WinnerCountdown extends React.Component {
         <Content.Seperator />
         <FONTS.H2>Want to boost your chance of winning?</FONTS.H2>
         {survey}
-        <br />
-        {invite}
+
         <br />
         {trivia}
-        <br />
         <br />
       </Content>
     );
@@ -306,8 +353,13 @@ class WinnerCountdown extends React.Component {
       <Content>
         {status}
         <Content.Seperator />
-        <FONTS.H2 noMarginBottom>Want to {influencerName} for 10 mins not 1 min?</FONTS.H2>
-        {ticketVIPCard}
+        <FONTS.H2 noMarginBottom>Want to talk to {influencerName} for 10 mins not 1 min?</FONTS.H2>
+        <br />
+        <Btn primary onClick={this.handleVIPSelect}>
+          Get VIP Package
+        </Btn>
+        <br />
+        <br />
 
         {popupTrivia}
         {popupInvite}

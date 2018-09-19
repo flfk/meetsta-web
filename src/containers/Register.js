@@ -8,7 +8,8 @@ import validator from 'validator';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
-import EVENT_IMAGE_MACKENZIE from '../assets/eventImages/EventImageMackenzieSol.jpg';
+import EVENT_IMAGE_MACKENZIE from '../assets/eventImages/EventImageMackenzieSol2.png';
+import EVENT_IMAGE_WILL from '../assets/eventImages/EventImageWillSimmons.png';
 import FooterEvents from '../components/FooterEvents';
 import FONTS from '../utils/Fonts';
 import PopupTime from './PopupTime';
@@ -231,13 +232,23 @@ class Register extends React.Component {
 
     const btnText = isLoading ? <PulseLoader color="white" size={8} /> : 'Register / Log In';
 
+    let eventImg = null;
+    switch (eventID) {
+      case 'meet-will-simmons':
+        eventImg = <img src={EVENT_IMAGE_WILL} alt="Will Simmons Online Meet & Greet" />;
+        break;
+      case 'meet-mackenzie-sol-2':
+        eventImg = <img src={EVENT_IMAGE_MACKENZIE} alt="Mackenzie Sol Online Meet & Greet" />;
+        break;
+      default:
+        eventImg = null;
+    }
+
     return (
       <div>
         <Content.PaddingBottom>
           <FONTS.H1>{title}</FONTS.H1>
-          <Wrapper.EventImage>
-            <img src={EVENT_IMAGE_MACKENZIE} alt={influencerName} />
-          </Wrapper.EventImage>
+          <Wrapper.EventImage>{eventImg}</Wrapper.EventImage>
 
           <Content>
             <Btn.Tertiary onClick={this.handleShowPopup('Time')}>

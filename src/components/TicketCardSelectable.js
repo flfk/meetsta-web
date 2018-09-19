@@ -98,6 +98,8 @@ class Ticket extends React.Component {
       ));
     }
 
+    console.log('eventID id in ticket card selectable is', eventID);
+
     return (
       <Container>
         <H1>{name}</H1>
