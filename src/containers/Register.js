@@ -65,7 +65,6 @@ class Register extends React.Component {
 
   loadFormattedData = async () => {
     const eventID = this.getEventId();
-
     try {
       const event = await actions.getDocEvent(eventID);
       const formattedData = {
@@ -114,7 +113,6 @@ class Register extends React.Component {
   handleSubmit = async () => {
     this.setState({ isLoading: true });
     const { email, eventID } = this.state;
-
     // Validating email is correct
     if (this.validateForm()) {
       // If the email has already been submitted set the rego ID in state and log them in

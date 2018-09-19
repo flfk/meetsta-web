@@ -13,13 +13,9 @@ import TicketCard from '../components/TicketCard';
 import TicketImage from '../components/TicketImage';
 
 import db from '../data/firebase';
+import actions from '../data/actions';
 
-const propTypes = {};
-
-const defaultProps = {};
-
-const DEFAULT_REGISTRATION_ID = 'oops';
-
+// TODO MAKE DYNAMIC
 const ADD_ONS = [
   { name: 'Additional 5 minutes', price: 8 },
   { name: 'Autographed selfie from your meet and greet', price: 2 },
@@ -27,6 +23,12 @@ const ADD_ONS = [
   { name: 'Personalized thank you video', price: 5 },
   { name: 'Video recording of your meet and greet', price: 10 }
 ];
+
+const propTypes = {};
+
+const defaultProps = {};
+
+const DEFAULT_REGISTRATION_ID = 'oops';
 
 class WinnerCountdown extends React.Component {
   state = {
@@ -58,8 +60,14 @@ class WinnerCountdown extends React.Component {
   }
 
   componentDidUpdate() {
-    this.updateDocRegistration();
+    this.updateRegistration();
   }
+
+  updateRegistration = async () => {
+    const { registrationID, hasDoneTrivia, hasDoneSurvey, hasDoneInvite } = this.state;
+    const updatedRegistration = { hasDoneTrivia, hasDoneSurvey, hasDoneInvite };
+    await actions.updateDocRegistration(registrationID, updatedRegistration);
+  };
 
   getRegistrationID = () => {
     const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
@@ -70,66 +78,11 @@ class WinnerCountdown extends React.Component {
     return id;
   };
 
-  getDocEvent = async eventID => {
-    try {
-      const eventRef = db.collection('events').doc(eventID);
-      const snapshot = await eventRef.get();
-      const data = await snapshot.data();
-      return data;
-    } catch (error) {
-      console.error('error getting event ', error);
-    }
-  };
-
-  getDocRegistration = async registrationID => {
-    try {
-      const registrationRef = db.collection('registrations').doc(registrationID);
-      const snapshot = await registrationRef.get();
-      const data = await snapshot.data();
-      return data;
-    } catch (error) {
-      console.error('error loading registration ', error);
-    }
-    return {};
-  };
-
-  getCollTickets = async eventID => {
-    try {
-      const ticketsRef = db
-        .collection('events')
-        .doc(eventID)
-        .collection('tickets');
-      const snapshot = await ticketsRef.get();
-      const tickets = [];
-      snapshot.forEach(snap => {
-        const ticket = snap.data();
-        const { id } = snap;
-        ticket.ticketID = id;
-        ticket['addOns'] = ADD_ONS;
-        tickets.push(ticket);
-      });
-      return tickets;
-    } catch (error) {
-      console.error('Error getting tickets ', error);
-    }
-  };
-
-  updateDocRegistration = async () => {
-    const { registrationID, hasDoneTrivia, hasDoneSurvey, hasDoneInvite } = this.state;
-    const registrationRef = db.collection('registrations').doc(registrationID);
-    const updateDocRegistration = registrationRef.update({
-      hasDoneTrivia,
-      hasDoneSurvey,
-      hasDoneInvite
-    });
-  };
-
   loadFormattedData = async () => {
     const registrationID = this.getRegistrationID();
-    console.log('registration ID is ', registrationID);
 
     try {
-      const registration = await this.getDocRegistration(registrationID);
+      const registration = await actions.getDocRegistration(registrationID);
       const formattedDataRegistration = {
         isWinner: registration.isWinner,
         email: registration.email,
@@ -139,15 +92,14 @@ class WinnerCountdown extends React.Component {
         hasDoneSurvey: registration.hasDoneSurvey
       };
 
-      const event = await this.getDocEvent(formattedDataRegistration.eventID);
-      console.log('eventID is ', formattedDataRegistration.eventID);
+      const event = await actions.getDocEvent(formattedDataRegistration.eventID);
       const formattedDataEvent = {
         influencerName: event.organiserName,
         triviaQuestion: event.triviaQuestion,
         triviaAnswer: event.triviaAnswer
       };
 
-      const tickets = await this.getCollTickets(formattedDataRegistration.eventID);
+      const tickets = await actions.getCollTickets(formattedDataRegistration.eventID);
       const ticketVIP = tickets[0];
       ticketVIP['addOns'] = ADD_ONS;
       this.setState({
