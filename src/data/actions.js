@@ -106,12 +106,10 @@ const getNewOrderNum = async () => {
 const getDocsTicketsSold = async eventID => {
   const ticketsSold = [];
   const ticketsRef = db.collection(COLL_TICKETS);
-  const snapshot = await ticketsRef.get();
+  const snapshot = await ticketsRef.where('eventID', '==', eventID).get();
   snapshot.forEach(snap => {
     const ticket = snap.data();
-    if (ticket.eventID === eventID) {
-      ticketsSold.push(ticket);
-    }
+    ticketsSold.push(ticket);
   });
   return ticketsSold;
 };
