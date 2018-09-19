@@ -156,7 +156,7 @@ class Checkout extends React.Component {
     this.setState({ ticketID: newTicket.id });
   };
 
-  // getTicketsSold = async () => {
+  // getDocsTicketsSold = async () => {
   //   const { eventID } = this.state;
   //   let ticketsSold = 0;
   //   const eventTickets = await actions.getCollEventTickets(eventID);
@@ -174,7 +174,7 @@ class Checkout extends React.Component {
 
   getTimeSlot = async () => {
     const { eventID, dateStart } = this.state;
-    const ticketsSold = await actions.getTicketsSold(eventID);
+    const ticketsSold = await actions.getDocsTicketsSold(eventID);
     const ticketsSoldCount = ticketsSold.length;
     const minsSold = ticketsSold.reduce((total, ticket) => (total += ticket.lengthMins), 0);
     let breakLengthMins = 0;

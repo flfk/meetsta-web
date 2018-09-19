@@ -98,7 +98,7 @@ class WinnerCountdown extends React.Component {
         triviaAnswer: event.triviaAnswer
       };
 
-      const tickets = await actions.getCollTickets(formattedDataRegistration.eventID);
+      const tickets = await actions.getCollEventTickets(formattedDataRegistration.eventID);
       const ticketVIP = tickets[0];
       ticketVIP['addOns'] = ADD_ONS;
       this.setState({

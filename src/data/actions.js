@@ -92,7 +92,7 @@ const getNewOrderNum = async () => {
   return data.orderNum + 1;
 };
 
-const getTicketsSold = async eventID => {
+const getDocsTicketsSold = async eventID => {
   let ticketsSold = [];
   const ticketsRef = db.collection(COLL_TICKETS);
   const snapshot = await ticketsRef.get();
@@ -113,6 +113,6 @@ actions.updateDocRegistration = updateDocRegistration;
 actions.getCollEventTickets = getCollEventTickets;
 actions.addDocTicket = addDocTicket;
 actions.getNewOrderNum = getNewOrderNum;
-actions.getTicketsSold = getTicketsSold;
+actions.getDocsTicketsSold = getDocsTicketsSold;
 
 export default actions;
