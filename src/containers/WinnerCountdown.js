@@ -56,6 +56,8 @@ class WinnerCountdown extends React.Component {
     influencerName: 'Cookie Cutters',
     isWinner: false,
     ticketNumber: null,
+    triviaQuestion: '',
+    triviaAnswer: '',
     hasDoneTrivia: false,
     showPopupTrivia: false,
     hasDoneInvite: false,
@@ -126,6 +128,7 @@ class WinnerCountdown extends React.Component {
     try {
       const registration = await this.getDocRegistration(registrationID);
       const formattedDataRegistration = {
+        isWinner: registration.isWinner,
         email: registration.email,
         eventID: registration.eventID,
         hasDoneTrivia: registration.hasDoneTrivia,
@@ -135,7 +138,9 @@ class WinnerCountdown extends React.Component {
 
       const event = await this.getDocEvent(formattedDataRegistration.eventID);
       const formattedDataEvent = {
-        influencerName: event.organiserName
+        influencerName: event.organiserName,
+        triviaQuestion: event.triviaQuestion,
+        triviaAnswer: event.triviaAnswer
       };
       this.setState({ registrationID, ...formattedDataRegistration, ...formattedDataEvent });
     } catch (error) {
@@ -173,6 +178,8 @@ class WinnerCountdown extends React.Component {
       eventID,
       influencerName,
       isWinner,
+      triviaQuestion,
+      triviaAnswer,
       hasDoneTrivia,
       showPopupTrivia,
       hasDoneInvite,
@@ -221,8 +228,8 @@ class WinnerCountdown extends React.Component {
     const popupTrivia = showPopupTrivia ? (
       <PopupTrivia
         handleClose={this.handleClosePopup('Trivia')}
-        question="What was Cookie Cutters first band called?"
-        answer="Urban Problems"
+        question={triviaQuestion}
+        answer={triviaAnswer}
         handleComplete={this.handleComplete('Trivia')}
       />
     ) : null;
@@ -288,7 +295,7 @@ class WinnerCountdown extends React.Component {
         <br />
         <TicketImage eventID="meet-mackenzie-sol" isPremium={false} />
         <br />
-        <Btn>Claim Your Free 1 min Meet & Greet</Btn>
+        <FONTS.H3 centered>You will recieve an email shortly with the details </FONTS.H3>
         <br />
       </Content>
     );

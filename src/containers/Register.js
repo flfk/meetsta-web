@@ -127,7 +127,8 @@ class Register extends React.Component {
       eventID,
       hasDoneTrivia: false,
       hasDoneInvite: false,
-      hasDoneSurvey: false
+      hasDoneSurvey: false,
+      isWinner: false
     };
     const newRegistration = await db.collection('registrations').add(registration);
     this.setState({ registrationID: newRegistration.id });

@@ -11,10 +11,10 @@ import SelectableFeature from './SelectableFeature';
 import MEDIA from '../utils/Media';
 
 const propTypes = {
-  ticketID: PropTypes.string.isRequired,
+  ticketID: PropTypes.string,
   eventID: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
+  description: PropTypes.string,
   lengthMins: PropTypes.number.isRequired,
   priceBase: PropTypes.number.isRequired,
   onSelect: PropTypes.func.isRequired,
@@ -23,6 +23,8 @@ const propTypes = {
 };
 
 const defaultProps = {
+  ticketID: '',
+  description: '',
   addOns: []
 };
 

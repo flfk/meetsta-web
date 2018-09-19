@@ -20,22 +20,15 @@ const TICKETS_PER_BREAK = 5;
 const BREAK_LENGTH_MINS = 5;
 const MILLISECS_PER_MIN = 60000;
 
-const TICKET = {
-  eventID: 'freemium-test',
-  ticketID: '',
-  name: 'VIP Package',
-  priceBase: 20,
-  lengthMins: 10,
-  description: '',
-  isPremium: true,
-  addOns: [
-    { name: 'Additional 5 minutes', price: 5, isAddOn: true },
-    { name: 'Autographed selfie from your meet and greet', price: 5, isAddOn: true },
-    { name: 'Comment on your most recent photo', price: 5, isAddOn: true },
-    { name: 'Personalized thank you video', price: 5, isAddOn: true },
-    { name: 'Video recording of your meet and greet', price: 10, isAddOn: true }
-  ]
-};
+const DEFAULT_EVENT_ID = 'default-event-id';
+
+const ADD_ONS = [
+  { name: 'Additional 5 minutes', price: 5, isAddOn: true },
+  { name: 'Autographed selfie from your meet and greet', price: 5, isAddOn: true },
+  { name: 'Comment on your most recent photo', price: 5, isAddOn: true },
+  { name: 'Personalized thank you video', price: 5, isAddOn: true },
+  { name: 'Video recording of your meet and greet', price: 10, isAddOn: true }
+];
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -44,13 +37,9 @@ const CLIENT = {
 const ENV = process.env.NODE_ENV === 'production' ? 'production' : 'sandbox';
 const CURRENCY = 'USD';
 
-const propTypes = {
-  selectedVIP: PropTypes.bool
-};
+const propTypes = {};
 
-const defaultProps = {
-  selectedVIP: false
-};
+const defaultProps = {};
 
 class Checkout extends React.Component {
   state = {
@@ -62,6 +51,7 @@ class Checkout extends React.Component {
     email: '',
     emailErrMsg: '',
     checkoutStep: 0,
+    tickets: [],
     ticketSelected: {},
     ticketID: null,
     ticketOrdered: null,
@@ -71,25 +61,107 @@ class Checkout extends React.Component {
   };
 
   componentDidMount() {
-    const eventData = this.getEventData();
-    this.setState({ ...eventData });
-
-    const defaultTicket = { ...TICKET };
-    this.setState({ ticketSelected: defaultTicket });
+    try {
+      this.loadFormattedData();
+    } catch (err) {
+      console.error('Error in getting documents', err);
+    }
   }
 
   componentDidUpdate() {
     this.toConfirmation();
   }
 
-  getEventData = () => {
-    const state = this.props.location.state;
-    if (state) {
-      const { selectedVIP, ticket, eventID } = state;
-      if (selectedVIP) {
-        this.setState({ ticketSelected: ticket, eventID });
-      }
-      return this.props.location.state.eventData;
+  getEventId = () => {
+    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+    let { eventID } = params;
+    if (!eventID) {
+      eventID = DEFAULT_EVENT_ID;
+    }
+    return eventID;
+  };
+
+  getEventData = async eventID => {
+    try {
+      const eventRef = db.collection('events').doc(eventID);
+      const snapshot = await eventRef.get();
+      const data = await snapshot.data();
+      return data;
+    } catch (error) {
+      console.error('Error in getting event data ', error);
+    }
+  };
+
+  getCollTickets = async eventID => {
+    try {
+      const ticketsRef = db
+        .collection('events')
+        .doc(eventID)
+        .collection('tickets');
+      const snapshot = await ticketsRef.get();
+      const tickets = [];
+      snapshot.forEach(snap => {
+        const ticket = snap.data();
+        const id = snap.id;
+        ticket.id = id;
+        ticket['addOns'] = ADD_ONS;
+        tickets.push(ticket);
+      });
+
+      // snapshot.docs.map(async (snap, index) => {
+      //   const ticket = snap.data();
+      // const addOns = await this.getCollAddOns(ticketsRef, snap.id);
+      // ticket['addOns'] = ADD_ONS;
+      // console.log(addOns);
+      // ticket['addOns'] = [{ name: 'testAddd', price: 20 }];
+      //   tickets.push(ticket);
+      //   console.log(ticket);
+      // });
+      // this.setState({ tickets });
+      return tickets;
+    } catch (error) {
+      console.error('Error getting tickets ', error);
+    }
+  };
+
+  getCollAddOns = async (eventID, ticketID) => {
+    try {
+      const addOnsRef = db
+        .collection('events')
+        .doc(eventID)
+        .collection('tickets')
+        .doc(ticketID)
+        .collection('addOns');
+      const snapshot = await addOnsRef.get();
+      const addOns = [];
+      snapshot.docs.map(snap => {
+        const data = snap.data();
+        addOns.push(data);
+      });
+      return addOns;
+    } catch (error) {
+      console.error('Error getting addOns ', error);
+    }
+  };
+
+  loadFormattedData = async () => {
+    const eventID = this.getEventId();
+
+    try {
+      const event = await this.getEventData(eventID);
+      const formattedDataEvent = {
+        eventID,
+        title: event.title,
+        influencerName: event.organiserName,
+        dateStart: event.dateStart,
+        dateEnd: event.dateEnd
+      };
+      const tickets = await this.getCollTickets(eventID);
+      // console.log('tickets');
+      // console.log(tickets);
+      this.setState({ eventID, ...formattedDataEvent, tickets });
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -334,22 +406,22 @@ class Checkout extends React.Component {
       );
 
     let ticketCards = <div />;
-    if (TICKET) {
-      ticketCards = (
+    if (tickets) {
+      ticketCards = tickets.map((ticket, index) => (
         <TicketCardSelectable
-          key={TICKET.ticketID}
+          key={index}
           eventID={eventID}
-          ticketID={TICKET.ticketID}
-          name={TICKET.name}
-          description={TICKET.description}
-          lengthMins={TICKET.lengthMins}
-          priceBase={TICKET.priceBase}
+          ticketID={ticket.ticketID}
+          name={ticket.name}
+          description={ticket.description}
+          lengthMins={ticket.lengthMins}
+          priceBase={ticket.priceBase}
           onSelect={this.handleTicketSelect}
-          isPremium={TICKET.isPremium}
-          extras={TICKET.extras}
-          addOns={TICKET.addOns}
+          isPremium={ticket.isPremium}
+          extras={ticket.extras}
+          addOns={ticket.addOns}
         />
-      );
+      ));
     }
 
     const selectTicket = <div>{ticketCards}</div>;
