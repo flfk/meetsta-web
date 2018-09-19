@@ -27,7 +27,7 @@ const PaymentSummary = props => {
   if (addOns) {
     const addOnsSorted = addOns.sort((a, b) => b.price - a.price);
     addOnsDiv = addOnsSorted.map(addOn => (
-      <Content.Row>
+      <Content.Row key={addOn.name}>
         <FONTS.P>+ {addOn.name}</FONTS.P>
         <FONTS.P>${addOn.price.toFixed(2)}</FONTS.P>
       </Content.Row>

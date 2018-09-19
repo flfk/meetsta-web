@@ -102,8 +102,8 @@ class Checkout extends React.Component {
       const tickets = [];
       snapshot.forEach(snap => {
         const ticket = snap.data();
-        const id = snap.id;
-        ticket.id = id;
+        const { id } = snap;
+        ticket.ticketID = id;
         ticket['addOns'] = ADD_ONS;
         tickets.push(ticket);
       });
@@ -157,8 +157,6 @@ class Checkout extends React.Component {
         dateEnd: event.dateEnd
       };
       const tickets = await this.getCollTickets(eventID);
-      // console.log('tickets');
-      // console.log(tickets);
       this.setState({ eventID, ...formattedDataEvent, tickets });
     } catch (error) {
       console.error(error);
@@ -191,13 +189,14 @@ class Checkout extends React.Component {
     } = this.state;
     const orderNum = await this.getNewOrderNum();
     const startTime = await this.getTimeSlot();
+    const addOnsSelected = ticketSelected.addOnsSelected.map(addOn => addOn.name);
     const ticket = {
       eventID,
       eventTitle: title,
       influencerName,
       name: ticketSelected.name,
-      description: ticketSelected.description,
-      price: ticketSelected.price,
+      priceTotal: ticketSelected.priceTotal,
+      priceBase: ticketSelected.priceBase,
       fee: this.calculateFee(ticketSelected.price),
       lengthMins: ticketSelected.lengthMins,
       startTime,
@@ -209,7 +208,7 @@ class Checkout extends React.Component {
       orderNum,
       payPalPaymentID,
       userID: '',
-      hasStarted: false
+      addOns: addOnsSelected
     };
     this.setState({ ticketOrdered: ticket });
     this.incrementTicketsSold();
@@ -364,7 +363,7 @@ class Checkout extends React.Component {
 
   handleTicketSelect = ticket => {
     const ticketSelected = ticket;
-    console.log(ticketSelected);
+    const { ticketID } = ticketSelected;
     this.setState({ ticketSelected, checkoutStep: 1 });
   };
 
