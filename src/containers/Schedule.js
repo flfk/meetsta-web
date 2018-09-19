@@ -12,7 +12,7 @@ import actions from '../data/actions';
 
 // const defaultProps = {};
 
-class EventSales extends React.Component {
+class Schedule extends React.Component {
   state = {
     eventID: '',
     eventTitle: '',
@@ -67,7 +67,12 @@ class EventSales extends React.Component {
         <div key={ticket.orderNum}>
           <Content.Row>
             <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
-            <FONTS.P>{ticket.name}</FONTS.P>
+            <div>
+              <FONTS.P>{ticket.name}</FONTS.P>
+              {ticket.addOns.map(addOn => (
+                <div key={addOn}>{addOn}</div>
+              ))}
+            </div>
             <FONTS.P>{ticket.IGHandle}</FONTS.P>
             <FONTS.P>{ticket.purchaseNameFirst}</FONTS.P>
           </Content.Row>
@@ -85,7 +90,7 @@ class EventSales extends React.Component {
   }
 }
 
-// EventSales.propTypes = propTypes;
-// EventSales.defaultProps = defaultProps;
+// Schedule.propTypes = propTypes;
+// Schedule.defaultProps = defaultProps;
 
-export default EventSales;
+export default Schedule;

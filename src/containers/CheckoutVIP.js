@@ -24,7 +24,7 @@ const MILLISECS_PER_MIN = 60000;
 const DEFAULT_EVENT_ID = 'default-event-id';
 
 const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 8 },
+  { name: 'Additional 5 minutes', price: 8, extraMins: 5 },
   { name: 'Autographed selfie from your meet and greet', price: 2 },
   { name: 'Follow back and comment on your most recent', price: 5 },
   { name: 'Personalized thank you video', price: 5 },
@@ -128,7 +128,14 @@ class Checkout extends React.Component {
     } = this.state;
     const orderNum = await actions.getNewOrderNum();
     const startTime = await this.getTimeSlot();
-    const addOnsSelected = ticketSelected.addOnsSelected.map(addOn => addOn.name);
+    const addOnsSelected = ticketSelected.addOnsSelected;
+    const extraMins = addOnsSelected.reduce((total, addOn) => {
+      if (addOn.extraMins) {
+        total += addOn.extraMins;
+      }
+      return total;
+    }, 0);
+    const addOnsList = addOnsSelected.map(addOn => addOn.name);
     const ticket = {
       eventID,
       eventTitle: title,
@@ -137,7 +144,7 @@ class Checkout extends React.Component {
       priceTotal: ticketSelected.priceTotal,
       priceBase: ticketSelected.priceBase,
       fee: this.calculateFee(ticketSelected.priceTotal),
-      lengthMins: ticketSelected.lengthMins,
+      lengthMins: ticketSelected.lengthMins + extraMins,
       startTime,
       purchaseNameFirst: nameFirst,
       purchaseNameLast: nameLast,
@@ -147,7 +154,7 @@ class Checkout extends React.Component {
       orderNum,
       payPalPaymentID,
       userID: '',
-      addOns: addOnsSelected
+      addOns: addOnsList
     };
     this.setState({ ticketOrdered: ticket });
     // TODO XX
@@ -155,22 +162,6 @@ class Checkout extends React.Component {
     const newTicket = await actions.addDocTicket(ticket);
     this.setState({ ticketID: newTicket.id });
   };
-
-  // getDocsTicketsSold = async () => {
-  //   const { eventID } = this.state;
-  //   let ticketsSold = 0;
-  //   const eventTickets = await actions.getCollEventTickets(eventID);
-  //   eventTickets.forEach(ticket => (ticketsSold += ticket.sold));
-  //   return ticketsSold;
-  // };
-
-  // getMinsSold = async () => {
-  //   const { eventID } = this.state;
-  //   let minsSold = 0;
-  //   const eventTickets = await actions.getCollEventTickets(eventID);
-  //   eventTickets.forEach(ticket => (minsSold += ticket.sold * ticket.lengthMins));
-  //   return minsSold;
-  // };
 
   getTimeSlot = async () => {
     const { eventID, dateStart } = this.state;

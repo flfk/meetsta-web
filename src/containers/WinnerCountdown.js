@@ -14,7 +14,7 @@ import TicketImage from '../components/TicketImage';
 
 import actions from '../data/actions';
 
-// TODO MAKE DYNAMIC
+// TODO MAKE DYNAMIC XX
 const ADD_ONS = [
   { name: 'Additional 5 minutes', price: 8 },
   { name: 'Autographed selfie from your meet and greet', price: 2 },

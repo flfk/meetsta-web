@@ -10,7 +10,7 @@ const DOC_LAST_ORDER = 'lastOrder';
 
 // TODO MAKE DYNAMIC
 const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 8 },
+  { name: 'Additional 5 minutes', price: 8, extraMins: 5 },
   { name: 'Autographed selfie from your meet and greet', price: 2 },
   { name: 'Follow back and comment on your most recent', price: 5 },
   { name: 'Personalized thank you video', price: 5 },
