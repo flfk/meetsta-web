@@ -12,7 +12,8 @@ import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';
 import TicketCardSelectable from '../components/TicketCardSelectable';
 
-import db from '../data/firebase';
+// import db from '../data/firebase';
+import actions from '../data/actions';
 
 const PAYPAL_VARIABLE_FEE = 0.036;
 const PAYPAL_FIXED_FEE = 0.3;
@@ -44,6 +45,8 @@ const defaultProps = {};
 class Checkout extends React.Component {
   state = {
     eventID: '',
+    dateStart: null,
+    dateEnd: null,
     nameFirst: '',
     nameFirstErrMsg: '',
     nameLast: '',
@@ -81,74 +84,10 @@ class Checkout extends React.Component {
     return eventID;
   };
 
-  getEventData = async eventID => {
-    try {
-      const eventRef = db.collection('events').doc(eventID);
-      const snapshot = await eventRef.get();
-      const data = await snapshot.data();
-      return data;
-    } catch (error) {
-      console.error('Error in getting event data ', error);
-    }
-  };
-
-  getCollTickets = async eventID => {
-    try {
-      const ticketsRef = db
-        .collection('events')
-        .doc(eventID)
-        .collection('tickets');
-      const snapshot = await ticketsRef.get();
-      const tickets = [];
-      snapshot.forEach(snap => {
-        const ticket = snap.data();
-        const { id } = snap;
-        ticket.ticketID = id;
-        ticket['addOns'] = ADD_ONS;
-        tickets.push(ticket);
-      });
-
-      // snapshot.docs.map(async (snap, index) => {
-      //   const ticket = snap.data();
-      // const addOns = await this.getCollAddOns(ticketsRef, snap.id);
-      // ticket['addOns'] = ADD_ONS;
-      // console.log(addOns);
-      // ticket['addOns'] = [{ name: 'testAddd', price: 20 }];
-      //   tickets.push(ticket);
-      //   console.log(ticket);
-      // });
-      // this.setState({ tickets });
-      return tickets;
-    } catch (error) {
-      console.error('Error getting tickets ', error);
-    }
-  };
-
-  getCollAddOns = async (eventID, ticketID) => {
-    try {
-      const addOnsRef = db
-        .collection('events')
-        .doc(eventID)
-        .collection('tickets')
-        .doc(ticketID)
-        .collection('addOns');
-      const snapshot = await addOnsRef.get();
-      const addOns = [];
-      snapshot.docs.map(snap => {
-        const data = snap.data();
-        addOns.push(data);
-      });
-      return addOns;
-    } catch (error) {
-      console.error('Error getting addOns ', error);
-    }
-  };
-
   loadFormattedData = async () => {
     const eventID = this.getEventId();
-
     try {
-      const event = await this.getEventData(eventID);
+      const event = await actions.getDocEvent(eventID);
       const formattedDataEvent = {
         eventID,
         title: event.title,
@@ -156,10 +95,10 @@ class Checkout extends React.Component {
         dateStart: event.dateStart,
         dateEnd: event.dateEnd
       };
-      const tickets = await this.getCollTickets(eventID);
+      const tickets = await actions.getCollEventTickets(eventID);
       this.setState({ eventID, ...formattedDataEvent, tickets });
     } catch (error) {
-      console.error(error);
+      console.error('Error loading formatted data ', error);
     }
   };
 
@@ -187,7 +126,7 @@ class Checkout extends React.Component {
       nameLast,
       email
     } = this.state;
-    const orderNum = await this.getNewOrderNum();
+    const orderNum = await actions.getNewOrderNum();
     const startTime = await this.getTimeSlot();
     const addOnsSelected = ticketSelected.addOnsSelected.map(addOn => addOn.name);
     const ticket = {
@@ -211,93 +150,43 @@ class Checkout extends React.Component {
       addOns: addOnsSelected
     };
     this.setState({ ticketOrdered: ticket });
-    this.incrementTicketsSold();
-    this.addDocTicket(ticket);
+    // TODO XX
+    // this.incrementTicketsSold();
+    const newTicket = await actions.addDocTicket(ticket);
+    this.setState({ ticketID: newTicket.id });
   };
 
-  getNewOrderNum = async () => {
-    const lastOrderRef = db.collection('utils').doc('lastOrder');
-    const snapshot = await lastOrderRef.get();
-    const data = await snapshot.data();
-    const newOrderNum = data.orderNum + 1;
-    await lastOrderRef.set({ orderNum: newOrderNum });
-    return data.orderNum + 1;
-  };
+  // getTicketsSold = async () => {
+  //   const { eventID } = this.state;
+  //   let ticketsSold = 0;
+  //   const eventTickets = await actions.getCollEventTickets(eventID);
+  //   eventTickets.forEach(ticket => (ticketsSold += ticket.sold));
+  //   return ticketsSold;
+  // };
 
-  getEventTickets = async () => {
-    const { eventID } = this.state;
-    const eventTickets = [];
-    const eventTicketsRef = db
-      .collection('events')
-      .doc(eventID)
-      .collection('tickets');
-    const snapshot = await eventTicketsRef.get();
-    snapshot.forEach(snap => {
-      eventTickets.push(snap.data());
-    });
-    return eventTickets;
-  };
-
-  getTicketsSold = async () => {
-    let ticketsSold = 0;
-    const eventTickets = await this.getEventTickets();
-    eventTickets.forEach(ticket => (ticketsSold += ticket.sold));
-    return ticketsSold;
-  };
-
-  getMinsSold = async () => {
-    let minsSold = 0;
-    const eventTickets = await this.getEventTickets();
-    eventTickets.forEach(ticket => (minsSold += ticket.sold * ticket.lengthMins));
-    return minsSold;
-  };
-
-  getEventStart = async () => {
-    const { eventID } = this.state;
-    const eventRef = db.collection('events').doc(eventID);
-    const snapshot = await eventRef.get();
-    const data = await snapshot.data();
-    const eventStart = data.dateStart;
-    return eventStart;
-  };
+  // getMinsSold = async () => {
+  //   const { eventID } = this.state;
+  //   let minsSold = 0;
+  //   const eventTickets = await actions.getCollEventTickets(eventID);
+  //   eventTickets.forEach(ticket => (minsSold += ticket.sold * ticket.lengthMins));
+  //   return minsSold;
+  // };
 
   getTimeSlot = async () => {
-    const ticketsSold = await this.getTicketsSold();
-    const minsSold = await this.getMinsSold();
-    const eventStart = await this.getEventStart();
+    const { eventID, dateStart } = this.state;
+    const ticketsSold = await actions.getTicketsSold(eventID);
+    const ticketsSoldCount = ticketsSold.length;
+    const minsSold = ticketsSold.reduce((total, ticket) => (total += ticket.lengthMins), 0);
     let breakLengthMins = 0;
-    if (ticketsSold >= TICKETS_PER_BREAK) {
-      breakLengthMins = Math.floor(ticketsSold / TICKETS_PER_BREAK) * BREAK_LENGTH_MINS;
+    if (ticketsSoldCount >= TICKETS_PER_BREAK) {
+      breakLengthMins = Math.floor(ticketsSoldCount / TICKETS_PER_BREAK) * BREAK_LENGTH_MINS;
     }
     const startTimeMins = 0;
     const millisecsFromStart = (startTimeMins + minsSold + breakLengthMins) * MILLISECS_PER_MIN;
     // Time slot in milliseconds
-    const timeSlot = eventStart + millisecsFromStart;
+    const timeSlot = dateStart + millisecsFromStart;
     // const timeSlot = moment.tz(timeSlotMillisecs, 'America/Los_Angeles').format();
     return timeSlot;
-  };
-
-  addDocTicket = async ticket => {
-    const newTicket = await db.collection('tickets').add(ticket);
-    this.setState({ ticketID: newTicket.id });
-  };
-
-  incrementTicketsSold = async () => {
-    try {
-      const { eventID, ticketSelected } = this.state;
-      const { ticketID } = ticketSelected;
-      const ticketRef = db
-        .collection('events')
-        .doc(eventID)
-        .collection('tickets')
-        .doc(ticketID);
-      const snapshot = await ticketRef.get();
-      const data = await snapshot.data();
-      const newSold = data.sold + 1;
-      await ticketRef.update({ sold: newSold });
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   toConfirmation = () => {

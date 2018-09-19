@@ -6,6 +6,8 @@ const COLL_TICKETS = 'tickets';
 const COLL_UTILS = 'utils';
 const COLL_REGISTRATIONS = 'registrations';
 
+const DOC_LAST_ORDER = 'lastOrder';
+
 // TODO MAKE DYNAMIC
 const ADD_ONS = [
   { name: 'Additional 5 minutes', price: 8 },
@@ -55,7 +57,7 @@ const updateDocRegistration = async (registrationID, registration) => {
   return {};
 };
 
-const getCollTickets = async eventID => {
+const getCollEventTickets = async eventID => {
   try {
     const ticketsRef = db
       .collection('events')
@@ -76,11 +78,41 @@ const getCollTickets = async eventID => {
   }
 };
 
+const addDocTicket = async ticket => {
+  const newTicket = await db.collection(COLL_TICKETS).add(ticket);
+  return newTicket;
+};
+
+const getNewOrderNum = async () => {
+  const lastOrderRef = db.collection(COLL_UTILS).doc(DOC_LAST_ORDER);
+  const snapshot = await lastOrderRef.get();
+  const data = await snapshot.data();
+  const newOrderNum = data.orderNum + 1;
+  await lastOrderRef.set({ orderNum: newOrderNum });
+  return data.orderNum + 1;
+};
+
+const getTicketsSold = async eventID => {
+  let ticketsSold = [];
+  const ticketsRef = db.collection(COLL_TICKETS);
+  const snapshot = await ticketsRef.get();
+  snapshot.forEach(snap => {
+    const ticket = snap.data();
+    if (ticket.eventID === eventID) {
+      ticketsSold.push(ticket);
+    }
+  });
+  return ticketsSold;
+};
+
 const actions = {};
 actions.getDocEvent = getDocEvent;
 actions.addDocRegistration = addDocRegistration;
 actions.getDocRegistration = getDocRegistration;
 actions.updateDocRegistration = updateDocRegistration;
-actions.getCollTickets = getCollTickets;
+actions.getCollEventTickets = getCollEventTickets;
+actions.addDocTicket = addDocTicket;
+actions.getNewOrderNum = getNewOrderNum;
+actions.getTicketsSold = getTicketsSold;
 
 export default actions;

@@ -12,7 +12,6 @@ import PopupInvite from '../components/PopupInvite';
 import TicketCard from '../components/TicketCard';
 import TicketImage from '../components/TicketImage';
 
-import db from '../data/firebase';
 import actions from '../data/actions';
 
 // TODO MAKE DYNAMIC
