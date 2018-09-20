@@ -29,6 +29,22 @@ const getDocEvent = async eventID => {
   }
 };
 
+const getDocsEvent = async () => {
+  try {
+    const eventsRef = db.collection(COLL_EVENTS);
+    const events = [];
+    const snapshot = await eventsRef.get();
+    snapshot.forEach(snap => {
+      const event = snap.data();
+      event.eventID = snap.id;
+      events.push(event);
+    });
+    return events;
+  } catch (error) {
+    console.error('Error getting all event docs ', error);
+  }
+};
+
 const getDocsRegistrations = async eventID => {
   const registrations = [];
   const registrationsRef = db.collection(COLL_REGISTRATIONS);
@@ -123,6 +139,7 @@ const addDocEmailRequest = async emailRequest => {
 const actions = {};
 
 actions.getDocEvent = getDocEvent;
+actions.getDocsEvent = getDocsEvent;
 actions.getCollEventTickets = getCollEventTickets;
 
 actions.getDocsRegistrations = getDocsRegistrations;
