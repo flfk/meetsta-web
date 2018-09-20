@@ -10,15 +10,19 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 
 const REGISTRATION_BASE_URL = 'https://www.meetsta.com/countdown?id=';
 const CHECKOUT_BASE_URL = 'https://www.meetsta.com/checkout-vip?eventID=';
+const CONFIRMATION_URL_BASE = 'https://www.meetsta.com/confirmation?ticketID=';
 
 exports.orderConfirmationEmail = functions.firestore
   .document('tickets/{ticketID}')
   .onCreate(snap => {
     const ticket = snap.data();
+    const id = snap.id;
 
     const startTimeFormatted = `${moment
       .tz(ticket.startTime, 'America/Los_Angeles')
       .format('H:mm a, dddd, MMM Do')} PDT`;
+
+    const confirmationURL = CONFIRMATION_URL_BASE + id;
 
     const msg = {
       to: ticket.purchaseEmail,
@@ -30,7 +34,8 @@ exports.orderConfirmationEmail = functions.firestore
         ticketName: ticket.name,
         startTime: startTimeFormatted,
         purchaseNameFirst: ticket.purchaseNameFirst,
-        influencerName: ticket.influencerName
+        influencerName: ticket.influencerName,
+        confirmationURL: confirmationURL
       }
     };
 

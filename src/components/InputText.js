@@ -29,7 +29,6 @@ const Label = styled.label`
 
 const Input = styled.input`
   padding: 1em 1em;
-  max-width: 90%;
   border-radius: 3px;
   margin-bottom: ${props => (props.noMargin ? '0' : '16px')};
   border: 1px solid ${COLORS.greys.light};

@@ -68,6 +68,15 @@ const Spacing = styled.div`
   height: 32px;
 `;
 
+const Anchor = styled.a`
+  flex-basis: 100%;
+  display: flex;
+  text-decoration: none;
+  > button {
+    flex-basis: 100%;
+  }
+`;
+
 const Divider = () => {
   return (
     <Center>
@@ -86,5 +95,6 @@ Content.Divider = Divider;
 Content.Spacing = Spacing;
 Content.Center = Center;
 Content.CenteredBothAxis = CenteredBothAxis;
+Content.Anchor = Anchor;
 
 export default Content;
