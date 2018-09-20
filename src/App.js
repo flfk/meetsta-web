@@ -10,6 +10,7 @@ import Events from './containers/Events';
 import EventSales from './containers/EventSales';
 import LandingPage from './containers/LandingPage';
 import Register from './containers/Register';
+import Status from './containers/Status';
 import Schedule from './containers/Schedule';
 import Main from './components/Main';
 import NavBar from './containers/NavBar';
@@ -34,12 +35,13 @@ class App extends Component {
             <NavBar />
             <Main>
               <Switch>
-                <Route exact path="/" component={Register} />
+                <Route exact path="/" component={LandingPage} />
                 <Route path="/event" component={Events} />
                 <Route path="/checkout" component={Checkout} />
                 <Route path="/checkout-vip" component={CheckoutVIP} />
                 <Route path="/confirmation" component={OrderConfirmation} />
                 <Route path="/eventSales" component={EventSales} />
+                <Route path="/status" component={Status} />
                 <Route path="/schedule" component={Schedule} />
                 <Route path="/register" component={Register} />
                 <Route path="/termsConditions" component={TermsConditions} />
