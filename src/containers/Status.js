@@ -120,7 +120,7 @@ class Status extends React.Component {
         <FONTS.P>{surveyCompletions} Survey Completions</FONTS.P>
         <FONTS.P>{inviteCompletions} Friends Invited </FONTS.P>
         <FONTS.P>{triviaCompletions} Trivia Completed </FONTS.P>
-        <FONTS.P>${totalSales} total sales </FONTS.P>
+        <FONTS.P>${totalSales.toFixed(2)} total sales </FONTS.P>
         <FONTS.H3>Winners</FONTS.H3>
         {winnersDiv}
         <FONTS.H3>3/3 tasks completed</FONTS.H3>

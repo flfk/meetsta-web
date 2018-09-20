@@ -160,7 +160,7 @@ class Sales extends React.Component {
         return (
           <div key={event.eventID}>
             <FONTS.H3>{event.eventID}</FONTS.H3>
-            <FONTS.P>${revenue} total revenue</FONTS.P>
+            <FONTS.P>${revenue.toFixed(2)} total revenue</FONTS.P>
             <br />
             <FONTS.P>{ticketsSold} tickets sold</FONTS.P>
             <br />
@@ -183,13 +183,14 @@ class Sales extends React.Component {
       <Content>
         <FONTS.H1>Total Sales Summary</FONTS.H1>
         <FONTS.H3>
-          ${totalRevenue} <FONTS.P>total revenue</FONTS.P>
+          ${totalRevenue.toFixed(2)} <FONTS.P>total revenue</FONTS.P>
         </FONTS.H3>
         <FONTS.H3>
-          ${totalRevenue * (1 - MEETSTA_COMMISSION)} <FONTS.P>influencer revenue</FONTS.P>
+          ${(totalRevenue * (1 - MEETSTA_COMMISSION)).toFixed(2)}{' '}
+          <FONTS.P>influencer revenue</FONTS.P>
         </FONTS.H3>
         <FONTS.H3>
-          ${totalRevenue * MEETSTA_COMMISSION} <FONTS.P>Meetsta revenue</FONTS.P>
+          ${(totalRevenue * MEETSTA_COMMISSION).toFixed(2)} <FONTS.P>Meetsta revenue</FONTS.P>
         </FONTS.H3>
         <FONTS.H3>
           {totalTicketsSold} <FONTS.P>tickets sold</FONTS.P>

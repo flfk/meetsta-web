@@ -85,7 +85,7 @@ class Sales extends React.Component {
     }, 0);
 
     const totalRevenue = tickets.reduce((total, ticket) => total + ticket.priceTotal, 0);
-    const totalRevenueInfluencer = totalRevenue * (1 - MEETSTA_COMMISSION);
+    const totalRevenueInfluencer = (totalRevenue * (1 - MEETSTA_COMMISSION)).toFixed(2);
     const ticketsSold = tickets.length;
     const addOnsSold = tickets.reduce((total, ticket) => total + ticket.addOns.length, 0);
 
