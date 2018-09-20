@@ -12,7 +12,9 @@ import actions from '../data/actions';
 
 // const defaultProps = {};
 
-class Status extends React.Component {
+const MEETSTA_COMMISSION = 0.15;
+
+class Sales extends React.Component {
   state = {
     eventID: '',
     eventTitle: '',
@@ -81,54 +83,34 @@ class Status extends React.Component {
       }
       return total;
     }, 0);
-    const totalSales = tickets.reduce((total, ticket) => total + ticket.priceTotal, 0);
 
-    let registrations3complete = <div />;
-    let registrationsSomeComplete = <div />;
-    let registrations0complete = <div />;
-
-    const registrationsAll = [];
-    const registrationsSome = [];
-    const registrationsNone = [];
-
-    if (registrations) {
-      registrations.map(registration => {
-        const { hasDoneTrivia, hasDoneInvite, hasDoneSurvey } = registration;
-        if (hasDoneSurvey && hasDoneInvite && hasDoneTrivia) {
-          registrationsAll.push(registration.email);
-        } else if (!hasDoneSurvey && !hasDoneInvite && !hasDoneTrivia) {
-          registrationsNone.push(registration.email);
-        } else {
-          registrationsSome.push(registration.email);
-        }
-      });
-
-      registrations3complete = registrationsAll.map(email => <div>{email}</div>);
-      registrationsSomeComplete = registrationsSome.map(email => <div>{email}</div>);
-      registrations0complete = registrationsNone.map(email => <div>{email}</div>);
-    }
+    const totalRevenue = tickets.reduce((total, ticket) => total + ticket.priceTotal, 0);
+    const totalRevenueInfluencer = totalRevenue * (1 - MEETSTA_COMMISSION);
+    const ticketsSold = tickets.length;
+    const addOnsSold = tickets.reduce((total, ticket) => total + ticket.addOns.length, 0);
 
     return (
       <Content>
-        <FONTS.H1>Registrations - {eventTitle}</FONTS.H1>
-        <FONTS.P>{totalRegistrations} Total Registrations</FONTS.P>
-        <FONTS.P>{surveyCompletions} Survey Completions</FONTS.P>
-        <FONTS.P>{inviteCompletions} Friends Invited </FONTS.P>
-        <FONTS.P>{triviaCompletions} Trivia Completed </FONTS.P>
-        <FONTS.P>${totalSales} total sales </FONTS.P>
-        <FONTS.H3>3/3 tasks completed</FONTS.H3>
-        {registrations3complete}
-        <FONTS.H3>1/3 or 2/3 tasks completed</FONTS.H3>
-        {registrationsSomeComplete}
-        <FONTS.H3>0/3 tasks completed</FONTS.H3>
-        {registrations0complete}
+        <FONTS.H1>Sales - {eventTitle}</FONTS.H1>
+        <FONTS.H1>
+          ${totalRevenueInfluencer} <FONTS.P>earned</FONTS.P>
+        </FONTS.H1>
+        <FONTS.H1>
+          {ticketsSold} <FONTS.P>tickets sold</FONTS.P>
+        </FONTS.H1>
+        <FONTS.H1>
+          {addOnsSold} <FONTS.P>VIP add ons sold</FONTS.P>
+        </FONTS.H1>
+        <FONTS.H1>
+          {totalRegistrations} <FONTS.P>total free ticket registrations</FONTS.P>
+        </FONTS.H1>
         <br />
       </Content>
     );
   }
 }
 
-// Status.propTypes = propTypes;
-// Status.defaultProps = defaultProps;
+// Sales.propTypes = propTypes;
+// Sales.defaultProps = defaultProps;
 
-export default Status;
+export default Sales;
