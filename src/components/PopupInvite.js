@@ -30,10 +30,12 @@ class PopupInvite extends React.Component {
   state = {
     popupStep: 0,
     daysLeft: 0,
-    nameFirst: '',
-    nameFirstErrMsg: '',
-    email: '',
-    refereesEmail: '',
+    refereeName: '',
+    refereeNameErrMsg: '',
+    inviteeEmail: '',
+    inviteeName: '',
+    inviteeNameErrMsg: '',
+    refereeEmail: '',
     emailErrMsg: '',
     emailID: ''
   };
@@ -41,7 +43,7 @@ class PopupInvite extends React.Component {
   componentDidMount() {
     const { dateStart, email } = this.props;
     const daysLeft = this.getDaysLeft(dateStart);
-    this.setState({ daysLeft, refereesEmail: email });
+    this.setState({ daysLeft, refereeEmail: email });
   }
 
   getDaysLeft = dateStart => {
@@ -50,23 +52,28 @@ class PopupInvite extends React.Component {
     return daysLeft;
   };
 
-  handleChangeFirstName = event => {
-    this.setState({ nameFirst: event.target.value });
+  handleChangeRefereeName = event => {
+    this.setState({ refereeName: event.target.value });
+  };
+
+  handleChangeInviteeName = event => {
+    this.setState({ inviteeName: event.target.value });
   };
 
   handleChangeEmail = event => {
-    this.setState({ email: event.target.value });
+    this.setState({ inviteeEmail: event.target.value });
   };
 
   emailRequestInvite = async () => {
-    const { nameFirst, email, daysLeft } = this.state;
+    const { refereeName, inviteeName, inviteeEmail, daysLeft } = this.state;
     const { influencerName, eventID } = this.props;
     const eventURL = EVENT_URL_BASE + eventID;
     const emailRequest = {
       type: EMAIL_TYPE,
       eventID,
-      email,
-      nameFirst,
+      refereeName,
+      email: inviteeEmail,
+      inviteeName,
       influencerName,
       eventURL,
       daysLeft
@@ -86,18 +93,25 @@ class PopupInvite extends React.Component {
   };
 
   validateForm = () => {
-    const { nameFirst, email, refereesEmail } = this.state;
+    const { refereeName, inviteeName, inviteeEmail, refereeEmail } = this.state;
 
     let isFormValid = true;
 
-    if (nameFirst === '') {
-      this.setState({ nameFirstErrMsg: 'First name required.' });
+    if (refereeName === '') {
+      this.setState({ refereeNameErrMsg: 'First name required.' });
       isFormValid = false;
       return isFormValid;
     }
-    this.setState({ nameFirstErrMsg: '' });
+    this.setState({ refereeNameErrMsg: '' });
 
-    if (refereesEmail === email) {
+    if (inviteeName === '') {
+      this.setState({ inviteeNameErrMsg: 'First name required.' });
+      isFormValid = false;
+      return isFormValid;
+    }
+    this.setState({ refereeNameErrMsg: '' });
+
+    if (refereeEmail === inviteeEmail) {
       this.setState({
         emailErrMsg: "You can't invite yourself. Why not share this with a friend instead?"
       });
@@ -105,7 +119,7 @@ class PopupInvite extends React.Component {
       return isFormValid;
     }
 
-    if (!validator.isEmail(email)) {
+    if (!validator.isEmail(inviteeEmail)) {
       this.setState({ emailErrMsg: 'Valid email address required.' });
       isFormValid = false;
       return isFormValid;
@@ -116,7 +130,15 @@ class PopupInvite extends React.Component {
   };
 
   render() {
-    const { popupStep, nameFirst, nameFirstErrMsg, email, emailErrMsg } = this.state;
+    const {
+      popupStep,
+      refereeName,
+      refereeNameErrMsg,
+      inviteeName,
+      inviteeNameErrMsg,
+      inviteeEmail,
+      emailErrMsg
+    } = this.state;
     const { handleClose } = this.props;
 
     const emailFormStep = (
@@ -124,19 +146,26 @@ class PopupInvite extends React.Component {
         <Popup.Card>
           <Popup.BtnClose handleClose={handleClose} />
           <Content>
-            <FONTS.H1>Invite a friend {this.state.refereesEmail}</FONTS.H1>
+            <FONTS.H1>Invite a friend</FONTS.H1>
             <InputText
               label="Your first name"
               placeholder="Jane"
-              onChange={this.handleChangeFirstName}
-              value={nameFirst}
-              errMsg={nameFirstErrMsg}
+              onChange={this.handleChangeRefereeName}
+              value={refereeName}
+              errMsg={refereeNameErrMsg}
             />
             <InputText
-              label="Email address of person you are inviting"
+              label="First name of the friend you are inviting"
+              placeholder="Jennifer"
+              onChange={this.handleChangeInviteeName}
+              value={inviteeName}
+              errMsg={inviteeNameErrMsg}
+            />
+            <InputText
+              label="Email address of the friend you are inviting"
               placeholder="my-best-friend@example.com"
               onChange={this.handleChangeEmail}
-              value={email}
+              value={inviteeEmail}
               errMsg={emailErrMsg}
             />
             <Btn primary onClick={this.handleSend}>
