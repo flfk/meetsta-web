@@ -259,9 +259,11 @@ class WinnerCountdown extends React.Component {
           You won!
         </FONTS.H1>
         <br />
-        <TicketImage eventID="meet-mackenzie-sol" isPremium={false} />
+        <Content.Center>
+          <TicketImage eventID="meet-mackenzie-sol-2" isPremium={false} />
+        </Content.Center>
         <br />
-        <FONTS.H3 centered>You will recieve an email shortly with the details </FONTS.H3>
+        <FONTS.H3 centered>You will receive an email shortly with the details </FONTS.H3>
         <br />
       </Content>
     );

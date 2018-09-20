@@ -86,20 +86,26 @@ class Status extends React.Component {
     let registrations3complete = <div />;
     let registrationsSomeComplete = <div />;
     let registrations0complete = <div />;
+    let winnersDiv = <div />;
 
     const registrationsAll = [];
     const registrationsSome = [];
     const registrationsNone = [];
+    const winners = [];
 
     if (registrations) {
       registrations.map(registration => {
-        const { hasDoneTrivia, hasDoneInvite, hasDoneSurvey } = registration;
+        const { hasDoneTrivia, hasDoneInvite, hasDoneSurvey, isWinner } = registration;
         if (hasDoneSurvey && hasDoneInvite && hasDoneTrivia) {
           registrationsAll.push(registration.email);
         } else if (!hasDoneSurvey && !hasDoneInvite && !hasDoneTrivia) {
           registrationsNone.push(registration.email);
         } else {
           registrationsSome.push(registration.email);
+        }
+
+        if (isWinner) {
+          winners.push(registration.email);
         }
       });
 
@@ -116,6 +122,8 @@ class Status extends React.Component {
         <FONTS.P>{inviteCompletions} Friends Invited </FONTS.P>
         <FONTS.P>{triviaCompletions} Trivia Completed </FONTS.P>
         <FONTS.P>${totalSales} total sales </FONTS.P>
+        <FONTS.H3>Winners</FONTS.H3>
+        {winnersDiv}
         <FONTS.H3>3/3 tasks completed</FONTS.H3>
         {registrations3complete}
         <FONTS.H3>1/3 or 2/3 tasks completed</FONTS.H3>
