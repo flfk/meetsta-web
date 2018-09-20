@@ -9,9 +9,10 @@ import FONTS from '../utils/Fonts';
 import Popup from '../components/Popup';
 import InputText from '../components/InputText';
 
-import db from '../data/firebase';
+import actions from '../data/actions';
 
 const EVENT_URL_BASE = 'https://www.meetsta.com/event?eventID=';
+const EMAIL_TYPE = 'parent';
 
 const propTypes = {
   handleClose: PropTypes.func.isRequired,
@@ -44,22 +45,23 @@ class PopupParentEmail extends React.Component {
 
   handleSend = () => {
     if (this.validateForm()) {
-      this.addParentEmailDoc();
+      this.emailRequestParents();
       this.setState({ popupStep: 1 });
     }
   };
 
-  addParentEmailDoc = async () => {
+  emailRequestParents = async () => {
     const { nameFirst, email } = this.state;
     const { influencerName, eventID } = this.props;
     const eventURL = EVENT_URL_BASE + eventID;
     const emailRequest = {
+      type: EMAIL_TYPE,
       email,
       nameFirst,
       influencerName,
       eventURL
     };
-    const newEmail = await db.collection('emails').add(emailRequest);
+    const newEmail = await actions.addDocEmailRequest(emailRequest);
     this.setState({ emailID: newEmail.id });
   };
 

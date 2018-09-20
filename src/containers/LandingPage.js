@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import 'typeface-roboto';
 
@@ -6,17 +7,29 @@ import EmailForm from '../components/EmailForm';
 import Header from '../components/Header';
 import Screenshots from '../components/Screenshots';
 
+const DEFAULT_EVENT_ID = 'meet-mackenzie-sol-2';
+
 class LandingPage extends Component {
+  // <Background>
+  //       <Container>
+  //         <Header />
+  //         <EmailForm />
+  //         <Screenshots />
+  //       </Container>
+  //     </Background>
+
   render() {
     return (
-      <Background>
-        <Container>
-          <Header />
-          <EmailForm />
-          <Screenshots />
-        </Container>
-      </Background>
+      <Redirect
+        push
+        to={{
+          pathname: '/register',
+          search: `?eventID=${DEFAULT_EVENT_ID}`
+        }}
+      />
     );
+
+    // return <div>Meetsta Landing Page</div>;
   }
 }
 
