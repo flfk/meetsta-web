@@ -8,6 +8,9 @@ admin.initializeApp(functions.config().firebase);
 const SENDGRID_API_KEY = functions.config().sendgrid.key;
 sgMail.setApiKey(SENDGRID_API_KEY);
 
+const REGISTRATION_BASE_URL = 'https://www.meetsta.com/countdown?id=';
+const CHECKOUT_BASE_URL = 'https://www.meetsta.com/checkout-vip?eventID=';
+
 exports.orderConfirmationEmail = functions.firestore
   .document('tickets/{ticketID}')
   .onCreate(snap => {
@@ -34,6 +37,34 @@ exports.orderConfirmationEmail = functions.firestore
     return sgMail
       .send(msg)
       .then(() => console.log('Order confirmation email sent'))
+      .catch(error => {
+        console.error(error.toString());
+      });
+  });
+
+exports.registrationEmail = functions.firestore
+  .document('registrations/{registration}')
+  .onCreate(snap => {
+    const registration = snap.data();
+    const id = snap.id;
+
+    const checkoutURL = CHECKOUT_BASE_URL + registration.eventID;
+    const registrationURL = REGISTRATION_BASE_URL + id;
+
+    const msg = {
+      to: registration.email,
+      from: 'contact.meetsta@gmail.com',
+      templateId: 'd-83399d89bb4d4f0e96518a781a2e35c5',
+      dynamic_template_data: {
+        influencerName: registration.influencerName,
+        checkoutURL: checkoutURL,
+        registrationURL: registrationURL
+      }
+    };
+
+    return sgMail
+      .send(msg)
+      .then(() => console.log('Registration email sent'))
       .catch(error => {
         console.error(error.toString());
       });

@@ -110,7 +110,7 @@ class Register extends React.Component {
 
   handleSubmit = async () => {
     this.setState({ isLoading: true });
-    const { email, eventID } = this.state;
+    const { email, eventID, influencerName } = this.state;
     // Validating email is correct
     if (this.validateForm()) {
       // If the email has already been submitted set the rego ID in state and log them in
@@ -124,6 +124,7 @@ class Register extends React.Component {
             email,
             dateCreated: Date.now(),
             eventID,
+            influencerName,
             hasDoneTrivia: false,
             hasDoneInvite: false,
             hasDoneSurvey: false,
