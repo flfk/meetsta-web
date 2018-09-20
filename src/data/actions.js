@@ -29,6 +29,22 @@ const getDocEvent = async eventID => {
   }
 };
 
+const getDocsEvent = async () => {
+  try {
+    const eventsRef = db.collection(COLL_EVENTS);
+    const events = [];
+    const snapshot = await eventsRef.get();
+    snapshot.forEach(snap => {
+      const event = snap.data();
+      event.eventID = snap.id;
+      events.push(event);
+    });
+    return events;
+  } catch (error) {
+    console.error('Error getting all event docs ', error);
+  }
+};
+
 const getDocsRegistrations = async eventID => {
   const registrations = [];
   const registrationsRef = db.collection(COLL_REGISTRATIONS);
@@ -95,6 +111,12 @@ const addDocTicket = async ticket => {
   return newTicket;
 };
 
+const getDocTicket = async ticketID => {
+  const ticketRef = db.collection(COLL_TICKETS).doc(ticketID);
+  const snapshot = await ticketRef.get();
+  return snapshot.data();
+};
+
 const getNewOrderNum = async () => {
   const lastOrderRef = db.collection(COLL_UTILS).doc(DOC_LAST_ORDER);
   const snapshot = await lastOrderRef.get();
@@ -123,6 +145,7 @@ const addDocEmailRequest = async emailRequest => {
 const actions = {};
 
 actions.getDocEvent = getDocEvent;
+actions.getDocsEvent = getDocsEvent;
 actions.getCollEventTickets = getCollEventTickets;
 
 actions.getDocsRegistrations = getDocsRegistrations;
@@ -131,6 +154,7 @@ actions.getDocRegistration = getDocRegistration;
 actions.updateDocRegistration = updateDocRegistration;
 
 actions.addDocTicket = addDocTicket;
+actions.getDocTicket = getDocTicket;
 actions.getNewOrderNum = getNewOrderNum;
 actions.getDocsTicketsSold = getDocsTicketsSold;
 

@@ -10,6 +10,7 @@ import InputText from '../components/InputText';
 import PopupTime from './PopupTime';
 
 import db from '../data/firebase';
+import actions from '../data/actions';
 
 const URL_APPEARIN_IPHONE =
   'https://itunes.apple.com/au/app/appear-in-video-meetings/id878583078?mt=8';
@@ -47,7 +48,11 @@ class OrderConfirmation extends React.Component {
   };
 
   componentDidMount() {
-    this.getTicketData();
+    try {
+      this.loadFormattedData();
+    } catch (error) {
+      console.error('Error loading data', error);
+    }
   }
 
   getOrderId = () => {
@@ -55,11 +60,9 @@ class OrderConfirmation extends React.Component {
     return params.ticketID;
   };
 
-  getTicketData = async () => {
+  loadFormattedData = async () => {
     const ticketID = this.getOrderId();
-    const ticketRef = db.collection('tickets').doc(ticketID);
-    const snapshot = await ticketRef.get();
-    const ticket = await snapshot.data();
+    const ticket = await actions.getDocTicket(ticketID);
     const startTimeFormatted = this.formatStartTime(ticket.startTime);
     const submittedInsta = ticket.instaHandle ? true : false;
     this.setState({
@@ -112,16 +115,16 @@ class OrderConfirmation extends React.Component {
     ) : null;
 
     const instaForm = (
-      <Content>
+      <div>
         <InputText
           placeholder="@example.handle"
           value={ticket.instaHandle}
           onChange={this.handleChangeInstaHandle}
         />
-        <Btn primary onClick={this.handleInstaSubmit}>
+        <Btn primary fill onClick={this.handleInstaSubmit}>
           Submit
         </Btn>
-      </Content>
+      </div>
     );
 
     const instaSubmitted = (
@@ -164,18 +167,29 @@ class OrderConfirmation extends React.Component {
         <FONTS.P>We will use this to send you the link for the video call on the day.</FONTS.P>
         {instaSubmit}
 
-        <FONTS.H2>2. Download AppearIn</FONTS.H2>
-        <FONTS.P>AppearIn is the video call app we will use for the event.</FONTS.P>
+        <FONTS.H2>2. Double check when the event starts where you live</FONTS.H2>
         <FONTS.P>
-          iPhone users - you can download it <FONTS.A href={URL_APPEARIN_IPHONE}>here</FONTS.A>
+          If you don't live in California, you will need to double check when the event starts in
+          your local time.
         </FONTS.P>
-        <FONTS.P>
-          Android users - you can download it <FONTS.A href={URL_APPEARIN_ANDROID}>here</FONTS.A>
-        </FONTS.P>
+        <br />
+        <Btn onClick={this.handleTimePopupOpen}>Check My Time</Btn>
 
-        <FONTS.H2>3. You will receive a confirmation email</FONTS.H2>
+        <FONTS.H2>3. Download AppearIn</FONTS.H2>
+        <FONTS.P>AppearIn is the video call app we will use for the event.</FONTS.P>
+        <br />
+        <Content.Anchor href={URL_APPEARIN_IPHONE} target="_blank">
+          <Btn>I Have An iPhone</Btn>
+        </Content.Anchor>
+        <br />
+        <Content.Anchor href={URL_APPEARIN_ANDROID} target="_blank">
+          <Btn>I Have An Android</Btn>
+        </Content.Anchor>
+
+        <FONTS.H2>4. You will receive a confirmation email</FONTS.H2>
         <FONTS.P>
-          If you do not receive this email within a few minutes, check your spam folder.
+          If you do not receive this email within a few minutes, check your spam folder. This email
+          will have a link to get you back to this page later.
         </FONTS.P>
         <Content.Seperator />
 

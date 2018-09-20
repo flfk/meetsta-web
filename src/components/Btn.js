@@ -7,7 +7,7 @@ import DARKEN from '../utils/Darken';
 
 const Btn = styled.button`
   flex: 1 0 1;
-  // margin: 8px;
+  width: ${props => (props.fill ? '100%' : '')};
   padding: 1em 1em;
   background-color: transparent;
   border-radius: 5px;

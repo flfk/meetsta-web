@@ -12,7 +12,6 @@ import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';
 import TicketCardSelectable from '../components/TicketCardSelectable';
 
-// import db from '../data/firebase';
 import actions from '../data/actions';
 
 const PAYPAL_VARIABLE_FEE = 0.036;
@@ -278,7 +277,7 @@ class Checkout extends React.Component {
           push
           to={{
             pathname: '/confirmation',
-            search: `?eventID=${eventID}&ticketID=${ticketID}`,
+            search: `?ticketID=${ticketID}`,
             state: { ticket: ticketOrdered }
           }}
         />

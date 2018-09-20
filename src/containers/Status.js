@@ -12,7 +12,7 @@ import actions from '../data/actions';
 
 // const defaultProps = {};
 
-class Schedule extends React.Component {
+class Status extends React.Component {
   state = {
     eventID: '',
     eventTitle: '',
@@ -62,27 +62,6 @@ class Schedule extends React.Component {
   render() {
     const { tickets, eventTitle, registrations } = this.state;
 
-    let schedule = <div />;
-    // const IGHandle = ticket.IGHandle ? ticket.IGHandle : 'IG missing';
-    if (tickets) {
-      schedule = tickets.map(ticket => (
-        <div key={ticket.orderNum}>
-          <Content.Row>
-            <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
-            <div>
-              <FONTS.P>{ticket.name}</FONTS.P>
-              {ticket.addOns.map(addOn => (
-                <div key={addOn}>{addOn}</div>
-              ))}
-            </div>
-            <FONTS.P>{ticket.IGHandle}</FONTS.P>
-            <FONTS.P>{ticket.purchaseNameFirst}</FONTS.P>
-          </Content.Row>
-          <Content.Seperator />
-        </div>
-      ));
-    }
-
     const totalRegistrations = registrations.length;
     const surveyCompletions = registrations.reduce((total, registration) => {
       if (registration.hasDoneSurvey) {
@@ -107,14 +86,16 @@ class Schedule extends React.Component {
     let registrations3complete = <div />;
     let registrationsSomeComplete = <div />;
     let registrations0complete = <div />;
+    let winnersDiv = <div />;
 
     const registrationsAll = [];
     const registrationsSome = [];
     const registrationsNone = [];
+    const registrationsWinners = registrations.filter(registration => registration.isWinner);
 
     if (registrations) {
       registrations.map(registration => {
-        const { hasDoneTrivia, hasDoneInvite, hasDoneSurvey } = registration;
+        const { hasDoneTrivia, hasDoneInvite, hasDoneSurvey, isWinner } = registration;
         if (hasDoneSurvey && hasDoneInvite && hasDoneTrivia) {
           registrationsAll.push(registration.email);
         } else if (!hasDoneSurvey && !hasDoneInvite && !hasDoneTrivia) {
@@ -124,9 +105,12 @@ class Schedule extends React.Component {
         }
       });
 
-      registrations3complete = registrationsAll.map(email => <div>{email}</div>);
-      registrationsSomeComplete = registrationsSome.map(email => <div>{email}</div>);
-      registrations0complete = registrationsNone.map(email => <div>{email}</div>);
+      registrations3complete = registrationsAll.map(email => <div key={email}>{email}</div>);
+      registrationsSomeComplete = registrationsSome.map(email => <div key={email}>{email}</div>);
+      registrations0complete = registrationsNone.map(email => <div key={email}>{email}</div>);
+      winnersDiv = registrationsWinners.map(registration => (
+        <div key={registration.email}>{registration.email}</div>
+      ));
     }
 
     return (
@@ -137,6 +121,8 @@ class Schedule extends React.Component {
         <FONTS.P>{inviteCompletions} Friends Invited </FONTS.P>
         <FONTS.P>{triviaCompletions} Trivia Completed </FONTS.P>
         <FONTS.P>${totalSales} total sales </FONTS.P>
+        <FONTS.H3>Winners</FONTS.H3>
+        {winnersDiv}
         <FONTS.H3>3/3 tasks completed</FONTS.H3>
         {registrations3complete}
         <FONTS.H3>1/3 or 2/3 tasks completed</FONTS.H3>
@@ -149,7 +135,7 @@ class Schedule extends React.Component {
   }
 }
 
-// Schedule.propTypes = propTypes;
-// Schedule.defaultProps = defaultProps;
+// Status.propTypes = propTypes;
+// Status.defaultProps = defaultProps;
 
-export default Schedule;
+export default Status;

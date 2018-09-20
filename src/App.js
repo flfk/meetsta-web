@@ -10,6 +10,8 @@ import Events from './containers/Events';
 import EventSales from './containers/EventSales';
 import LandingPage from './containers/LandingPage';
 import Register from './containers/Register';
+import Sales from './containers/Sales';
+import SalesTotalAdmin from './containers/SalesTotalAdmin';
 import Status from './containers/Status';
 import Schedule from './containers/Schedule';
 import Main from './components/Main';
@@ -41,6 +43,8 @@ class App extends Component {
                 <Route path="/checkout-vip" component={CheckoutVIP} />
                 <Route path="/confirmation" component={OrderConfirmation} />
                 <Route path="/eventSales" component={EventSales} />
+                <Route path="/sales" component={Sales} />
+                <Route path="/sales-total-admin" component={SalesTotalAdmin} />
                 <Route path="/status" component={Status} />
                 <Route path="/schedule" component={Schedule} />
                 <Route path="/register" component={Register} />
