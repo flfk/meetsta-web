@@ -91,7 +91,7 @@ class Status extends React.Component {
     const registrationsAll = [];
     const registrationsSome = [];
     const registrationsNone = [];
-    const winners = [];
+    const registrationsWinners = registrations.filter(registration => registration.isWinner);
 
     if (registrations) {
       registrations.map(registration => {
@@ -103,15 +103,14 @@ class Status extends React.Component {
         } else {
           registrationsSome.push(registration.email);
         }
-
-        if (isWinner) {
-          winners.push(registration.email);
-        }
       });
 
-      registrations3complete = registrationsAll.map(email => <div>{email}</div>);
-      registrationsSomeComplete = registrationsSome.map(email => <div>{email}</div>);
-      registrations0complete = registrationsNone.map(email => <div>{email}</div>);
+      registrations3complete = registrationsAll.map(email => <div key={email}>{email}</div>);
+      registrationsSomeComplete = registrationsSome.map(email => <div key={email}>{email}</div>);
+      registrations0complete = registrationsNone.map(email => <div key={email}>{email}</div>);
+      winnersDiv = registrationsWinners.map(registration => (
+        <div key={registration.email}>{registration.email}</div>
+      ));
     }
 
     return (
