@@ -16,7 +16,8 @@ class Schedule extends React.Component {
   state = {
     eventID: '',
     eventTitle: '',
-    tickets: []
+    tickets: [],
+    registrations: []
   };
 
   componentDidMount() {
@@ -44,7 +45,10 @@ class Schedule extends React.Component {
 
       const tickets = await actions.getDocsTicketsSold(eventID);
       const ticketsSorted = tickets.sort((a, b) => a.startTime - b.startTime);
-      this.setState({ tickets: ticketsSorted, eventTitle });
+
+      const registrations = await actions.getDocsRegistrations(eventID);
+
+      this.setState({ tickets: ticketsSorted, eventTitle, registrations });
     } catch (error) {
       console.error('Error loading formatted data ', error);
     }
@@ -56,12 +60,10 @@ class Schedule extends React.Component {
   };
 
   render() {
-    const { tickets, eventTitle } = this.state;
+    const { tickets, eventTitle, registrations } = this.state;
 
     let schedule = <div />;
-
     // const IGHandle = ticket.IGHandle ? ticket.IGHandle : 'IG missing';
-
     if (tickets) {
       schedule = tickets.map(ticket => (
         <div key={ticket.orderNum}>
@@ -81,10 +83,67 @@ class Schedule extends React.Component {
       ));
     }
 
+    const totalRegistrations = registrations.length;
+    const surveyCompletions = registrations.reduce((total, registration) => {
+      if (registration.hasDoneSurvey) {
+        return total + 1;
+      }
+      return total;
+    }, 0);
+    const inviteCompletions = registrations.reduce((total, registration) => {
+      if (registration.hasDoneInvite) {
+        return total + 1;
+      }
+      return total;
+    }, 0);
+    const triviaCompletions = registrations.reduce((total, registration) => {
+      if (registration.hasDoneTrivia) {
+        return total + 1;
+      }
+      return total;
+    }, 0);
+    const totalSales = tickets.reduce((total, ticket) => total + ticket.priceTotal, 0);
+
+    let registrations3complete = <div />;
+    let registrationsSomeComplete = <div />;
+    let registrations0complete = <div />;
+
+    const registrationsAll = [];
+    const registrationsSome = [];
+    const registrationsNone = [];
+
+    if (registrations) {
+      registrations.map(registration => {
+        const { hasDoneTrivia, hasDoneInvite, hasDoneSurvey } = registration;
+        if (hasDoneSurvey && hasDoneInvite && hasDoneTrivia) {
+          registrationsAll.push(registration.email);
+        } else if (!hasDoneSurvey && !hasDoneInvite && !hasDoneTrivia) {
+          registrationsNone.push(registration.email);
+        } else {
+          registrationsSome.push(registration.email);
+        }
+      });
+
+      registrations3complete = registrationsAll.map(email => <div>{email}</div>);
+      registrationsSomeComplete = registrationsSome.map(email => <div>{email}</div>);
+      registrations0complete = registrationsNone.map(email => <div>{email}</div>);
+    }
+
     return (
       <Content>
-        <FONTS.H1>Schedule - {eventTitle}</FONTS.H1>
-        {schedule}
+        <FONTS.H1>Registrations - {eventTitle}</FONTS.H1>
+        <FONTS.P>{totalRegistrations} Total Registrations</FONTS.P>
+        <FONTS.P>{surveyCompletions} Survey Completions</FONTS.P>
+        <FONTS.P>{inviteCompletions} Friends Invited </FONTS.P>
+        <FONTS.P>{triviaCompletions} Trivia Completed </FONTS.P>
+        <FONTS.P>${totalSales} total sales </FONTS.P>
+        <FONTS.H3>3/3 tasks completed</FONTS.H3>
+        {registrations3complete}
+        <FONTS.H3>1/3 or 2/3 tasks completed</FONTS.H3>
+        {registrationsSomeComplete}
+        <FONTS.H3>0/3 tasks completed</FONTS.H3>
+        {registrations0complete}
+        <br />
       </Content>
     );
   }
