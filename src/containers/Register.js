@@ -111,17 +111,18 @@ class Register extends React.Component {
   handleSubmit = async () => {
     this.setState({ isLoading: true });
     const { email, eventID, influencerName } = this.state;
+    const emailLowercase = email.toLowerCase();
     // Validating email is correct
     if (this.validateForm()) {
       // If the email has already been submitted set the rego ID in state and log them in
       let registrationID = '';
       try {
         const registrations = await actions.getDocsRegistrations(eventID);
-        const isExisting = this.testExisting(email, registrations);
+        const isExisting = this.testExisting(emailLowercase, registrations);
         // Else create a new registration
         if (!isExisting) {
           const newRegistration = {
-            email,
+            email: emailLowercase,
             dateCreated: Date.now(),
             eventID,
             influencerName,
@@ -133,7 +134,7 @@ class Register extends React.Component {
           const addedRegistration = await actions.addDocRegistration(newRegistration);
           registrationID = addedRegistration.id;
         } else {
-          const registration = registrations.filter(rego => rego.email === email)[0];
+          const registration = registrations.filter(rego => rego.email === emailLowercase)[0];
           registrationID = registration.id;
         }
         this.setState({ registrationID });
