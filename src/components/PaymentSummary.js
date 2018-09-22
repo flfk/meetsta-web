@@ -22,13 +22,23 @@ const defaultProps = {
 const PaymentSummary = props => {
   const { item, lengthMins, priceBase, fee, addOns, priceTotal, priceTotalFeeIncl } = props;
 
+  let callDiv = <div />;
   let addOnsDiv = <div />;
+
+  if (lengthMins) {
+    callDiv = (
+      <Content.Row>
+        <FONTS.P>{lengthMins} minute one-on-one video call</FONTS.P>
+        <FONTS.P>${priceBase.toFixed(2)}</FONTS.P>
+      </Content.Row>
+    );
+  }
 
   if (addOns) {
     const addOnsSorted = addOns.sort((a, b) => b.price - a.price);
     addOnsDiv = addOnsSorted.map(addOn => (
       <Content.Row key={addOn.name}>
-        <FONTS.P>+ {addOn.name}</FONTS.P>
+        <FONTS.P>{addOn.name}</FONTS.P>
         <FONTS.P>${addOn.price.toFixed(2)}</FONTS.P>
       </Content.Row>
     ));
@@ -36,10 +46,7 @@ const PaymentSummary = props => {
 
   return (
     <div>
-      <Content.Row>
-        <FONTS.P>{lengthMins} minute one-on-one video call</FONTS.P>
-        <FONTS.P>${priceBase.toFixed(2)}</FONTS.P>
-      </Content.Row>
+      {callDiv}
       {addOnsDiv}
       <Content.Row>
         <FONTS.P>PayPal Processing Fee</FONTS.P>

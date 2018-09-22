@@ -169,25 +169,6 @@ class WinnerCountdown extends React.Component {
         />
       );
 
-    // let ticketVIPCard = <div />;
-
-    // if (ticketVIP.name) {
-    //   ticketVIPCard = (
-    //     <TicketCard
-    //       key={ticketVIP.ticketID}
-    //       eventID={ticketVIP.eventID}
-    //       ticketID={ticketVIP.ticketID}
-    //       name={ticketVIP.name}
-    //       description={ticketVIP.description}
-    //       lengthMins={ticketVIP.lengthMins}
-    //       price={ticketVIP.price}
-    //       onSelect={this.handleVIPSelect}
-    //       isPremium={ticketVIP.isPremium}
-    //       extras={ticketVIP.addOns}
-    //     />
-    //   );
-    // }
-
     const triviaBtn = <Btn onClick={this.handleShowPopup('Trivia')}>Answer Trivia Question</Btn>;
     const triviaDone = (
       <FONTS.H3 noMarginBottom>
@@ -260,7 +241,7 @@ class WinnerCountdown extends React.Component {
         </FONTS.H1>
         <br />
         <Content.Center>
-          <TicketImage eventID="meet-mackenzie-sol-2" isPremium={false} />
+          <TicketImage eventID={eventID} isPremium={false} />
         </Content.Center>
         <br />
         <FONTS.H3 centered>You will receive an email shortly with the details </FONTS.H3>

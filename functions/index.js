@@ -18,26 +18,44 @@ exports.orderConfirmationEmail = functions.firestore
     const ticket = snap.data();
     const id = snap.id;
 
-    const startTimeFormatted = `${moment
-      .tz(ticket.startTime, 'America/Los_Angeles')
-      .format('H:mm a, dddd, MMM Do')} PDT`;
-
     const confirmationURL = CONFIRMATION_URL_BASE + id;
 
-    const msg = {
-      to: ticket.purchaseEmail,
-      from: 'contact.meetsta@gmail.com',
-      templateId: 'd-9151449bb4e4476eb06436f9574a0a01',
-      dynamic_template_data: {
-        orderNum: ticket.orderNum,
-        eventTitle: ticket.eventTitle,
-        ticketName: ticket.name,
-        startTime: startTimeFormatted,
-        purchaseNameFirst: ticket.purchaseNameFirst,
-        influencerName: ticket.influencerName,
-        confirmationURL: confirmationURL
-      }
-    };
+    let msg = {};
+
+    // if lengthMins === 0, souvenirs only
+    if (ticket.lengthMins === 0) {
+      msg = {
+        to: ticket.purchaseEmail,
+        from: 'contact.meetsta@gmail.com',
+        templateId: 'd-c66c2e0750b8487e894abcb067bbf624',
+        dynamic_template_data: {
+          orderNum: ticket.orderNum,
+          ticketName: ticket.name,
+          purchaseNameFirst: ticket.purchaseNameFirst,
+          influencerName: ticket.influencerName,
+          confirmationURL
+        }
+      };
+    } else {
+      const startTimeFormatted = `${moment
+        .tz(ticket.startTime, 'America/Los_Angeles')
+        .format('H:mm a, dddd, MMM Do')} PDT`;
+
+      msg = {
+        to: ticket.purchaseEmail,
+        from: 'contact.meetsta@gmail.com',
+        templateId: 'd-9151449bb4e4476eb06436f9574a0a01',
+        dynamic_template_data: {
+          orderNum: ticket.orderNum,
+          eventTitle: ticket.eventTitle,
+          ticketName: ticket.name,
+          startTime: startTimeFormatted,
+          purchaseNameFirst: ticket.purchaseNameFirst,
+          influencerName: ticket.influencerName,
+          confirmationURL: confirmationURL
+        }
+      };
+    }
 
     return sgMail
       .send(msg)

@@ -141,8 +141,20 @@ class OrderConfirmation extends React.Component {
 
     const instaSubmit = submittedInsta ? instaSubmitted : instaForm;
 
-    return (
-      <Content>
+    const { addOns } = ticket;
+    let addOnNames = <div />;
+    if (addOns) {
+      addOnNames = addOns.map(addOn => (
+        <div>
+          <FONTS.P key={addOn}>
+            <strong>1 x {addOn}</strong>
+          </FONTS.P>
+        </div>
+      ));
+    }
+
+    const confirmationTickets = (
+      <div>
         <FONTS.H1>
           {' '}
           <span role="img" aria-label="Clapping">
@@ -155,8 +167,10 @@ class OrderConfirmation extends React.Component {
           <FONTS.A onClick={this.handleTimePopupOpen}>{startTimeFormatted}.</FONTS.A>
         </FONTS.H2>
         <FONTS.P>
-          You ordered <strong>1 x {ticket.name}.</strong>
+          <strong>1 x {ticket.name}.</strong>
+          {addOnNames}
         </FONTS.P>
+        <br />
         <FONTS.P>
           Your order confirmation number is <strong>{ticket.orderNum}.</strong>
         </FONTS.P>
@@ -192,7 +206,37 @@ class OrderConfirmation extends React.Component {
           will have a link to get you back to this page later.
         </FONTS.P>
         <Content.Seperator />
+      </div>
+    );
 
+    const confirmationSouvenirs = (
+      <div>
+        <FONTS.H1>
+          {' '}
+          <span role="img" aria-label="Clapping">
+            👏
+          </span>{' '}
+          Your souvenirs are on their way!
+        </FONTS.H1>
+        {addOnNames}
+        <br />
+        <FONTS.P>
+          We will email you your souvenirs within <strong>the next 7 days.</strong>
+        </FONTS.P>
+        <br />
+        <br />
+        <FONTS.P>
+          Your order confirmation number is <strong>{ticket.orderNum}.</strong>
+        </FONTS.P>
+        <br />
+      </div>
+    );
+
+    const confirmation = ticket.lengthMins == 0 ? confirmationSouvenirs : confirmationTickets;
+
+    return (
+      <Content>
+        {confirmation}
         <FONTS.H1>Any questions? We're here to help!</FONTS.H1>
         <FONTS.P>
           Send us en email at <FONTS.A href={`mailto: ${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</FONTS.A>
