@@ -10,7 +10,8 @@ import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';
-import TicketCardSelectable from '../components/TicketCardSelectable';
+import CardTicket from '../components/CardTicket';
+import CardSouvenirs from '../components/CardSouvenirs';
 
 import actions from '../data/actions';
 
@@ -23,7 +24,7 @@ const MILLISECS_PER_MIN = 60000;
 const DEFAULT_EVENT_ID = 'default-event-id';
 
 const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 8, extraMins: 5 },
+  { name: 'Additional 5 minutes', price: 8, additionalMins: 5 },
   { name: 'Autographed selfie from your meet and greet', price: 2 },
   { name: 'Follow back and comment on your most recent', price: 5 },
   { name: 'Personalized thank you video', price: 5 },
@@ -54,6 +55,7 @@ class Checkout extends React.Component {
     emailErrMsg: '',
     checkoutStep: 0,
     tickets: [],
+    addOns: [],
     ticketSelected: {},
     ticketID: null,
     ticketOrdered: null,
@@ -65,6 +67,7 @@ class Checkout extends React.Component {
   componentDidMount() {
     try {
       this.loadFormattedData();
+      this.getEventId();
     } catch (err) {
       console.error('Error in getting documents', err);
     }
@@ -75,12 +78,15 @@ class Checkout extends React.Component {
   }
 
   getEventId = () => {
-    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-    let { eventID } = params;
+    let { eventID } = this.getParams();
     if (!eventID) {
       eventID = DEFAULT_EVENT_ID;
     }
     return eventID;
+  };
+
+  getParams = () => {
+    return qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
   };
 
   loadFormattedData = async () => {
@@ -95,7 +101,8 @@ class Checkout extends React.Component {
         dateEnd: event.dateEnd
       };
       const tickets = await actions.getCollEventTickets(eventID);
-      this.setState({ eventID, ...formattedDataEvent, tickets });
+      const addOns = await actions.getCollAddOns(eventID);
+      this.setState({ eventID, ...formattedDataEvent, tickets, addOns });
     } catch (error) {
       console.error('Error loading formatted data ', error);
     }
@@ -127,10 +134,10 @@ class Checkout extends React.Component {
     } = this.state;
     const orderNum = await actions.getNewOrderNum();
     const startTime = await this.getTimeSlot();
-    const addOnsSelected = ticketSelected.addOnsSelected;
-    const extraMins = addOnsSelected.reduce((total, addOn) => {
-      if (addOn.extraMins) {
-        total += addOn.extraMins;
+    const { addOnsSelected } = ticketSelected;
+    const additionalMins = addOnsSelected.reduce((total, addOn) => {
+      if (addOn.additionalMins) {
+        total += addOn.additionalMins;
       }
       return total;
     }, 0);
@@ -143,7 +150,7 @@ class Checkout extends React.Component {
       priceTotal: ticketSelected.priceTotal,
       priceBase: ticketSelected.priceBase,
       fee: this.calculateFee(ticketSelected.priceTotal),
-      lengthMins: ticketSelected.lengthMins + extraMins,
+      lengthMins: ticketSelected.lengthMins + additionalMins,
       startTime,
       purchaseNameFirst: nameFirst,
       purchaseNameLast: nameLast,
@@ -241,9 +248,8 @@ class Checkout extends React.Component {
   };
 
   handleTicketSelect = ticket => {
-    const ticketSelected = ticket;
-    const { ticketID } = ticketSelected;
-    this.setState({ ticketSelected, checkoutStep: 1 });
+    console.log('handling select ticket is', ticket);
+    this.setState({ ticketSelected: ticket, checkoutStep: 1 });
   };
 
   handlePrevious = () => {
@@ -264,6 +270,7 @@ class Checkout extends React.Component {
       toConfirmation,
       checkoutStep,
       tickets,
+      addOns,
       ticketSelected,
       ticketOrdered,
       ticketID,
@@ -286,8 +293,8 @@ class Checkout extends React.Component {
     let ticketCards = <div />;
     if (tickets) {
       ticketCards = tickets.map((ticket, index) => (
-        <TicketCardSelectable
-          key={index}
+        <CardTicket
+          key={ticket.ticketID}
           eventID={eventID}
           ticketID={ticket.ticketID}
           name={ticket.name}
@@ -300,6 +307,21 @@ class Checkout extends React.Component {
           addOns={ticket.addOns}
         />
       ));
+    }
+
+    const params = this.getParams();
+    if (params.souvenirs && addOns) {
+      const souvenirs = addOns.filter(addOn => !addOn.additionalMins);
+      ticketCards = (
+        <CardSouvenirs
+          eventID={eventID}
+          name={'Souvenirs'}
+          lengthMins={0}
+          priceBase={0}
+          onSelect={this.handleTicketSelect}
+          addOns={souvenirs}
+        />
+      );
     }
 
     const selectTicket = <div>{ticketCards}</div>;

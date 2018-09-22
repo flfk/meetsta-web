@@ -4,6 +4,7 @@ import db from './firebase';
 const COLL_EMAILS = 'emails';
 const COLL_EVENTS = 'events';
 const COLL_TICKETS = 'tickets';
+const COLL_ADD_ONS = 'addOns';
 const COLL_UTILS = 'utils';
 const COLL_REGISTRATIONS = 'registrations';
 
@@ -11,7 +12,7 @@ const DOC_LAST_ORDER = 'lastOrder';
 
 // TODO MAKE DYNAMIC
 const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 8, extraMins: 5 },
+  { name: 'Additional 5 minutes', price: 8, additionalMins: 5 },
   { name: 'Autographed selfie from your meet and greet', price: 2 },
   { name: 'Follow back and comment on your most recent', price: 5 },
   { name: 'Personalized thank you video', price: 5 },
@@ -88,9 +89,9 @@ const updateDocRegistration = async (registrationID, registration) => {
 const getCollEventTickets = async eventID => {
   try {
     const ticketsRef = db
-      .collection('events')
+      .collection(COLL_EVENTS)
       .doc(eventID)
-      .collection('tickets');
+      .collection(COLL_TICKETS);
     const snapshot = await ticketsRef.get();
     const tickets = [];
     snapshot.forEach(snap => {
@@ -103,6 +104,26 @@ const getCollEventTickets = async eventID => {
     return tickets;
   } catch (error) {
     console.error('Error getting tickets ', error);
+  }
+};
+
+const getCollAddOns = async eventID => {
+  try {
+    const addOnsRef = db
+      .collection(COLL_EVENTS)
+      .doc(eventID)
+      .collection(COLL_ADD_ONS);
+    const snapshot = await addOnsRef.get();
+    const addOns = [];
+    snapshot.forEach(snap => {
+      const addOn = snap.data();
+      const { addOnID } = snap;
+      addOn.addOnID = addOnID;
+      addOns.push(addOn);
+    });
+    return addOns;
+  } catch (error) {
+    console.error('Error getting addOns ', error);
   }
 };
 
@@ -147,6 +168,7 @@ const actions = {};
 actions.getDocEvent = getDocEvent;
 actions.getDocsEvent = getDocsEvent;
 actions.getCollEventTickets = getCollEventTickets;
+actions.getCollAddOns = getCollAddOns;
 
 actions.getDocsRegistrations = getDocsRegistrations;
 actions.addDocRegistration = addDocRegistration;

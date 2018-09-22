@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import styled from 'styled-components';
 
 import Btn from './Btn';
-import COLORS from '../utils/Colors';
+import Card from './Card';
 import Content from './Content';
-import FONTS from '../utils/Fonts';
 import TicketImage from './TicketImage';
 import SelectableFeature from './SelectableFeature';
-import MEDIA from '../utils/Media';
 
 const propTypes = {
   ticketID: PropTypes.string,
@@ -99,67 +96,30 @@ class Ticket extends React.Component {
     }
 
     return (
-      <Container>
-        <H1>{name}</H1>
+      <Card>
+        <Card.H1>{name}</Card.H1>
         <TicketImage isPremium={isPremium} eventID={eventID} />
         <br />
         <Content.Row>
-          <P>✓ {lengthMins} minute one-on-one video call</P>
-          <P>${priceBase}</P>
+          <Card.P>✓ {lengthMins} minute one-on-one video call</Card.P>
+          <Card.P>${priceBase}</Card.P>
         </Content.Row>
         <Content.Seperator />
-        <H3> Optional Add-ons</H3>
+        <Card.H3> Optional Add-ons</Card.H3>
         {addOnsDiv}
         <Content.Seperator />
         <Content.Center>
-          <H2>$ {priceTotal}</H2>
+          <Card.H2>$ {priceTotal}</Card.H2>
         </Content.Center>
         <div>
           <Btn.Full primary onClick={() => onSelect({ ...this.state })} id={ticketID}>
             Get Ticket
           </Btn.Full>
         </div>
-      </Container>
+      </Card>
     );
   }
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  // max-width: 342px;
-  border: 1px solid ${COLORS.greys.light};
-  border-radius: 5px;
-  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
-  padding: 16px;
-  padding-top: 0px;
-  margin-bottom: 32px;
-
-  ${MEDIA.tablet} {
-    box-shadow: none;
-    border: none;
-    margin-bottom: 16px;
-  }
-`;
-
-const H1 = FONTS.H1.extend`
-  margin-top: 16px;
-  margin-bottom: 8px;
-`;
-
-const H2 = FONTS.H2.extend`
-  margin-top: 0;
-  margin-bottom: 16px;
-`;
-
-const H3 = FONTS.H3.extend`
-  margin-top: 0;
-  margin-bottom: 16px;
-`;
-
-const P = FONTS.P.extend`
-  margin: 8px 0;
-`;
 
 Ticket.propTypes = propTypes;
 Ticket.defaultProps = defaultProps;
