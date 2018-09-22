@@ -23,7 +23,6 @@ const propTypes = {
 
 const defaultProps = {
   ticketID: '',
-  description: '',
   addOns: []
 };
 
@@ -36,7 +35,6 @@ class Ticket extends React.Component {
   createTicket = () => {
     const { priceBase, lengthMins } = this.props;
     const { priceTotal, addOnsSelected } = this.state;
-
     const ticketSelected = {
       name: NAME_SOUVENIRS,
       priceTotal,
@@ -44,9 +42,6 @@ class Ticket extends React.Component {
       lengthMins,
       addOnsSelected
     };
-
-    console.log('create ticket is', ticketSelected);
-
     return ticketSelected;
   };
 

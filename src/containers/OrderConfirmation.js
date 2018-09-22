@@ -141,12 +141,6 @@ class OrderConfirmation extends React.Component {
 
     const instaSubmit = submittedInsta ? instaSubmitted : instaForm;
 
-    // let souvenirNames = 'souvenirs';
-    // const { addOns } = ticket;
-    // if (addOns) {
-    //   souvenirNames = addOns.map((addOn, index) => <FONTS.P key={index}>{addOn.name}</FONTS.P>);
-    // }
-
     const { addOns } = ticket;
     let addOnNames = <div />;
     if (addOns) {
@@ -173,10 +167,10 @@ class OrderConfirmation extends React.Component {
           <FONTS.A onClick={this.handleTimePopupOpen}>{startTimeFormatted}.</FONTS.A>
         </FONTS.H2>
         <FONTS.P>
-          You ordered <br />
           <strong>1 x {ticket.name}.</strong>
           {addOnNames}
         </FONTS.P>
+        <br />
         <FONTS.P>
           Your order confirmation number is <strong>{ticket.orderNum}.</strong>
         </FONTS.P>
@@ -224,7 +218,6 @@ class OrderConfirmation extends React.Component {
           </span>{' '}
           Your souvenirs are on their way!
         </FONTS.H1>
-        <FONTS.P>You ordered</FONTS.P>
         {addOnNames}
         <br />
         <FONTS.P>
