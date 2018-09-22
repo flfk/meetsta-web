@@ -6,6 +6,12 @@ import TICKET_PREMIUM_MACKENZIE from '../assets/ticketImages/TicketPremiumMacken
 import TICKET_STANDARD_MACKENZIE from '../assets/ticketImages/TicketStandardMackenzieSol2.png';
 import TICKET_PREMIUM_WILL from '../assets/ticketImages/TicketPremiumWillSimmons.png';
 import TICKET_STANDARD_WILL from '../assets/ticketImages/TicketStandardWillSimmons.png';
+import TICKET_PREMIUM_DENJIEL from '../assets/ticketImages/TicketPremiumDenjiel2.png';
+import TICKET_STANDARD_DENJIEL from '../assets/ticketImages/TicketStandardDenjiel2.png';
+import TICKET_PREMIUM_DYLAN from '../assets/ticketImages/TicketPremiumDylanHartman.png';
+import TICKET_STANDARD_DYLAN from '../assets/ticketImages/TicketStandardDylanHartman.png';
+import TICKET_PREMIUM_LUIGI from '../assets/ticketImages/TicketPremiumLuigiCastillo.png';
+import TICKET_STANDARD_LUIGI from '../assets/ticketImages/TicketStandardLuigiCastillo.png';
 import MEDIA from '../utils/Media';
 
 const propTypes = {
@@ -52,6 +58,27 @@ const ImageTicket = props => {
         ticketImg = TICKET_PREMIUM_MACKENZIE;
       } else {
         ticketImg = TICKET_STANDARD_MACKENZIE;
+      }
+      break;
+    case 'meet-denjiel-2':
+      if (isPremium) {
+        ticketImg = TICKET_PREMIUM_DENJIEL;
+      } else {
+        ticketImg = TICKET_STANDARD_DENJIEL;
+      }
+      break;
+    case 'meet-dylan-hartman':
+      if (isPremium) {
+        ticketImg = TICKET_PREMIUM_DYLAN;
+      } else {
+        ticketImg = TICKET_STANDARD_DYLAN;
+      }
+      break;
+    case 'meet-luigi-castillo':
+      if (isPremium) {
+        ticketImg = TICKET_PREMIUM_LUIGI;
+      } else {
+        ticketImg = TICKET_STANDARD_LUIGI;
       }
       break;
     default:

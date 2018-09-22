@@ -10,6 +10,9 @@ import Btn from '../components/Btn';
 import Content from '../components/Content';
 import EVENT_IMAGE_MACKENZIE from '../assets/eventImages/EventImageMackenzieSol2.png';
 import EVENT_IMAGE_WILL from '../assets/eventImages/EventImageWillSimmons.png';
+import EVENT_IMAGE_DENJIEL from '../assets/eventImages/EventImageDenjiel2.png';
+import EVENT_IMAGE_DYLAN from '../assets/eventImages/EventImageDylanHartman.png';
+import EVENT_IMAGE_LUIGI from '../assets/eventImages/EventImageLuigiCastillo.png';
 import FooterEvents from '../components/FooterEvents';
 import FONTS from '../utils/Fonts';
 import PopupTime from './PopupTime';
@@ -230,6 +233,15 @@ class Register extends React.Component {
         break;
       case 'meet-mackenzie-sol-2':
         eventImg = <img src={EVENT_IMAGE_MACKENZIE} alt="Mackenzie Sol Online Meet & Greet" />;
+        break;
+      case 'meet-denjiel-2':
+        eventImg = <img src={EVENT_IMAGE_DENJIEL} alt="Denjiel Online Meet & Greet" />;
+        break;
+      case 'meet-dylan-hartman':
+        eventImg = <img src={EVENT_IMAGE_DYLAN} alt="Dylan Hartman Online Meet & Greet" />;
+        break;
+      case 'meet-luigi-castillo':
+        eventImg = <img src={EVENT_IMAGE_LUIGI} alt="Luigi Castillo Online Meet & Greet" />;
         break;
       default:
         eventImg = null;
