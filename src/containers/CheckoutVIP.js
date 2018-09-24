@@ -24,14 +24,6 @@ const MILLISECS_PER_MIN = 60000;
 
 const DEFAULT_EVENT_ID = 'default-event-id';
 
-const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 8, additionalMins: 5 },
-  { name: 'Autographed selfie from your meet and greet', price: 2 },
-  { name: 'Follow back and comment on your most recent', price: 5 },
-  { name: 'Personalized thank you video', price: 5 },
-  { name: 'Video recording of your meet and greet', price: 10 }
-];
-
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
   production: process.env.REACT_APP_PAYPAL_CLIENT_ID_PRODUCTION
@@ -45,6 +37,7 @@ const defaultProps = {};
 
 class Checkout extends React.Component {
   state = {
+    addOns: [],
     eventID: '',
     dateStart: null,
     dateEnd: null,
@@ -314,7 +307,7 @@ class Checkout extends React.Component {
           onSelect={this.handleTicketSelect}
           isPremium={ticket.isPremium}
           extras={ticket.extras}
-          addOns={ticket.addOns}
+          addOns={addOns}
         />
       ));
     }

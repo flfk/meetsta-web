@@ -10,15 +10,6 @@ const COLL_REGISTRATIONS = 'registrations';
 
 const DOC_LAST_ORDER = 'lastOrder';
 
-// TODO MAKE DYNAMIC
-const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 8, additionalMins: 5 },
-  { name: 'Autographed selfie from your meet and greet', price: 2 },
-  { name: 'Follow back and comment on your most recent', price: 5 },
-  { name: 'Personalized thank you video', price: 5 },
-  { name: 'Video recording of your meet and greet', price: 10 }
-];
-
 const getDocEvent = async eventID => {
   try {
     const eventRef = db.collection(COLL_EVENTS).doc(eventID);
@@ -98,7 +89,6 @@ const getCollEventTickets = async eventID => {
       const ticket = snap.data();
       const { id } = snap;
       ticket.ticketID = id;
-      ticket['addOns'] = ADD_ONS;
       tickets.push(ticket);
     });
     return tickets;

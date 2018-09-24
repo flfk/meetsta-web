@@ -63,7 +63,9 @@ class Schedule extends React.Component {
     if (tickets) {
       schedule = tickets.map(ticket => {
         const instaHandle = ticket.instaHandle ? (
-          <FONTS.P>{ticket.instaHandle}</FONTS.P>
+          <FONTS.P>
+            <strong>{ticket.instaHandle}</strong>
+          </FONTS.P>
         ) : (
           <FONTS.ERROR noMargin>missing IG</FONTS.ERROR>
         );
@@ -72,13 +74,15 @@ class Schedule extends React.Component {
           <div key={ticket.orderNum}>
             <Content.RowGrid>
               <div>
-                <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
                 {instaHandle}
+                <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
                 <FONTS.P>{ticket.purchaseNameFirst}</FONTS.P>
                 <FONTS.P>Order #{ticket.orderNum}</FONTS.P>
               </div>
               <div>
-                <FONTS.P>{ticket.name}</FONTS.P>
+                <FONTS.P>
+                  <strong>{ticket.name}</strong>
+                </FONTS.P>
                 {ticket.addOns.map(addOn => (
                   <div key={addOn}>
                     <FONTS.P>{addOn}</FONTS.P>
