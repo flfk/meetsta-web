@@ -39,7 +39,7 @@ exports.orderConfirmationEmail = functions.firestore
     } else {
       const startTimeFormatted = `${moment
         .tz(ticket.startTime, 'America/Los_Angeles')
-        .format('H:mm a, dddd, MMM Do')} PDT`;
+        .format('dddd, MMM Do')}`;
 
       msg = {
         to: ticket.purchaseEmail,

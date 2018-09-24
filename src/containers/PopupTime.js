@@ -4,6 +4,7 @@ import { FaTimes } from 'react-icons/fa';
 
 import styled from 'styled-components';
 
+import Btn from '../components/Btn';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import Popup from '../components/Popup';
@@ -70,6 +71,12 @@ class TimeConverter extends React.Component {
       </div>
     ) : null;
 
+    const BtnComplete = startTimeFormatted ? (
+      <Btn primary fill onClick={handleClose}>
+        Close
+      </Btn>
+    ) : null;
+
     return (
       <div>
         <Popup.Background />
@@ -80,6 +87,7 @@ class TimeConverter extends React.Component {
             <DropdownFiller />
             {startRow}
             {endRow}
+            {BtnComplete}
             <FixedDropdown>
               <PlacesAutocomplete
                 dateStart={dateStart}

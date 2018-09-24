@@ -179,13 +179,15 @@ class OrderConfirmation extends React.Component {
 
     const instaSubmitted = (
       <div>
-        <FONTS.H3>
-          <span role="img" aria-label="Tick">
-            ✅
-          </span>{' '}
-          {ticket.instaHandle}
-          <Btn.Tertiary onClick={this.handleEditInsta}>Edit</Btn.Tertiary>
-        </FONTS.H3>
+        <FONTS.P>
+          <strong>
+            <span role="img" aria-label="Tick">
+              ✅
+            </span>{' '}
+            {ticket.instaHandle}
+            <Btn.Tertiary onClick={this.handleEditInsta}>Edit</Btn.Tertiary>
+          </strong>
+        </FONTS.P>
       </div>
     );
 
@@ -213,13 +215,15 @@ class OrderConfirmation extends React.Component {
 
     const timeChecked = (
       <div>
-        <FONTS.H3>
-          <span role="img" aria-label="Tick">
-            ✅
-          </span>{' '}
-          {ticket.startTimeLocalised} for {ticket.location}.
-          <Btn.Tertiary onClick={this.handleTimePopupOpen}>Edit</Btn.Tertiary>
-        </FONTS.H3>
+        <FONTS.P>
+          <strong>
+            <span role="img" aria-label="Tick">
+              ✅
+            </span>{' '}
+            {ticket.startTimeLocalised} for {ticket.location}.
+            <Btn.Tertiary onClick={this.handleTimePopupOpen}>Edit</Btn.Tertiary>
+          </strong>
+        </FONTS.P>
       </div>
     );
 
@@ -243,29 +247,54 @@ class OrderConfirmation extends React.Component {
 
     const appDownloaded = (
       <div>
-        <FONTS.H3>
-          <span role="img" aria-label="Tick">
-            ✅
-          </span>{' '}
-          I downloaded the {ticket.mobileOS} app.
-          <Btn.Tertiary onClick={this.handleEditAppDownload}>Edit</Btn.Tertiary>
-        </FONTS.H3>
+        <FONTS.P>
+          <strong>
+            <span role="img" aria-label="Tick">
+              ✅
+            </span>{' '}
+            I downloaded the {ticket.mobileOS} app.
+            <Btn.Tertiary onClick={this.handleEditAppDownload}>Edit</Btn.Tertiary>
+          </strong>
+        </FONTS.P>
       </div>
     );
 
     const downloadApp = hasDownloadedApp ? appDownloaded : downloadBtns;
 
-    const confirmationTickets = (
-      <div>
+    const confirmationTitle =
+      hasSubmittedInsta && hasCheckedLocalTime && hasDownloadedApp ? (
         <FONTS.H1>
-          {' '}
+          <span role="img" aria-label="Clapping">
+            👏
+          </span>{' '}
+          You're ready to meet {ticket.influencerName}!
+        </FONTS.H1>
+      ) : (
+        <FONTS.H1>
           <span role="img" aria-label="Clapping">
             👏
           </span>{' '}
           You're almost ready to meet {ticket.influencerName}!
         </FONTS.H1>
+      );
+    const stepsTitle =
+      hasSubmittedInsta && hasCheckedLocalTime && hasDownloadedApp ? (
+        <FONTS.H1>
+          <span role="img" aria-label="Tick">
+            ✅
+          </span>{' '}
+          All steps completed!
+        </FONTS.H1>
+      ) : (
+        <FONTS.H1>Complete all 3 steps to confirm your spot</FONTS.H1>
+      );
+
+    const confirmationTickets = (
+      <div>
+        {confirmationTitle}
         <FONTS.P>
-          You ordered a <strong>{ticket.name}.</strong>
+          You ordered <br />
+          <strong>1 x {ticket.name}</strong>
           {addOnNames}
         </FONTS.P>
         <br />
@@ -278,7 +307,7 @@ class OrderConfirmation extends React.Component {
         </FONTS.P>{' '}
         <br />
         <Content.Seperator />
-        <FONTS.H1>Complete all 3 steps to confirm your spot</FONTS.H1>
+        <FONTS.H1>{stepsTitle}</FONTS.H1>
         <FONTS.H2>1. Send us the attendee's Instagram name</FONTS.H2>
         <FONTS.P>We will use this to send you the link for the video call on the day.</FONTS.P>
         {instaSubmit}
