@@ -33,6 +33,16 @@ const Row = styled.div`
   align-items: flex-start;
 `;
 
+const RowGrid = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  > div {
+    width: 48%;
+  }
+`;
+
 const PaddingBottom = Content.extend`
   padding-bottom: 168px;
 `;
@@ -89,6 +99,7 @@ const Divider = () => {
 
 Content.NoPadding = NoPadding;
 Content.Row = Row;
+Content.RowGrid = RowGrid;
 Content.PaddingBottom = PaddingBottom;
 Content.Seperator = Seperator;
 Content.Divider = Divider;

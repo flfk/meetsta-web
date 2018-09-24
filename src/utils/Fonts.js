@@ -75,6 +75,7 @@ const ERROR = styled.p`
   font-weight: bold;
   color: red;
   margin: 8px 0;
+  margin: ${props => (props.noMargin ? '0px' : '')};
   text-align: ${props => (props.centered ? 'center' : '')};
 `;
 
