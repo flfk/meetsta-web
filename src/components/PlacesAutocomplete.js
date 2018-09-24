@@ -11,13 +11,17 @@ const propTypes = {
   dateStart: PropTypes.number,
   updateStartTime: PropTypes.func.isRequired,
   dateEnd: PropTypes.number,
-  updateEndTime: PropTypes.func
+  updateEndTime: PropTypes.func,
+  fromConfirmation: PropTypes.bool,
+  getLocationDetails: PropTypes.func
 };
 
 const defaultProps = {
   dateStart: 0,
   dateEnd: 0,
-  updateEndTime: () => null
+  updateEndTime: () => null,
+  fromConfirmation: false,
+  getLocationDetails: PropTypes.func
 };
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
@@ -33,13 +37,23 @@ class PlacesComponent extends React.Component {
 
   handleSelect = async address => {
     this.handleChange(address);
-    const { dateStart, updateStartTime, dateEnd, updateEndTime } = this.props;
+    const {
+      dateStart,
+      updateStartTime,
+      dateEnd,
+      updateEndTime,
+      fromConfirmation,
+      getLocationDetails
+    } = this.props;
     try {
       const newStartTime = await this.getUpdatedDate(address, dateStart);
       updateStartTime(newStartTime);
       if (dateEnd) {
         const newEndTime = await this.getUpdatedDate(address, dateEnd);
         updateEndTime(newEndTime);
+      }
+      if (fromConfirmation) {
+        getLocationDetails(address, newStartTime);
       }
     } catch (error) {
       console.error('Google Maps API error ', error);

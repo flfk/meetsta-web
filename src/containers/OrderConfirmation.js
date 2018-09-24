@@ -9,7 +9,7 @@ import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import PopupTime from './PopupTime';
 
-import db from '../data/firebase';
+// import db from '../data/firebase';
 import actions from '../data/actions';
 
 const URL_APPEARIN_IPHONE =
@@ -26,7 +26,9 @@ class OrderConfirmation extends React.Component {
   state = {
     ticketID: null,
     startTimeFormatted: '',
-    submittedInsta: false,
+    hasSubmittedInsta: false,
+    hasCheckedLocalTime: false,
+    hasDownloadedApp: false,
     ticket: {
       eventID: '',
       name: '',
@@ -37,14 +39,17 @@ class OrderConfirmation extends React.Component {
       purchaseNameLast: '',
       purchaseEmail: '',
       instaHandle: '',
+      location: '',
+      startTimeLocalised: '',
+      mobileOS: '',
       purchaseDate: null,
       orderNum: '',
       payPalPaymentID: '',
       userID: '',
       hasStarted: false,
-      dateStart: '',
-      showTimePopup: false
-    }
+      dateStart: ''
+    },
+    showTimePopup: false
   };
 
   componentDidMount() {
@@ -64,11 +69,15 @@ class OrderConfirmation extends React.Component {
     const ticketID = this.getOrderId();
     const ticket = await actions.getDocTicket(ticketID);
     const startTimeFormatted = this.formatStartTime(ticket.startTime);
-    const submittedInsta = ticket.instaHandle ? true : false;
+    const hasSubmittedInsta = ticket.instaHandle ? true : false;
+    const hasCheckedLocalTime = ticket.startTimeLocalised ? true : false;
+    const hasDownloadedApp = ticket.mobileOS ? true : false;
     this.setState({
       ticket: { ...ticket },
       startTimeFormatted,
-      submittedInsta,
+      hasSubmittedInsta,
+      hasCheckedLocalTime,
+      hasDownloadedApp,
       dateStart: ticket.startTime
     });
   };
@@ -82,11 +91,11 @@ class OrderConfirmation extends React.Component {
 
   handleTimePopupClose = () => this.setState({ showTimePopup: false });
 
-  updateInstaHandle = async instaHandle => {
-    const ticketID = this.getOrderId();
-    const ticketRef = db.collection('tickets').doc(ticketID);
-    const updateInstaHandle = ticketRef.update({ instaHandle });
-  };
+  // updateInstaHandle = async instaHandle => {
+  //   const ticketID = this.getOrderId();
+  //   const ticketRef = db.collection('tickets').doc(ticketID);
+  //   const updateInstaHandle = ticketRef.update({ instaHandle });
+  // };
 
   handleChangeInstaHandle = event => {
     const { ticket } = this.state;
@@ -95,23 +104,64 @@ class OrderConfirmation extends React.Component {
   };
 
   handleInstaSubmit = () => {
+    const ticketID = this.getOrderId();
     const { ticket } = this.state;
     const { instaHandle } = ticket;
     if (instaHandle) {
-      this.updateInstaHandle(instaHandle);
-      this.setState({ submittedInsta: true });
+      const ticketUpdated = { ...ticket, instaHandle };
+      actions.updateDocTicket(ticketID, ticketUpdated);
+      this.setState({ hasSubmittedInsta: true });
     }
   };
 
-  handleInstaEdit = () => {
-    this.setState({ submittedInsta: false });
+  handleLocalTimeSubmit = (location, startTimeLocalised) => {
+    const ticketID = this.getOrderId();
+    const { ticket } = this.state;
+    const ticketUpdated = { ...ticket, location, startTimeLocalised };
+    actions.updateDocTicket(ticketID, ticketUpdated);
+    this.setState({ ticket: ticketUpdated, hasCheckedLocalTime: true });
+  };
+
+  handleAppDownload = event => {
+    const ticketID = this.getOrderId();
+    const { ticket } = this.state;
+    const linkClicked = event.target.href;
+    const mobileOS = linkClicked === URL_APPEARIN_IPHONE ? 'iPhone' : 'Android';
+    const ticketUpdated = { ...ticket, mobileOS };
+    actions.updateDocTicket(ticketID, ticketUpdated);
+    this.setState({ ticket: ticketUpdated, hasDownloadedApp: true });
+  };
+
+  handleEditInsta = () => {
+    this.setState({ hasSubmittedInsta: false });
+  };
+
+  handleEditTime = () => {
+    this.setState({ hasCheckedLocalTime: false });
+  };
+
+  handleEditAppDownload = () => {
+    this.setState({ hasDownloadedApp: false });
   };
 
   render() {
-    const { ticket, startTimeFormatted, showTimePopup, dateStart, submittedInsta } = this.state;
+    const {
+      ticket,
+      startTimeFormatted,
+      showTimePopup,
+      dateStart,
+      hasSubmittedInsta,
+      hasCheckedLocalTime,
+      hasDownloadedApp
+    } = this.state;
 
     const timePopup = showTimePopup ? (
-      <PopupTime handleClose={this.handleTimePopupClose} dateStart={dateStart} />
+      <PopupTime
+        handleClose={this.handleTimePopupClose}
+        dateStart={dateStart}
+        fromConfirmation={true}
+        handleLocalTimeSubmit={this.handleLocalTimeSubmit}
+      />
     ) : null;
 
     const instaForm = (
@@ -134,12 +184,12 @@ class OrderConfirmation extends React.Component {
             ✅
           </span>{' '}
           {ticket.instaHandle}
-          <Btn.Tertiary onClick={this.handleInstaEdit}>Edit</Btn.Tertiary>
+          <Btn.Tertiary onClick={this.handleEditInsta}>Edit</Btn.Tertiary>
         </FONTS.H3>
       </div>
     );
 
-    const instaSubmit = submittedInsta ? instaSubmitted : instaForm;
+    const instaSubmit = hasSubmittedInsta ? instaSubmitted : instaForm;
 
     const { addOns } = ticket;
     let addOnNames = <div />;
@@ -153,6 +203,58 @@ class OrderConfirmation extends React.Component {
       ));
     }
 
+    const checkedStartTime = true;
+
+    const timeBtn = (
+      <Btn primary fill onClick={this.handleTimePopupOpen}>
+        Check My Time
+      </Btn>
+    );
+
+    const timeChecked = (
+      <div>
+        <FONTS.H3>
+          <span role="img" aria-label="Tick">
+            ✅
+          </span>{' '}
+          {ticket.startTimeLocalised} for {ticket.location}.
+          <Btn.Tertiary onClick={this.handleTimePopupOpen}>Edit</Btn.Tertiary>
+        </FONTS.H3>
+      </div>
+    );
+
+    const checkStartTime = hasCheckedLocalTime ? timeChecked : timeBtn;
+
+    const downloadBtns = (
+      <div>
+        <Content.Row>
+          <FONTS.A href={URL_APPEARIN_IPHONE} target="_blank" onClick={this.handleAppDownload}>
+            I Will Use An iPhone
+          </FONTS.A>
+        </Content.Row>
+        <br />
+        <Content.Row>
+          <FONTS.A href={URL_APPEARIN_ANDROID} target="_blank" onClick={this.handleAppDownload}>
+            I Will Use An Android
+          </FONTS.A>
+        </Content.Row>
+      </div>
+    );
+
+    const appDownloaded = (
+      <div>
+        <FONTS.H3>
+          <span role="img" aria-label="Tick">
+            ✅
+          </span>{' '}
+          I downloaded the {ticket.mobileOS} app.
+          <Btn.Tertiary onClick={this.handleEditAppDownload}>Edit</Btn.Tertiary>
+        </FONTS.H3>
+      </div>
+    );
+
+    const downloadApp = hasDownloadedApp ? appDownloaded : downloadBtns;
+
     const confirmationTickets = (
       <div>
         <FONTS.H1>
@@ -160,7 +262,7 @@ class OrderConfirmation extends React.Component {
           <span role="img" aria-label="Clapping">
             👏
           </span>{' '}
-          You're going to meet {ticket.influencerName}!
+          You're almost ready to meet {ticket.influencerName}!
         </FONTS.H1>
         <FONTS.P>
           You ordered a <strong>{ticket.name}.</strong>
@@ -183,22 +285,9 @@ class OrderConfirmation extends React.Component {
         <FONTS.H2>2. Check the event start time</FONTS.H2>
         <FONTS.P> Find out what time you can join the queue for the event. </FONTS.P>
         <br />
-        <Content />
-        <Btn primary fill onClick={this.handleTimePopupOpen}>
-          Check My Time
-        </Btn>
+        {checkStartTime}
         <FONTS.H2>3. Download the video call app</FONTS.H2>
-        <Content.Row>
-          <FONTS.A href={URL_APPEARIN_IPHONE} target="_blank">
-            I Will Use An iPhone
-          </FONTS.A>
-        </Content.Row>
-        <br />
-        <Content.Row>
-          <FONTS.A href={URL_APPEARIN_ANDROID} target="_blank">
-            I Will Use An Android
-          </FONTS.A>
-        </Content.Row>
+        {downloadApp}
         <Content.Seperator />
       </div>
     );

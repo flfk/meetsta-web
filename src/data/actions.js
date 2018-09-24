@@ -138,6 +138,17 @@ const getDocTicket = async ticketID => {
   return snapshot.data();
 };
 
+const updateDocTicket = async (ticketID, ticket) => {
+  try {
+    const ticketRef = db.collection(COLL_TICKETS).doc(ticketID);
+    const updatedDocTicket = ticketRef.update({ ...ticket });
+    return updatedDocTicket;
+  } catch (error) {
+    console.error('Error updating ticket ', error);
+  }
+  return {};
+};
+
 const getNewOrderNum = async () => {
   const lastOrderRef = db.collection(COLL_UTILS).doc(DOC_LAST_ORDER);
   const snapshot = await lastOrderRef.get();
@@ -177,6 +188,7 @@ actions.updateDocRegistration = updateDocRegistration;
 
 actions.addDocTicket = addDocTicket;
 actions.getDocTicket = getDocTicket;
+actions.updateDocTicket = updateDocTicket;
 actions.getNewOrderNum = getNewOrderNum;
 actions.getDocsTicketsSold = getDocsTicketsSold;
 

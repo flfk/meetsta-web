@@ -12,13 +12,17 @@ import PlacesAutocomplete from '../components/PlacesAutocomplete';
 const propTypes = {
   dateStart: PropTypes.number,
   dateEnd: PropTypes.number,
-  handleClose: PropTypes.func
+  handleClose: PropTypes.func,
+  fromConfirmation: PropTypes.bool,
+  handleLocalTimeSubmit: PropTypes.func
 };
 
 const defaultProps = {
   dateStart: null,
   dateEnd: null,
-  handleClose: () => true
+  handleClose: () => true,
+  fromConfirmation: false,
+  handleLocalTimeSubmit: () => true
 };
 
 class TimeConverter extends React.Component {
@@ -42,8 +46,15 @@ class TimeConverter extends React.Component {
     this.setState({ endTimeFormatted: endTime });
   };
 
+  getLocationDetails = (address, updatedStartTime) => {
+    const { handleLocalTimeSubmit } = this.props;
+    handleLocalTimeSubmit(address, updatedStartTime);
+  };
+
   render() {
     const { startTimeFormatted, endTimeFormatted, dateStart, dateEnd } = this.state;
+
+    const { handleClose, fromConfirmation } = this.props;
 
     const startRow = startTimeFormatted ? (
       <div>
@@ -58,8 +69,6 @@ class TimeConverter extends React.Component {
         <FONTS.H3>{endTimeFormatted}</FONTS.H3>
       </div>
     ) : null;
-
-    const { handleClose } = this.props;
 
     return (
       <div>
@@ -77,6 +86,8 @@ class TimeConverter extends React.Component {
                 updateStartTime={this.updateStartTime}
                 dateEnd={dateEnd}
                 updateEndTime={this.updateEndTime}
+                fromConfirmation={fromConfirmation}
+                getLocationDetails={this.getLocationDetails}
               />
             </FixedDropdown>
           </Content>
