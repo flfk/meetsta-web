@@ -51,12 +51,12 @@ const H3 = styled.h3`
   margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
 `;
 
-const P = styled.span`
+const P = styled.p`
   font-size: ${FONT_SIZES.p};
   font-family: ${FONT_FAMILY.body};
   font-weight: 300;
   color: ${COLORS.greys.primary};
-  margin: 8px 0;
+  margin: 0;
   text-align: ${props => (props.centered ? 'center' : '')};
 `;
 

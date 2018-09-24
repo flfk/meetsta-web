@@ -67,7 +67,7 @@ class TimeConverter extends React.Component {
         <Popup.Card>
           <Popup.BtnClose handleClose={handleClose} />
           <Content>
-            <FONTS.H1>Local Time Calculator</FONTS.H1>
+            <FONTS.H1>Event Time Calculator</FONTS.H1>
             <DropdownFiller />
             {startRow}
             {endRow}

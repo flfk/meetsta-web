@@ -160,51 +160,45 @@ class OrderConfirmation extends React.Component {
           <span role="img" aria-label="Clapping">
             👏
           </span>{' '}
-          Thanks for getting a ticket to meet {ticket.influencerName}!
+          You're going to meet {ticket.influencerName}!
         </FONTS.H1>
-        <FONTS.H2>
-          Your time slot is{' '}
-          <FONTS.A onClick={this.handleTimePopupOpen}>{startTimeFormatted}.</FONTS.A>
-        </FONTS.H2>
         <FONTS.P>
-          <strong>1 x {ticket.name}.</strong>
+          You ordered a <strong>{ticket.name}.</strong>
           {addOnNames}
         </FONTS.P>
         <br />
         <FONTS.P>
-          Your order confirmation number is <strong>{ticket.orderNum}.</strong>
-        </FONTS.P>
+          A confirmation email has been sent to <strong>{ticket.purchaseEmail}</strong>.
+        </FONTS.P>{' '}
+        <br />
+        <FONTS.P>
+          Order confirmation <strong>#{ticket.orderNum}</strong>.
+        </FONTS.P>{' '}
+        <br />
         <Content.Seperator />
-        <FONTS.H1>What now?</FONTS.H1>
-
-        <FONTS.H2>1. Send us your Instagram Handle</FONTS.H2>
+        <FONTS.H1>Complete all 3 steps to confirm your spot</FONTS.H1>
+        <FONTS.H2>1. Send us the attendee's Instagram name</FONTS.H2>
         <FONTS.P>We will use this to send you the link for the video call on the day.</FONTS.P>
         {instaSubmit}
-
-        <FONTS.H2>2. Double check when the event starts where you live</FONTS.H2>
-        <FONTS.P>
-          If you don't live in California, you will need to double check when the event starts in
-          your local time.
-        </FONTS.P>
+        <FONTS.H2>2. Check the event start time</FONTS.H2>
+        <FONTS.P> Find out what time you can join the queue for the event. </FONTS.P>
         <br />
-        <Btn onClick={this.handleTimePopupOpen}>Check My Time</Btn>
-
-        <FONTS.H2>3. Download AppearIn</FONTS.H2>
-        <FONTS.P>AppearIn is the video call app we will use for the event.</FONTS.P>
+        <Content />
+        <Btn primary fill onClick={this.handleTimePopupOpen}>
+          Check My Time
+        </Btn>
+        <FONTS.H2>3. Download the video call app</FONTS.H2>
+        <Content.Row>
+          <FONTS.A href={URL_APPEARIN_IPHONE} target="_blank">
+            I Will Use An iPhone
+          </FONTS.A>
+        </Content.Row>
         <br />
-        <Content.Anchor href={URL_APPEARIN_IPHONE} target="_blank">
-          <Btn>I Have An iPhone</Btn>
-        </Content.Anchor>
-        <br />
-        <Content.Anchor href={URL_APPEARIN_ANDROID} target="_blank">
-          <Btn>I Have An Android</Btn>
-        </Content.Anchor>
-
-        <FONTS.H2>4. You will receive a confirmation email</FONTS.H2>
-        <FONTS.P>
-          If you do not receive this email within a few minutes, check your spam folder. This email
-          will have a link to get you back to this page later.
-        </FONTS.P>
+        <Content.Row>
+          <FONTS.A href={URL_APPEARIN_ANDROID} target="_blank">
+            I Will Use An Android
+          </FONTS.A>
+        </Content.Row>
         <Content.Seperator />
       </div>
     );
@@ -241,6 +235,7 @@ class OrderConfirmation extends React.Component {
         <FONTS.P>
           Send us en email at <FONTS.A href={`mailto: ${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</FONTS.A>
         </FONTS.P>
+        <br />
         <FONTS.P>
           Or message us on Instagram at{' '}
           <FONTS.A href={CONTACT_INSTAGRAM}>{CONTACT_INSTAGRAM}</FONTS.A>
