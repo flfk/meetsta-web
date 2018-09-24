@@ -9,7 +9,7 @@ import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import PopupTime from './PopupTime';
 
-import db from '../data/firebase';
+// import db from '../data/firebase';
 import actions from '../data/actions';
 
 const URL_APPEARIN_IPHONE =
@@ -26,7 +26,9 @@ class OrderConfirmation extends React.Component {
   state = {
     ticketID: null,
     startTimeFormatted: '',
-    submittedInsta: false,
+    hasSubmittedInsta: false,
+    hasCheckedLocalTime: false,
+    hasDownloadedApp: false,
     ticket: {
       eventID: '',
       name: '',
@@ -37,14 +39,17 @@ class OrderConfirmation extends React.Component {
       purchaseNameLast: '',
       purchaseEmail: '',
       instaHandle: '',
+      location: '',
+      startTimeLocalised: '',
+      mobileOS: '',
       purchaseDate: null,
       orderNum: '',
       payPalPaymentID: '',
       userID: '',
       hasStarted: false,
-      dateStart: '',
-      showTimePopup: false
-    }
+      dateStart: ''
+    },
+    showTimePopup: false
   };
 
   componentDidMount() {
@@ -64,11 +69,15 @@ class OrderConfirmation extends React.Component {
     const ticketID = this.getOrderId();
     const ticket = await actions.getDocTicket(ticketID);
     const startTimeFormatted = this.formatStartTime(ticket.startTime);
-    const submittedInsta = ticket.instaHandle ? true : false;
+    const hasSubmittedInsta = ticket.instaHandle ? true : false;
+    const hasCheckedLocalTime = ticket.startTimeLocalised ? true : false;
+    const hasDownloadedApp = ticket.mobileOS ? true : false;
     this.setState({
       ticket: { ...ticket },
       startTimeFormatted,
-      submittedInsta,
+      hasSubmittedInsta,
+      hasCheckedLocalTime,
+      hasDownloadedApp,
       dateStart: ticket.startTime
     });
   };
@@ -82,11 +91,11 @@ class OrderConfirmation extends React.Component {
 
   handleTimePopupClose = () => this.setState({ showTimePopup: false });
 
-  updateInstaHandle = async instaHandle => {
-    const ticketID = this.getOrderId();
-    const ticketRef = db.collection('tickets').doc(ticketID);
-    const updateInstaHandle = ticketRef.update({ instaHandle });
-  };
+  // updateInstaHandle = async instaHandle => {
+  //   const ticketID = this.getOrderId();
+  //   const ticketRef = db.collection('tickets').doc(ticketID);
+  //   const updateInstaHandle = ticketRef.update({ instaHandle });
+  // };
 
   handleChangeInstaHandle = event => {
     const { ticket } = this.state;
@@ -95,23 +104,64 @@ class OrderConfirmation extends React.Component {
   };
 
   handleInstaSubmit = () => {
+    const ticketID = this.getOrderId();
     const { ticket } = this.state;
     const { instaHandle } = ticket;
     if (instaHandle) {
-      this.updateInstaHandle(instaHandle);
-      this.setState({ submittedInsta: true });
+      const ticketUpdated = { ...ticket, instaHandle };
+      actions.updateDocTicket(ticketID, ticketUpdated);
+      this.setState({ hasSubmittedInsta: true });
     }
   };
 
-  handleInstaEdit = () => {
-    this.setState({ submittedInsta: false });
+  handleLocalTimeSubmit = (location, startTimeLocalised) => {
+    const ticketID = this.getOrderId();
+    const { ticket } = this.state;
+    const ticketUpdated = { ...ticket, location, startTimeLocalised };
+    actions.updateDocTicket(ticketID, ticketUpdated);
+    this.setState({ ticket: ticketUpdated, hasCheckedLocalTime: true });
+  };
+
+  handleAppDownload = event => {
+    const ticketID = this.getOrderId();
+    const { ticket } = this.state;
+    const linkClicked = event.target.href;
+    const mobileOS = linkClicked === URL_APPEARIN_IPHONE ? 'iPhone' : 'Android';
+    const ticketUpdated = { ...ticket, mobileOS };
+    actions.updateDocTicket(ticketID, ticketUpdated);
+    this.setState({ ticket: ticketUpdated, hasDownloadedApp: true });
+  };
+
+  handleEditInsta = () => {
+    this.setState({ hasSubmittedInsta: false });
+  };
+
+  handleEditTime = () => {
+    this.setState({ hasCheckedLocalTime: false });
+  };
+
+  handleEditAppDownload = () => {
+    this.setState({ hasDownloadedApp: false });
   };
 
   render() {
-    const { ticket, startTimeFormatted, showTimePopup, dateStart, submittedInsta } = this.state;
+    const {
+      ticket,
+      startTimeFormatted,
+      showTimePopup,
+      dateStart,
+      hasSubmittedInsta,
+      hasCheckedLocalTime,
+      hasDownloadedApp
+    } = this.state;
 
     const timePopup = showTimePopup ? (
-      <PopupTime handleClose={this.handleTimePopupClose} dateStart={dateStart} />
+      <PopupTime
+        handleClose={this.handleTimePopupClose}
+        dateStart={dateStart}
+        fromConfirmation={true}
+        handleLocalTimeSubmit={this.handleLocalTimeSubmit}
+      />
     ) : null;
 
     const instaForm = (
@@ -129,17 +179,19 @@ class OrderConfirmation extends React.Component {
 
     const instaSubmitted = (
       <div>
-        <FONTS.H3>
-          <span role="img" aria-label="Tick">
-            ✅
-          </span>{' '}
-          {ticket.instaHandle}
-          <Btn.Tertiary onClick={this.handleInstaEdit}>Edit</Btn.Tertiary>
-        </FONTS.H3>
+        <FONTS.P>
+          <strong>
+            <span role="img" aria-label="Tick">
+              ✅
+            </span>{' '}
+            {ticket.instaHandle}
+            <Btn.Tertiary onClick={this.handleEditInsta}>Edit</Btn.Tertiary>
+          </strong>
+        </FONTS.P>
       </div>
     );
 
-    const instaSubmit = submittedInsta ? instaSubmitted : instaForm;
+    const instaSubmit = hasSubmittedInsta ? instaSubmitted : instaForm;
 
     const { addOns } = ticket;
     let addOnNames = <div />;
@@ -153,58 +205,118 @@ class OrderConfirmation extends React.Component {
       ));
     }
 
-    const confirmationTickets = (
+    const checkedStartTime = true;
+
+    const timeBtn = (
+      <Btn primary fill onClick={this.handleTimePopupOpen}>
+        Check My Time
+      </Btn>
+    );
+
+    const timeChecked = (
       <div>
+        <FONTS.P>
+          <strong>
+            <span role="img" aria-label="Tick">
+              ✅
+            </span>{' '}
+            {ticket.startTimeLocalised} for {ticket.location}.
+            <Btn.Tertiary onClick={this.handleTimePopupOpen}>Edit</Btn.Tertiary>
+          </strong>
+        </FONTS.P>
+      </div>
+    );
+
+    const checkStartTime = hasCheckedLocalTime ? timeChecked : timeBtn;
+
+    const downloadBtns = (
+      <div>
+        <Content.Row>
+          <FONTS.A href={URL_APPEARIN_IPHONE} target="_blank" onClick={this.handleAppDownload}>
+            I Will Use An iPhone
+          </FONTS.A>
+        </Content.Row>
+        <br />
+        <Content.Row>
+          <FONTS.A href={URL_APPEARIN_ANDROID} target="_blank" onClick={this.handleAppDownload}>
+            I Will Use An Android
+          </FONTS.A>
+        </Content.Row>
+      </div>
+    );
+
+    const appDownloaded = (
+      <div>
+        <FONTS.P>
+          <strong>
+            <span role="img" aria-label="Tick">
+              ✅
+            </span>{' '}
+            I downloaded the {ticket.mobileOS} app.
+            <Btn.Tertiary onClick={this.handleEditAppDownload}>Edit</Btn.Tertiary>
+          </strong>
+        </FONTS.P>
+      </div>
+    );
+
+    const downloadApp = hasDownloadedApp ? appDownloaded : downloadBtns;
+
+    const confirmationTitle =
+      hasSubmittedInsta && hasCheckedLocalTime && hasDownloadedApp ? (
         <FONTS.H1>
-          {' '}
           <span role="img" aria-label="Clapping">
             👏
           </span>{' '}
-          Thanks for getting a ticket to meet {ticket.influencerName}!
+          You're ready to meet {ticket.influencerName}!
         </FONTS.H1>
-        <FONTS.H2>
-          Your time slot is{' '}
-          <FONTS.A onClick={this.handleTimePopupOpen}>{startTimeFormatted}.</FONTS.A>
-        </FONTS.H2>
+      ) : (
+        <FONTS.H1>
+          <span role="img" aria-label="Clapping">
+            👏
+          </span>{' '}
+          You're almost ready to meet {ticket.influencerName}!
+        </FONTS.H1>
+      );
+    const stepsTitle =
+      hasSubmittedInsta && hasCheckedLocalTime && hasDownloadedApp ? (
+        <FONTS.H1>
+          <span role="img" aria-label="Tick">
+            ✅
+          </span>{' '}
+          All steps completed!
+        </FONTS.H1>
+      ) : (
+        <FONTS.H1>Complete all 3 steps to confirm your spot</FONTS.H1>
+      );
+
+    const confirmationTickets = (
+      <div>
+        {confirmationTitle}
         <FONTS.P>
-          <strong>1 x {ticket.name}.</strong>
+          You ordered <br />
+          <strong>1 x {ticket.name}</strong>
           {addOnNames}
         </FONTS.P>
         <br />
         <FONTS.P>
-          Your order confirmation number is <strong>{ticket.orderNum}.</strong>
-        </FONTS.P>
+          A confirmation email has been sent to <strong>{ticket.purchaseEmail}</strong>.
+        </FONTS.P>{' '}
+        <br />
+        <FONTS.P>
+          Order confirmation <strong>#{ticket.orderNum}</strong>.
+        </FONTS.P>{' '}
+        <br />
         <Content.Seperator />
-        <FONTS.H1>What now?</FONTS.H1>
-
-        <FONTS.H2>1. Send us your Instagram Handle</FONTS.H2>
+        <FONTS.H1>{stepsTitle}</FONTS.H1>
+        <FONTS.H2>1. Send us the attendee's Instagram name</FONTS.H2>
         <FONTS.P>We will use this to send you the link for the video call on the day.</FONTS.P>
         {instaSubmit}
-
-        <FONTS.H2>2. Double check when the event starts where you live</FONTS.H2>
-        <FONTS.P>
-          If you don't live in California, you will need to double check when the event starts in
-          your local time.
-        </FONTS.P>
+        <FONTS.H2>2. Check the event start time</FONTS.H2>
+        <FONTS.P> Find out what time you can join the queue for the event. </FONTS.P>
         <br />
-        <Btn onClick={this.handleTimePopupOpen}>Check My Time</Btn>
-
-        <FONTS.H2>3. Download AppearIn</FONTS.H2>
-        <FONTS.P>AppearIn is the video call app we will use for the event.</FONTS.P>
-        <br />
-        <Content.Anchor href={URL_APPEARIN_IPHONE} target="_blank">
-          <Btn>I Have An iPhone</Btn>
-        </Content.Anchor>
-        <br />
-        <Content.Anchor href={URL_APPEARIN_ANDROID} target="_blank">
-          <Btn>I Have An Android</Btn>
-        </Content.Anchor>
-
-        <FONTS.H2>4. You will receive a confirmation email</FONTS.H2>
-        <FONTS.P>
-          If you do not receive this email within a few minutes, check your spam folder. This email
-          will have a link to get you back to this page later.
-        </FONTS.P>
+        {checkStartTime}
+        <FONTS.H2>3. Download the video call app</FONTS.H2>
+        {downloadApp}
         <Content.Seperator />
       </div>
     );
@@ -241,6 +353,7 @@ class OrderConfirmation extends React.Component {
         <FONTS.P>
           Send us en email at <FONTS.A href={`mailto: ${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</FONTS.A>
         </FONTS.P>
+        <br />
         <FONTS.P>
           Or message us on Instagram at{' '}
           <FONTS.A href={CONTACT_INSTAGRAM}>{CONTACT_INSTAGRAM}</FONTS.A>

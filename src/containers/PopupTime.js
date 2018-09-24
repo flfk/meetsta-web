@@ -4,6 +4,7 @@ import { FaTimes } from 'react-icons/fa';
 
 import styled from 'styled-components';
 
+import Btn from '../components/Btn';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import Popup from '../components/Popup';
@@ -12,13 +13,17 @@ import PlacesAutocomplete from '../components/PlacesAutocomplete';
 const propTypes = {
   dateStart: PropTypes.number,
   dateEnd: PropTypes.number,
-  handleClose: PropTypes.func
+  handleClose: PropTypes.func,
+  fromConfirmation: PropTypes.bool,
+  handleLocalTimeSubmit: PropTypes.func
 };
 
 const defaultProps = {
   dateStart: null,
   dateEnd: null,
-  handleClose: () => true
+  handleClose: () => true,
+  fromConfirmation: false,
+  handleLocalTimeSubmit: () => true
 };
 
 class TimeConverter extends React.Component {
@@ -42,8 +47,15 @@ class TimeConverter extends React.Component {
     this.setState({ endTimeFormatted: endTime });
   };
 
+  getLocationDetails = (address, updatedStartTime) => {
+    const { handleLocalTimeSubmit } = this.props;
+    handleLocalTimeSubmit(address, updatedStartTime);
+  };
+
   render() {
     const { startTimeFormatted, endTimeFormatted, dateStart, dateEnd } = this.state;
+
+    const { handleClose, fromConfirmation } = this.props;
 
     const startRow = startTimeFormatted ? (
       <div>
@@ -59,7 +71,11 @@ class TimeConverter extends React.Component {
       </div>
     ) : null;
 
-    const { handleClose } = this.props;
+    const BtnComplete = startTimeFormatted ? (
+      <Btn primary fill onClick={handleClose}>
+        Close
+      </Btn>
+    ) : null;
 
     return (
       <div>
@@ -67,16 +83,19 @@ class TimeConverter extends React.Component {
         <Popup.Card>
           <Popup.BtnClose handleClose={handleClose} />
           <Content>
-            <FONTS.H1>Local Time Calculator</FONTS.H1>
+            <FONTS.H1>Event Time Calculator</FONTS.H1>
             <DropdownFiller />
             {startRow}
             {endRow}
+            {BtnComplete}
             <FixedDropdown>
               <PlacesAutocomplete
                 dateStart={dateStart}
                 updateStartTime={this.updateStartTime}
                 dateEnd={dateEnd}
                 updateEndTime={this.updateEndTime}
+                fromConfirmation={fromConfirmation}
+                getLocationDetails={this.getLocationDetails}
               />
             </FixedDropdown>
           </Content>

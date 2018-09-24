@@ -60,31 +60,40 @@ class Schedule extends React.Component {
 
     let schedule = <div />;
 
-    // const IGHandle = ticket.IGHandle ? ticket.IGHandle : 'IG missing';
-
     if (tickets) {
-      schedule = tickets.map(ticket => (
-        <div key={ticket.orderNum}>
-          <Content.Row>
-            <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
-            <div>
-              <FONTS.P>{ticket.name}</FONTS.P>
-              {ticket.addOns.map(addOn => (
-                <div key={addOn}>
-                  <FONTS.P>{addOn}</FONTS.P>
-                </div>
-              ))}
-            </div>
-            <FONTS.P>{ticket.IGHandle}</FONTS.P>
-            <div>
-              <FONTS.P>{ticket.purchaseNameFirst}</FONTS.P>
-              <br />
-              <FONTS.P>{ticket.instagramHandle}</FONTS.P>
-            </div>
-          </Content.Row>
-          <Content.Seperator />
-        </div>
-      ));
+      schedule = tickets.map(ticket => {
+        const instaHandle = ticket.instaHandle ? (
+          <FONTS.P>
+            <strong>{ticket.instaHandle}</strong>
+          </FONTS.P>
+        ) : (
+          <FONTS.ERROR noMargin>missing IG</FONTS.ERROR>
+        );
+
+        return (
+          <div key={ticket.orderNum}>
+            <Content.RowGrid>
+              <div>
+                {instaHandle}
+                <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
+                <FONTS.P>{ticket.purchaseNameFirst}</FONTS.P>
+                <FONTS.P>Order #{ticket.orderNum}</FONTS.P>
+              </div>
+              <div>
+                <FONTS.P>
+                  <strong>{ticket.name}</strong>
+                </FONTS.P>
+                {ticket.addOns.map(addOn => (
+                  <div key={addOn}>
+                    <FONTS.P>{addOn}</FONTS.P>
+                  </div>
+                ))}
+              </div>
+            </Content.RowGrid>
+            <Content.Seperator />
+          </div>
+        );
+      });
     }
 
     return (

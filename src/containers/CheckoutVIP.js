@@ -19,17 +19,10 @@ const PAYPAL_VARIABLE_FEE = 0.036;
 const PAYPAL_FIXED_FEE = 0.3;
 const TICKETS_PER_BREAK = 5;
 const BREAK_LENGTH_MINS = 5;
+const QUEUE_START_PRE_EVENT_MINS = 20;
 const MILLISECS_PER_MIN = 60000;
 
 const DEFAULT_EVENT_ID = 'default-event-id';
-
-const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 8, additionalMins: 5 },
-  { name: 'Autographed selfie from your meet and greet', price: 2 },
-  { name: 'Follow back and comment on your most recent', price: 5 },
-  { name: 'Personalized thank you video', price: 5 },
-  { name: 'Video recording of your meet and greet', price: 10 }
-];
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -44,6 +37,7 @@ const defaultProps = {};
 
 class Checkout extends React.Component {
   state = {
+    addOns: [],
     eventID: '',
     dateStart: null,
     dateEnd: null,
@@ -133,7 +127,7 @@ class Checkout extends React.Component {
       email
     } = this.state;
     const orderNum = await actions.getNewOrderNum();
-    const startTime = await this.getTimeSlot();
+    // const startTime = await this.getTimeSlot();
     const { addOnsSelected } = ticketSelected;
     const additionalMins = addOnsSelected.reduce((total, addOn) => {
       if (addOn.additionalMins) {
@@ -151,12 +145,15 @@ class Checkout extends React.Component {
       priceBase: ticketSelected.priceBase,
       fee: this.calculateFee(ticketSelected.priceTotal),
       lengthMins: ticketSelected.lengthMins + additionalMins,
-      startTime,
+      startTime: this.getQueueStartTime(),
       purchaseNameFirst: nameFirst,
       purchaseNameLast: nameLast,
       purchaseEmail: email,
       purchaseDate: Date.now(),
       instaHandle: '',
+      location: '',
+      startTimeLocalised: '',
+      mobileOS: '',
       orderNum,
       payPalPaymentID,
       userID: '',
@@ -169,22 +166,28 @@ class Checkout extends React.Component {
     this.setState({ ticketID: newTicket.id });
   };
 
-  getTimeSlot = async () => {
-    const { eventID, dateStart } = this.state;
-    const ticketsSold = await actions.getDocsTicketsSold(eventID);
-    const ticketsSoldCount = ticketsSold.length;
-    const minsSold = ticketsSold.reduce((total, ticket) => (total += ticket.lengthMins), 0);
-    let breakLengthMins = 0;
-    if (ticketsSoldCount >= TICKETS_PER_BREAK) {
-      breakLengthMins = Math.floor(ticketsSoldCount / TICKETS_PER_BREAK) * BREAK_LENGTH_MINS;
-    }
-    const startTimeMins = 0;
-    const millisecsFromStart = (startTimeMins + minsSold + breakLengthMins) * MILLISECS_PER_MIN;
-    // Time slot in milliseconds
-    const timeSlot = dateStart + millisecsFromStart;
-    // const timeSlot = moment.tz(timeSlotMillisecs, 'America/Los_Angeles').format();
-    return timeSlot;
+  getQueueStartTime = () => {
+    const { dateStart } = this.state;
+    const dateStartQueue = dateStart - QUEUE_START_PRE_EVENT_MINS * MILLISECS_PER_MIN;
+    return dateStartQueue;
   };
+
+  // getTimeSlot = async () => {
+  //   const { eventID, dateStart } = this.state;
+  //   const ticketsSold = await actions.getDocsTicketsSold(eventID);
+  //   const ticketsSoldCount = ticketsSold.length;
+  //   const minsSold = ticketsSold.reduce((total, ticket) => (total += ticket.lengthMins), 0);
+  //   let breakLengthMins = 0;
+  //   if (ticketsSoldCount >= TICKETS_PER_BREAK) {
+  //     breakLengthMins = Math.floor(ticketsSoldCount / TICKETS_PER_BREAK) * BREAK_LENGTH_MINS;
+  //   }
+  //   const startTimeMins = 0;
+  //   const millisecsFromStart = (startTimeMins + minsSold + breakLengthMins) * MILLISECS_PER_MIN;
+  //   // Time slot in milliseconds
+  //   const timeSlot = dateStart + millisecsFromStart;
+  //   // const timeSlot = moment.tz(timeSlotMillisecs, 'America/Los_Angeles').format();
+  //   return timeSlot;
+  // };
 
   toConfirmation = () => {
     const { ticketID, paid } = this.state;
@@ -304,7 +307,7 @@ class Checkout extends React.Component {
           onSelect={this.handleTicketSelect}
           isPremium={ticket.isPremium}
           extras={ticket.extras}
-          addOns={ticket.addOns}
+          addOns={addOns}
         />
       ));
     }

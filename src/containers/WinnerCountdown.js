@@ -14,15 +14,6 @@ import TicketImage from '../components/TicketImage';
 
 import actions from '../data/actions';
 
-// TODO MAKE DYNAMIC XX
-const ADD_ONS = [
-  { name: 'Additional 5 minutes', price: 8 },
-  { name: 'Autographed selfie from your meet and greet', price: 2 },
-  { name: 'Follow back and comment on your most recent', price: 5 },
-  { name: 'Personalized thank you video', price: 5 },
-  { name: 'Video recording of your meet and greet', price: 10 }
-];
-
 const propTypes = {};
 
 const defaultProps = {};
@@ -102,7 +93,7 @@ class WinnerCountdown extends React.Component {
 
       const tickets = await actions.getCollEventTickets(formattedDataRegistration.eventID);
       const ticketVIP = tickets[0];
-      ticketVIP['addOns'] = ADD_ONS;
+
       this.setState({
         registrationID,
         ...formattedDataRegistration,
