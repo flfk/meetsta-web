@@ -1,6 +1,6 @@
 {
   "name": "landing-page",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "private": true,
   "dependencies": {
     "dotenv": "^6.0.0",
