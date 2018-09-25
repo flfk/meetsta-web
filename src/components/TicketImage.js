@@ -12,6 +12,8 @@ import TICKET_PREMIUM_DYLAN from '../assets/ticketImages/TicketPremiumDylanHartm
 import TICKET_STANDARD_DYLAN from '../assets/ticketImages/TicketStandardDylanHartman.png';
 import TICKET_PREMIUM_LUIGI from '../assets/ticketImages/TicketPremiumLuigiCastillo.png';
 import TICKET_STANDARD_LUIGI from '../assets/ticketImages/TicketStandardLuigiCastillo.png';
+import TICKET_PREMIUM_JON from '../assets/ticketImages/TicketPremiumJonKlaasen.png';
+import TICKET_STANDARD_JON from '../assets/ticketImages/TicketStandardJonKlaasen.png';
 import MEDIA from '../utils/Media';
 
 const propTypes = {
@@ -79,6 +81,13 @@ const ImageTicket = props => {
         ticketImg = TICKET_PREMIUM_LUIGI;
       } else {
         ticketImg = TICKET_STANDARD_LUIGI;
+      }
+      break;
+    case 'meet-jon-klaasen':
+      if (isPremium) {
+        ticketImg = TICKET_PREMIUM_JON;
+      } else {
+        ticketImg = TICKET_STANDARD_JON;
       }
       break;
     default:

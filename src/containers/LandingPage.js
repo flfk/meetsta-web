@@ -7,7 +7,7 @@ import EmailForm from '../components/EmailForm';
 import Header from '../components/Header';
 import Screenshots from '../components/Screenshots';
 
-const DEFAULT_EVENT_ID = 'meet-mackenzie-sol-2';
+const DEFAULT_EVENT_ID = 'meet-dylan-hartman';
 
 class LandingPage extends Component {
   // <Background>
