@@ -17,7 +17,6 @@ import Schedule from './containers/Schedule';
 import Main from './components/Main';
 import NavBar from './containers/NavBar';
 import TermsConditions from './containers/TermsConditions';
-import TwilioTest from './twilio/TwilioTest';
 import PrivacyPolicy from './containers/PrivacyPolicy';
 import OrderConfirmation from './containers/OrderConfirmation';
 import WinnerCountdown from './containers/WinnerCountdown';
@@ -53,8 +52,6 @@ class App extends Component {
                 <Route path="/privacyPolicy" component={PrivacyPolicy} />
                 <Route path="/contactus" component={ContactUs} />
                 <Route path="/countdown" component={WinnerCountdown} />
-
-                <Route path="/twiliotest" component={TwilioTest} />
               </Switch>
             </Main>
           </div>
