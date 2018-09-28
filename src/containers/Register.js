@@ -14,6 +14,7 @@ import EVENT_IMAGE_DENJIEL from '../assets/eventImages/EventImageDenjiel2.png';
 import EVENT_IMAGE_DYLAN from '../assets/eventImages/EventImageDylanHartman.png';
 import EVENT_IMAGE_LUIGI from '../assets/eventImages/EventImageLuigiCastillo.png';
 import EVENT_IMAGE_JON from '../assets/eventImages/EventImageJonKlaasen.png';
+import EVENT_IMAGE_LUCA from '../assets/eventImages/EventImageMostlyLuca.png';
 import FooterEvents from '../components/FooterEvents';
 import FONTS from '../utils/Fonts';
 import PopupTime from './PopupTime';
@@ -246,6 +247,9 @@ class Register extends React.Component {
         break;
       case 'meet-jon-klaasen':
         eventImg = <img src={EVENT_IMAGE_JON} alt="Jon Klaasen Online Meet & Greet" />;
+        break;
+      case 'meet-mostly-luca':
+        eventImg = <img src={EVENT_IMAGE_LUCA} alt="Mostly Luca Online Meet & Greet" />;
         break;
       default:
         eventImg = null;
