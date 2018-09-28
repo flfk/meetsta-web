@@ -124,7 +124,8 @@ class Checkout extends React.Component {
       ticketSelected,
       nameFirst,
       nameLast,
-      email
+      email,
+      dateStart
     } = this.state;
     const orderNum = await actions.getNewOrderNum();
     // const startTime = await this.getTimeSlot();
@@ -145,7 +146,7 @@ class Checkout extends React.Component {
       priceBase: ticketSelected.priceBase,
       fee: this.calculateFee(ticketSelected.priceTotal),
       lengthMins: ticketSelected.lengthMins + additionalMins,
-      startTime: this.getQueueStartTime(),
+      startTime: dateStart,
       purchaseNameFirst: nameFirst,
       purchaseNameLast: nameLast,
       purchaseEmail: email,
@@ -166,11 +167,11 @@ class Checkout extends React.Component {
     this.setState({ ticketID: newTicket.id });
   };
 
-  getQueueStartTime = () => {
-    const { dateStart } = this.state;
-    const dateStartQueue = dateStart - QUEUE_START_PRE_EVENT_MINS * MILLISECS_PER_MIN;
-    return dateStartQueue;
-  };
+  // getQueueStartTime = () => {
+  //   const { dateStart } = this.state;
+  //   const dateStartQueue = dateStart - QUEUE_START_PRE_EVENT_MINS * MILLISECS_PER_MIN;
+  //   return dateStartQueue;
+  // };
 
   // getTimeSlot = async () => {
   //   const { eventID, dateStart } = this.state;

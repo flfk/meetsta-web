@@ -312,7 +312,7 @@ class OrderConfirmation extends React.Component {
         <FONTS.P>We will use this to send you the link for the video call on the day.</FONTS.P>
         {instaSubmit}
         <FONTS.H2>2. Check the event start time</FONTS.H2>
-        <FONTS.P> Find out what time you can join the queue for the event. </FONTS.P>
+        <FONTS.P> Find out when the event starts for you. </FONTS.P>
         <br />
         {checkStartTime}
         <FONTS.H2>3. Download the video call app</FONTS.H2>
