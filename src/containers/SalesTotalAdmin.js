@@ -84,6 +84,11 @@ class Sales extends React.Component {
 
   getRevenue = event => event.tickets.reduce((total, ticket) => total + ticket.priceTotal, 0);
 
+  getRevenueTickets = event => event.tickets.reduce((total, ticket) => total + ticket.priceBase, 0);
+
+  getRevenueAddOns = event =>
+    event.tickets.reduce((total, ticket) => total + (ticket.priceTotal - ticket.priceBase), 0);
+
   getTicketsSolds = event => event.tickets.length;
 
   getAddOnsSolds = event =>
@@ -128,6 +133,8 @@ class Sales extends React.Component {
     // const addOnsSold = tickets.reduce((total, ticket) => total + ticket.addOns.length, 0);
 
     let totalRevenue = 0;
+    let totalRevenueTickets = 0;
+    let totalRevenueAddOns = 0;
     let totalTicketsSold = 0;
     let totalAddOnsSold = 0;
     let totalRegistrations = 0;
@@ -142,6 +149,8 @@ class Sales extends React.Component {
       const eventsFiltered = events.filter(event => !(TEST_EVENT_IDS.indexOf(event.eventID) > -1));
       eventsDiv = eventsFiltered.map(event => {
         const revenue = this.getRevenue(event);
+        const revenueTickets = this.getRevenueTickets(event);
+        const revenueAddOns = this.getRevenueAddOns(event);
         const ticketsSold = this.getTicketsSolds(event);
         const addOnsSold = this.getAddOnsSolds(event);
         const registrations = this.getRegistrations(event);
@@ -150,6 +159,8 @@ class Sales extends React.Component {
         const triviaCompletions = this.getTaskCompletions(event, 'hasDoneTrivia');
 
         totalRevenue += revenue;
+        totalRevenueTickets += revenueTickets;
+        totalRevenueAddOns += revenueAddOns;
         totalTicketsSold += ticketsSold;
         totalAddOnsSold += addOnsSold;
         totalRegistrations += registrations;
@@ -161,6 +172,10 @@ class Sales extends React.Component {
           <div key={event.eventID}>
             <FONTS.H3>{event.eventID}</FONTS.H3>
             <FONTS.P>${revenue.toFixed(2)} total revenue</FONTS.P>
+            <br />
+            <FONTS.P>${revenueTickets.toFixed(2)} ticket revenue</FONTS.P>
+            <br />
+            <FONTS.P>${revenueAddOns.toFixed(2)} add on revenue</FONTS.P>
             <br />
             <FONTS.P>{ticketsSold} tickets sold</FONTS.P>
             <br />
@@ -184,6 +199,12 @@ class Sales extends React.Component {
         <FONTS.H1>Total Sales Summary</FONTS.H1>
         <FONTS.H3>
           ${totalRevenue.toFixed(2)} <FONTS.P>total revenue</FONTS.P>
+        </FONTS.H3>
+        <FONTS.H3>
+          ${totalRevenueTickets.toFixed(2)} <FONTS.P>total ticket revenue</FONTS.P>
+        </FONTS.H3>
+        <FONTS.H3>
+          ${totalRevenueAddOns.toFixed(2)} <FONTS.P>total addOn revenue</FONTS.P>
         </FONTS.H3>
         <FONTS.H3>
           ${(totalRevenue * (1 - MEETSTA_COMMISSION)).toFixed(2)}{' '}
