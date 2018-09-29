@@ -47,24 +47,32 @@ class PlacesComponent extends React.Component {
     } = this.props;
     try {
       const newStartTime = await this.getUpdatedDate(address, dateStart);
+      let newEndTime = null;
       updateStartTime(newStartTime);
       if (dateEnd) {
-        const newEndTime = await this.getUpdatedDate(address, dateEnd);
+        newEndTime = await this.getUpdatedDate(address, dateEnd);
         updateEndTime(newEndTime);
       }
       if (fromConfirmation) {
-        getLocationDetails(address, newStartTime);
+        const dateStartLocalised = await this.getOffsetDate(address, dateStart);
+        const dateEndLocalised = await this.getOffsetDate(address, dateEnd);
+        getLocationDetails(address, dateStartLocalised, dateEndLocalised);
       }
     } catch (error) {
       console.error('Google Maps API error ', error);
     }
   };
 
-  getUpdatedDate = async (address, date) => {
+  getOffsetDate = async (address, date) => {
     const location = await this.getLocation(address);
     const { lat, lng } = location;
     const offsetUTCMillis = await this.getUTCOffsetMillis(lat, lng);
     const newDate = date + offsetUTCMillis;
+    return newDate;
+  };
+
+  getUpdatedDate = async (address, date) => {
+    const newDate = await this.getOffsetDate(address, date);
     const newDateFormatted = this.formatStartTime(newDate);
     return newDateFormatted;
   };

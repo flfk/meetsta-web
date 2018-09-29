@@ -47,9 +47,9 @@ class TimeConverter extends React.Component {
     this.setState({ endTimeFormatted: endTime });
   };
 
-  getLocationDetails = (address, updatedStartTime) => {
+  getLocationDetails = (address, dateStartLocalised, dateEndLocalised) => {
     const { handleLocalTimeSubmit } = this.props;
-    handleLocalTimeSubmit(address, updatedStartTime);
+    handleLocalTimeSubmit(address, dateStartLocalised, dateEndLocalised);
   };
 
   render() {
@@ -72,7 +72,7 @@ class TimeConverter extends React.Component {
     ) : null;
 
     const BtnComplete = startTimeFormatted ? (
-      <Btn primary fill onClick={handleClose}>
+      <Btn primary fill="true" onClick={handleClose}>
         Close
       </Btn>
     ) : null;

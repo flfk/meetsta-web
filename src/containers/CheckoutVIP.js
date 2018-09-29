@@ -153,7 +153,7 @@ class Checkout extends React.Component {
       purchaseDate: Date.now(),
       instaHandle: '',
       location: '',
-      startTimeLocalised: '',
+      timeLocalised: '',
       mobileOS: '',
       orderNum,
       payPalPaymentID,

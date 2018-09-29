@@ -25,10 +25,13 @@ const propTypes = {};
 class OrderConfirmation extends React.Component {
   state = {
     ticketID: null,
+    eventID: null,
     startTimeFormatted: '',
     hasSubmittedInsta: false,
     hasCheckedLocalTime: false,
     hasDownloadedApp: false,
+    dateStart: 0,
+    dateEnd: 0,
     ticket: {
       eventID: '',
       name: '',
@@ -40,7 +43,7 @@ class OrderConfirmation extends React.Component {
       purchaseEmail: '',
       instaHandle: '',
       location: '',
-      startTimeLocalised: '',
+      timeLocalised: '',
       mobileOS: '',
       purchaseDate: null,
       orderNum: '',
@@ -68,17 +71,21 @@ class OrderConfirmation extends React.Component {
   loadFormattedData = async () => {
     const ticketID = this.getOrderId();
     const ticket = await actions.getDocTicket(ticketID);
-    const startTimeFormatted = this.formatStartTime(ticket.startTime);
+    // const startTimeFormatted = this.formatStartTime(ticket.startTime);
+    const event = await actions.getDocEvent(ticket.eventID);
+    const { dateStart, dateEnd } = event;
     const hasSubmittedInsta = ticket.instaHandle ? true : false;
-    const hasCheckedLocalTime = ticket.startTimeLocalised ? true : false;
+    const hasCheckedLocalTime = ticket.timeLocalised ? true : false;
     const hasDownloadedApp = ticket.mobileOS ? true : false;
     this.setState({
+      dateStart,
+      dateEnd,
       ticket: { ...ticket },
-      startTimeFormatted,
+      // startTimeFormatted,
       hasSubmittedInsta,
       hasCheckedLocalTime,
-      hasDownloadedApp,
-      dateStart: ticket.startTime
+      hasDownloadedApp
+      // dateStart: ticket.startTime
     });
   };
 
@@ -114,10 +121,15 @@ class OrderConfirmation extends React.Component {
     }
   };
 
-  handleLocalTimeSubmit = (location, startTimeLocalised) => {
+  handleLocalTimeSubmit = (location, dateStartLocalised, dateEndLocalised) => {
+    const timeStart = moment.tz(dateStartLocalised, 'UTC').format('H:mm');
+    const timeEnd = moment.tz(dateEndLocalised, 'UTC').format('H:mm a, dddd, MMM Do');
+    const timeLocalised = `${timeStart} - ${timeEnd}`;
+    console.log(timeLocalised);
+
     const ticketID = this.getOrderId();
     const { ticket } = this.state;
-    const ticketUpdated = { ...ticket, location, startTimeLocalised };
+    const ticketUpdated = { ...ticket, location, timeLocalised };
     actions.updateDocTicket(ticketID, ticketUpdated);
     this.setState({ ticket: ticketUpdated, hasCheckedLocalTime: true });
   };
@@ -150,6 +162,7 @@ class OrderConfirmation extends React.Component {
       startTimeFormatted,
       showTimePopup,
       dateStart,
+      dateEnd,
       hasSubmittedInsta,
       hasCheckedLocalTime,
       hasDownloadedApp
@@ -159,6 +172,7 @@ class OrderConfirmation extends React.Component {
       <PopupTime
         handleClose={this.handleTimePopupClose}
         dateStart={dateStart}
+        dateEnd={dateEnd}
         fromConfirmation={true}
         handleLocalTimeSubmit={this.handleLocalTimeSubmit}
       />
@@ -171,7 +185,7 @@ class OrderConfirmation extends React.Component {
           value={ticket.instaHandle}
           onChange={this.handleChangeInstaHandle}
         />
-        <Btn primary fill onClick={this.handleInstaSubmit}>
+        <Btn primary fill="true" onClick={this.handleInstaSubmit}>
           Submit
         </Btn>
       </div>
@@ -197,8 +211,8 @@ class OrderConfirmation extends React.Component {
     let addOnNames = <div />;
     if (addOns) {
       addOnNames = addOns.map(addOn => (
-        <div>
-          <FONTS.P key={addOn}>
+        <div key={addOn}>
+          <FONTS.P>
             <strong>1 x {addOn}</strong>
           </FONTS.P>
         </div>
@@ -208,7 +222,7 @@ class OrderConfirmation extends React.Component {
     const checkedStartTime = true;
 
     const timeBtn = (
-      <Btn primary fill onClick={this.handleTimePopupOpen}>
+      <Btn primary fill="true" onClick={this.handleTimePopupOpen}>
         Check My Time
       </Btn>
     );
@@ -220,7 +234,7 @@ class OrderConfirmation extends React.Component {
             <span role="img" aria-label="Tick">
               ✅
             </span>{' '}
-            {ticket.startTimeLocalised} for {ticket.location}.
+            {ticket.timeLocalised} for {ticket.location}.
             <Btn.Tertiary onClick={this.handleTimePopupOpen}>Edit</Btn.Tertiary>
           </strong>
         </FONTS.P>
@@ -295,8 +309,8 @@ class OrderConfirmation extends React.Component {
         <FONTS.P>
           You ordered <br />
           <strong>1 x {ticket.name}</strong>
-          {addOnNames}
         </FONTS.P>
+        {addOnNames}
         <br />
         <FONTS.P>
           A confirmation email has been sent to <strong>{ticket.purchaseEmail}</strong>.
@@ -307,12 +321,18 @@ class OrderConfirmation extends React.Component {
         </FONTS.P>{' '}
         <br />
         <Content.Seperator />
-        <FONTS.H1>{stepsTitle}</FONTS.H1>
+        {stepsTitle}
         <FONTS.H2>1. Send us the attendee's Instagram name</FONTS.H2>
         <FONTS.P>We will use this to send you the link for the video call on the day.</FONTS.P>
         {instaSubmit}
-        <FONTS.H2>2. Check the event start time</FONTS.H2>
-        <FONTS.P> Find out when the event starts for you. </FONTS.P>
+        <FONTS.H2>2. Check when the event is</FONTS.H2>
+        <FONTS.P>
+          {' '}
+          We will send a message to your instagram when the event starts and the event queue is
+          open. <br /> <br />
+          You can join the event queue up to 15 minutes before the event starts to get your spot
+          early by replying to our message!
+        </FONTS.P>
         <br />
         {checkStartTime}
         <FONTS.H2>3. Download the video call app</FONTS.H2>

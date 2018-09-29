@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import qs from 'qs';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
@@ -22,12 +22,11 @@ import PopupRegistered from '../components/PopupRegistered';
 import InputText from '../components/InputText';
 import Wrapper from '../components/Wrapper';
 
-import db from '../data/firebase';
 import actions from '../data/actions';
 
-const propTypes = {};
+// const propTypes = {};
 
-const defaultProps = {};
+// const defaultProps = {};
 
 const DEFAULT_EVENT_ID = 'cookie-cutters';
 
@@ -316,7 +315,7 @@ class Register extends React.Component {
   }
 }
 
-Register.propTypes = propTypes;
-Register.defaultProps = defaultProps;
+// Register.propTypes = propTypes;
+// Register.defaultProps = defaultProps;
 
 export default Register;
