@@ -77,6 +77,7 @@ class Schedule extends React.Component {
                 {instaHandle}
                 <FONTS.P>{this.formatStartTime(ticket.startTime)}</FONTS.P>
                 <FONTS.P>{ticket.purchaseNameFirst}</FONTS.P>
+                <FONTS.P>{ticket.mobileOS}</FONTS.P>
                 <FONTS.P>Order #{ticket.orderNum}</FONTS.P>
               </div>
               <div>

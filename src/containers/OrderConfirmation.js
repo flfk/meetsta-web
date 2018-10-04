@@ -252,12 +252,15 @@ class OrderConfirmation extends React.Component {
         </Content.Row>
         <br />
         <Content.Row>
-          <FONTS.A href={URL_APPEARIN_ANDROID} target="_blank" onClick={this.handleAppDownload}>
-            I Will Use An Android
-          </FONTS.A>
+          <FONTS.A onClick={this.handleAppDownload}>I Will Use An Android</FONTS.A>
         </Content.Row>
       </div>
     );
+
+    const appDownloadedTxt =
+      ticket.mobileOS === 'iPhone'
+        ? 'I downloaded the iPhone app.'
+        : 'No need to download anything - turns out Android phones are smarter than iPhones.';
 
     const appDownloaded = (
       <div>
@@ -266,7 +269,7 @@ class OrderConfirmation extends React.Component {
             <span role="img" aria-label="Tick">
               ✅
             </span>{' '}
-            I downloaded the {ticket.mobileOS} app.
+            {appDownloadedTxt}
             <Btn.Tertiary onClick={this.handleEditAppDownload}>Edit</Btn.Tertiary>
           </strong>
         </FONTS.P>
