@@ -16,6 +16,7 @@ import TICKET_PREMIUM_JON from '../assets/ticketImages/TicketPremiumJonKlaasen.p
 import TICKET_STANDARD_JON from '../assets/ticketImages/TicketStandardJonKlaasen.png';
 import TICKET_PREMIUM_LUCA from '../assets/ticketImages/TicketPremiumMostlyLuca.png';
 import TICKET_STANDARD_LUCA from '../assets/ticketImages/TicketStandardMostlyLuca.png';
+import TICKET_PREMIUM_LUCA_MINI from '../assets/ticketImages/TicketPremiumMostlyLucaMini.png';
 import MEDIA from '../utils/Media';
 
 const propTypes = {
@@ -26,24 +27,6 @@ const propTypes = {
 const defaultProps = {
   isPremium: false
 };
-
-const WrapperTicketImage = styled.div`
-  height: 200px;
-  width: 416px;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
-  margin: 8px 0;
-  img {
-    height: 100%;
-    width: 100%;
-    border-radius: 5px;
-  }
-
-  ${MEDIA.tablet} {
-    height: 156px;
-    width: 312px;
-  }
-`;
 
 const ImageTicket = props => {
   const { isPremium, eventID } = props;
@@ -107,12 +90,56 @@ const ImageTicket = props => {
       }
   }
 
+  if (eventID === 'meet-mostly-luca-mini') {
+    return (
+      <WrapperTicketImageLuca>
+        <img src={TICKET_PREMIUM_LUCA_MINI} alt="Event ticket" />
+      </WrapperTicketImageLuca>
+    );
+  }
+
   return (
     <WrapperTicketImage>
       <img src={ticketImg} alt="Event ticket" />
     </WrapperTicketImage>
   );
 };
+
+const WrapperTicketImage = styled.div`
+  height: 200px;
+  width: 416px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px 0;
+  img {
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  ${MEDIA.tablet} {
+    height: 156px;
+    width: 312px;
+  }
+`;
+
+const WrapperTicketImageLuca = styled.div`
+  height: 272px;
+  width: 416px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px 0;
+  img {
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  ${MEDIA.tablet} {
+    height: 208px;
+    width: 312px;
+  }
+`;
 
 ImageTicket.propTypes = propTypes;
 ImageTicket.defaultProps = defaultProps;

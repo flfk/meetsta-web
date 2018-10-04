@@ -95,13 +95,18 @@ class Ticket extends React.Component {
       ));
     }
 
+    const ticketName =
+      eventID === 'meet-mostly-luca-mini'
+        ? 'Say hi to Luca and take a selfie together on a one-on-one video call'
+        : `${lengthMins} minute one-on-one video call`;
+
     return (
       <Card>
         <Card.H1>{name}</Card.H1>
         <TicketImage isPremium={isPremium} eventID={eventID} />
         <br />
         <Content.Row>
-          <Card.P>✓ {lengthMins} minute one-on-one video call</Card.P>
+          <Card.P>{ticketName}</Card.P>
           <Card.P>${priceBase}</Card.P>
         </Content.Row>
         <Content.Seperator />
