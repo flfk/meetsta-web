@@ -246,6 +246,8 @@ class Checkout extends React.Component {
     const {
       addOns,
       checkoutStep,
+      dateStart,
+      dateEnd,
       email,
       emailErrMsg,
       eventID,
@@ -291,6 +293,8 @@ class Checkout extends React.Component {
           isPremium={ticket.isPremium}
           baseOptions={ticket.baseOptions}
           addOns={addOns}
+          dateStart={dateStart}
+          dateEnd={dateEnd}
         />
       ));
     }

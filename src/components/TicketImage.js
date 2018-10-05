@@ -82,6 +82,13 @@ const ImageTicket = props => {
         ticketImg = TICKET_STANDARD_LUCA;
       }
       break;
+    case 'masterclass-test':
+      if (isPremium) {
+        ticketImg = TICKET_PREMIUM_LUCA;
+      } else {
+        ticketImg = TICKET_STANDARD_LUCA;
+      }
+      break;
     default:
       if (isPremium) {
         ticketImg = null;

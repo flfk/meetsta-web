@@ -4,6 +4,8 @@ import React from 'react';
 import Btn from './Btn';
 import Card from './Card';
 import Content from './Content';
+import { getTimeRange, getDate } from '../utils/helpers';
+import PopupTime from '../containers/PopupTime';
 import TicketImage from './TicketImage';
 import SelectableFeature from './SelectableFeature';
 
@@ -41,7 +43,8 @@ class Ticket extends React.Component {
     priceBase: '',
     isPremium: true,
     addOnsSelected: [],
-    priceTotal: ''
+    priceTotal: '',
+    showPopupTime: false
   };
 
   componentDidMount() {
@@ -111,6 +114,10 @@ class Ticket extends React.Component {
     onSelect(ticket);
   };
 
+  handleTimePopupOpen = () => this.setState({ showPopupTime: true });
+
+  handleTimePopupClose = () => this.setState({ showPopupTime: false });
+
   render() {
     const {
       baseOptionSelected,
@@ -121,10 +128,11 @@ class Ticket extends React.Component {
       lengthMins,
       priceBase,
       priceTotal,
-      isPremium
+      isPremium,
+      showPopupTime
     } = this.state;
 
-    const { addOns, onSelect, baseOptions } = this.props;
+    const { addOns, onSelect, baseOptions, dateStart, dateEnd } = this.props;
 
     let addOnsDiv = null;
     if (addOns) {
@@ -176,11 +184,28 @@ class Ticket extends React.Component {
       );
     }
 
+    const eventTimeDiv = (
+      <div>
+        <Card.H3>Event date</Card.H3>
+        <Card.P>{getTimeRange(dateStart, dateEnd)}</Card.P>
+        <Card.P>{getDate(dateStart)}</Card.P>
+        <Btn.Tertiary noPadding onClick={this.handleTimePopupOpen}>
+          What time is that for me?
+        </Btn.Tertiary>
+      </div>
+    );
+
+    const popupTime = showPopupTime ? (
+      <PopupTime handleClose={this.handleTimePopupClose} dateStart={dateStart} dateEnd={dateEnd} />
+    ) : null;
+
     return (
       <Card>
-        <Card.H1>{name}</Card.H1>
+        <Card.H1>Create Your Ticket</Card.H1>
         <TicketImage isPremium={isPremium} eventID={eventID} />
         <br />
+        {eventTimeDiv}
+        <Content.Seperator />
         {baseOptionsDiv}
         <Content.Seperator />
         <Card.H3> Optional Add-ons</Card.H3>
@@ -194,6 +219,7 @@ class Ticket extends React.Component {
             Get Ticket
           </Btn.Full>
         </div>
+        {popupTime}
       </Card>
     );
   }
