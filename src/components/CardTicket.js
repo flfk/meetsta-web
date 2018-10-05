@@ -101,7 +101,15 @@ class Ticket extends React.Component {
     this.setState({ baseOptionSelected: name });
   };
 
-  createTicket = () => {};
+  handleSelectTicket = () => {
+    const { onSelect } = this.props;
+    const { baseOptionSelected } = this.state;
+    const ticket = { ...this.state };
+    if (baseOptionSelected) {
+      ticket.name = baseOptionSelected;
+    }
+    onSelect(ticket);
+  };
 
   render() {
     const {
@@ -139,13 +147,14 @@ class Ticket extends React.Component {
     );
 
     let baseOptionsDiv = null;
-    if (baseOptions) {
+    if (baseOptions.length > 0) {
       const baseOptionsList = baseOptions.map(option => {
         const isChecked = option === baseOptionSelected;
         return (
           <SelectableFeature
             key={option}
             name={option}
+            price={priceBase}
             isBaseOption={true}
             isChecked={isChecked}
             handleSelect={this.handleBaseOptionSelect}
@@ -158,31 +167,35 @@ class Ticket extends React.Component {
           {baseOptionsList}
         </div>
       );
+    } else {
+      baseOptionsDiv = (
+        <Content.Row>
+          <Card.P>{lengthMins} minute one-on-one video call</Card.P>
+          <Card.P>${priceBase}</Card.P>
+        </Content.Row>
+      );
     }
 
-    const ticketDescription = baseOptions ? baseOptionsDiv : baseNonSelectableDiv;
-
-    if (baseOptions)
-      return (
-        <Card>
-          <Card.H1>{name}</Card.H1>
-          <TicketImage isPremium={isPremium} eventID={eventID} />
-          <br />
-          {ticketDescription}
-          <Content.Seperator />
-          <Card.H3> Optional Add-ons</Card.H3>
-          {addOnsDiv}
-          <Content.Seperator />
-          <Content.Center>
-            <Card.H2>$ {priceTotal}</Card.H2>
-          </Content.Center>
-          <div>
-            <Btn.Full primary onClick={() => onSelect({ ...this.state })} id={ticketID}>
-              Get Ticket
-            </Btn.Full>
-          </div>
-        </Card>
-      );
+    return (
+      <Card>
+        <Card.H1>{name}</Card.H1>
+        <TicketImage isPremium={isPremium} eventID={eventID} />
+        <br />
+        {baseOptionsDiv}
+        <Content.Seperator />
+        <Card.H3> Optional Add-ons</Card.H3>
+        {addOnsDiv}
+        <Content.Seperator />
+        <Content.Center>
+          <Card.H2>$ {priceTotal}</Card.H2>
+        </Content.Center>
+        <div>
+          <Btn.Full primary onClick={this.handleSelectTicket} id={ticketID}>
+            Get Ticket
+          </Btn.Full>
+        </div>
+      </Card>
+    );
   }
 }
 
