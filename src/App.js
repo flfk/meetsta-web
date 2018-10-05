@@ -4,7 +4,6 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { StripeProvider } from 'react-stripe-elements';
 
 import Checkout from './containers/Checkout';
-import CheckoutVIP from './containers/CheckoutVIP';
 import ContactUs from './containers/ContactUs';
 import Events from './containers/Events';
 import EventSales from './containers/EventSales';
@@ -40,7 +39,6 @@ class App extends Component {
                 <Route exact path="/" component={LandingPage} />
                 <Route path="/event" component={Events} />
                 <Route path="/checkout" component={Checkout} />
-                <Route path="/checkout-vip" component={CheckoutVIP} />
                 <Route path="/confirmation" component={OrderConfirmation} />
                 <Route path="/eventSales" component={EventSales} />
                 <Route path="/sales" component={Sales} />

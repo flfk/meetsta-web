@@ -10,15 +10,20 @@ import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
 import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';
-import TicketCard from '../components/TicketCard';
+import CardTicket from '../components/CardTicket';
+import CardSouvenirs from '../components/CardSouvenirs';
 
-import db from '../data/firebase';
+import actions from '../data/actions';
 
 const PAYPAL_VARIABLE_FEE = 0.036;
 const PAYPAL_FIXED_FEE = 0.3;
 const TICKETS_PER_BREAK = 5;
 const BREAK_LENGTH_MINS = 5;
+const QUEUE_START_PRE_EVENT_MINS = 20;
 const MILLISECS_PER_MIN = 60000;
+
+const DEFAULT_EVENT_ID = 'default-event-id';
+const DEFAULT_TICKET_ID = 'default-ticket-id';
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -33,35 +38,79 @@ const defaultProps = {};
 
 class Checkout extends React.Component {
   state = {
+    addOns: [],
+    checkoutStep: 0,
+    dateStart: null,
+    dateEnd: null,
+    email: '',
+    emailErrMsg: '',
     eventID: '',
+    influencerName: '',
     nameFirst: '',
     nameFirstErrMsg: '',
     nameLast: '',
     nameLastErrMsg: '',
-    email: '',
-    emailErrMsg: '',
-    checkoutStep: 0,
+    paid: false,
+    paypalErrorMsg: '',
+    title: '',
+    tickets: [],
     ticketSelected: {},
     ticketID: null,
     ticketOrdered: null,
-    paid: false,
-    toConfirmation: false,
-    paypalErrorMsg: ''
+    toConfirmation: false
   };
 
   componentDidMount() {
-    const eventData = this.getEventData();
-    this.setState({ ...eventData });
+    try {
+      this.loadFormattedData();
+      this.getEventID();
+    } catch (err) {
+      console.error('Error in getting documents', err);
+    }
   }
 
   componentDidUpdate() {
     this.toConfirmation();
   }
 
-  getEventData = () => {
-    const state = this.props.location.state;
-    if (state) {
-      return this.props.location.state.eventData;
+  getEventID = () => {
+    let { eventID } = this.getParams();
+    if (!eventID) {
+      eventID = DEFAULT_EVENT_ID;
+    }
+    return eventID;
+  };
+
+  getTicketID = () => {
+    let { ticketID } = this.getParams();
+    if (!ticketID) {
+      ticketID = DEFAULT_EVENT_ID;
+    }
+    return ticketID;
+  };
+
+  getParams = () => {
+    return qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+  };
+
+  loadFormattedData = async () => {
+    const eventID = this.getEventID();
+    const ticketID = this.getTicketID();
+    try {
+      const event = await actions.getDocEvent(eventID);
+      const formattedDataEvent = {
+        eventID,
+        title: event.title,
+        influencerName: event.organiserName,
+        dateStart: event.dateStart,
+        dateEnd: event.dateEnd
+      };
+      const ticket = await actions.getDocEventTicket(eventID, ticketID);
+      const tickets = [ticket];
+      const addOns = await actions.getCollEventTicketAddOns(eventID, ticketID);
+      this.setState({ eventID, ...formattedDataEvent, tickets, addOns });
+    } catch (error) {
+      console.error('Error loading formatted data ', error);
     }
   };
 
@@ -81,124 +130,50 @@ class Checkout extends React.Component {
 
   createTicketOrder = async payPalPaymentID => {
     const {
+      dateStart,
+      email,
       eventID,
-      title,
       influencerName,
-      ticketSelected,
       nameFirst,
       nameLast,
-      email
+      ticketSelected,
+      title
     } = this.state;
-    const orderNum = await this.getNewOrderNum();
-    const startTime = await this.getTimeSlot();
+    const orderNum = await actions.getNewOrderNum();
+    const { addOnsSelected } = ticketSelected;
+    const additionalMins = addOnsSelected.reduce((total, addOn) => {
+      if (addOn.additionalMins) {
+        total += addOn.additionalMins;
+      }
+      return total;
+    }, 0);
+    const addOnsList = addOnsSelected.map(addOn => addOn.name);
     const ticket = {
       eventID,
       eventTitle: title,
       influencerName,
       name: ticketSelected.name,
-      description: ticketSelected.description,
-      price: ticketSelected.price,
-      fee: this.calculateFee(ticketSelected.price),
-      lengthMins: ticketSelected.lengthMins,
-      startTime,
+      priceTotal: ticketSelected.priceTotal,
+      priceBase: ticketSelected.priceBase,
+      fee: this.calculateFee(ticketSelected.priceTotal),
+      lengthMins: ticketSelected.lengthMins + additionalMins,
+      startTime: dateStart,
       purchaseNameFirst: nameFirst,
       purchaseNameLast: nameLast,
       purchaseEmail: email,
       purchaseDate: Date.now(),
       instaHandle: '',
+      location: '',
+      timeLocalised: '',
+      mobileOS: '',
       orderNum,
       payPalPaymentID,
       userID: '',
-      hasStarted: false
+      addOns: addOnsList
     };
     this.setState({ ticketOrdered: ticket });
-    this.incrementTicketsSold();
-    this.addDocTicket(ticket);
-  };
-
-  getNewOrderNum = async () => {
-    const lastOrderRef = db.collection('utils').doc('lastOrder');
-    const snapshot = await lastOrderRef.get();
-    const data = await snapshot.data();
-    const newOrderNum = data.orderNum + 1;
-    await lastOrderRef.set({ orderNum: newOrderNum });
-    return data.orderNum + 1;
-  };
-
-  getEventTickets = async () => {
-    const { eventID } = this.state;
-    const eventTickets = [];
-    const eventTicketsRef = db
-      .collection('events')
-      .doc(eventID)
-      .collection('tickets');
-    const snapshot = await eventTicketsRef.get();
-    snapshot.forEach(snap => {
-      eventTickets.push(snap.data());
-    });
-    return eventTickets;
-  };
-
-  getDocsTicketsSold = async () => {
-    let ticketsSold = 0;
-    const eventTickets = await this.getEventTickets();
-    eventTickets.forEach(ticket => (ticketsSold += ticket.sold));
-    return ticketsSold;
-  };
-
-  getMinsSold = async () => {
-    let minsSold = 0;
-    const eventTickets = await this.getEventTickets();
-    eventTickets.forEach(ticket => (minsSold += ticket.sold * ticket.lengthMins));
-    return minsSold;
-  };
-
-  getEventStart = async () => {
-    const { eventID } = this.state;
-    const eventRef = db.collection('events').doc(eventID);
-    const snapshot = await eventRef.get();
-    const data = await snapshot.data();
-    const eventStart = data.dateStart;
-    return eventStart;
-  };
-
-  getTimeSlot = async () => {
-    const ticketsSold = await this.getDocsTicketsSold();
-    const minsSold = await this.getMinsSold();
-    const eventStart = await this.getEventStart();
-    let breakLengthMins = 0;
-    if (ticketsSold >= TICKETS_PER_BREAK) {
-      breakLengthMins = Math.floor(ticketsSold / TICKETS_PER_BREAK) * BREAK_LENGTH_MINS;
-    }
-    const startTimeMins = 0;
-    const millisecsFromStart = (startTimeMins + minsSold + breakLengthMins) * MILLISECS_PER_MIN;
-    // Time slot in milliseconds
-    const timeSlot = eventStart + millisecsFromStart;
-    // const timeSlot = moment.tz(timeSlotMillisecs, 'America/Los_Angeles').format();
-    return timeSlot;
-  };
-
-  addDocTicket = async ticket => {
-    const newTicket = await db.collection('tickets').add(ticket);
+    const newTicket = await actions.addDocTicket(ticket);
     this.setState({ ticketID: newTicket.id });
-  };
-
-  incrementTicketsSold = async () => {
-    try {
-      const { eventID, ticketSelected } = this.state;
-      const { ticketID } = ticketSelected;
-      const ticketRef = db
-        .collection('events')
-        .doc(eventID)
-        .collection('tickets')
-        .doc(ticketID);
-      const snapshot = await ticketRef.get();
-      const data = await snapshot.data();
-      const newSold = data.sold + 1;
-      await ticketRef.update({ sold: newSold });
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   toConfirmation = () => {
@@ -257,15 +232,8 @@ class Checkout extends React.Component {
     }
   };
 
-  getEventId = () => {
-    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-    return params.eventID;
-  };
-
-  handleTicketSelect = event => {
-    const { tickets } = this.state;
-    const ticketSelected = tickets.filter(ticket => ticket.ticketID === event.target.id)[0];
-    this.setState({ ticketSelected, checkoutStep: 1 });
+  handleTicketSelect = ticket => {
+    this.setState({ ticketSelected: ticket, checkoutStep: 1 });
   };
 
   handlePrevious = () => {
@@ -276,21 +244,23 @@ class Checkout extends React.Component {
 
   render() {
     const {
+      addOns,
+      checkoutStep,
+      email,
+      emailErrMsg,
       eventID,
+      influencerName,
       nameFirst,
       nameFirstErrMsg,
       nameLast,
       nameLastErrMsg,
-      email,
-      emailErrMsg,
-      toConfirmation,
-      checkoutStep,
+      paid,
+      paypalErrorMsg,
       tickets,
       ticketSelected,
-      ticketOrdered,
       ticketID,
-      paypalErrorMsg,
-      paid
+      ticketOrdered,
+      toConfirmation
     } = this.state;
 
     if (toConfirmation === true)
@@ -299,7 +269,7 @@ class Checkout extends React.Component {
           push
           to={{
             pathname: '/confirmation',
-            search: `?eventID=${eventID}&ticketID=${ticketID}`,
+            search: `?ticketID=${ticketID}`,
             state: { ticket: ticketOrdered }
           }}
         />
@@ -307,29 +277,40 @@ class Checkout extends React.Component {
 
     let ticketCards = <div />;
     if (tickets) {
-      const ticketsSorted = tickets.sort((a, b) => a.price - b.price);
-      ticketCards = ticketsSorted.map((ticket, index) => (
-        <TicketCard
+      ticketCards = tickets.map((ticket, index) => (
+        <CardTicket
           key={ticket.ticketID}
           eventID={eventID}
           ticketID={ticket.ticketID}
           name={ticket.name}
+          influencerName={influencerName}
           description={ticket.description}
           lengthMins={ticket.lengthMins}
-          price={ticket.price}
+          priceBase={ticket.priceBase}
           onSelect={this.handleTicketSelect}
-          isPremium={index === tickets.length - 1}
-          extras={ticket.extras}
+          isPremium={ticket.isPremium}
+          baseOptions={ticket.baseOptions}
+          addOns={addOns}
         />
       ));
     }
 
-    const selectTicket = (
-      <div>
-        <FONTS.H2>Select Ticket</FONTS.H2>
-        {ticketCards}
-      </div>
-    );
+    const params = this.getParams();
+    if (params.souvenirs && addOns) {
+      const souvenirs = addOns.filter(addOn => !addOn.additionalMins);
+      ticketCards = (
+        <CardSouvenirs
+          eventID={eventID}
+          name={'Souvenirs'}
+          lengthMins={0}
+          priceBase={0}
+          onSelect={this.handleTicketSelect}
+          addOns={souvenirs}
+        />
+      );
+    }
+
+    const selectTicket = <div>{ticketCards}</div>;
 
     const basicInformation = (
       <div>
@@ -366,7 +347,9 @@ class Checkout extends React.Component {
 
     const paypalError = paypalErrorMsg ? <FONTS.ERROR>{paypalErrorMsg}</FONTS.ERROR> : null;
 
-    const priceTotal = (ticketSelected.price + this.calculateFee(ticketSelected.price)).toFixed(2);
+    const priceTotalFeeIncl = (
+      ticketSelected.priceTotal + this.calculateFee(ticketSelected.priceTotal)
+    ).toFixed(2);
 
     const payPalCheckout = (
       <PayPalCheckout
@@ -374,7 +357,7 @@ class Checkout extends React.Component {
         env={ENV}
         commit={true}
         currency={CURRENCY}
-        total={priceTotal}
+        total={priceTotalFeeIncl}
         onSuccess={this.onSuccess}
         onError={this.onError}
         onCancel={this.onCancel}
@@ -390,8 +373,12 @@ class Checkout extends React.Component {
         <FONTS.H2>Payment</FONTS.H2>
         <PaymentSummary
           item={ticketSelected.name}
-          price={ticketSelected.price}
-          fee={this.calculateFee(ticketSelected.price)}
+          lengthMins={ticketSelected.lengthMins}
+          priceBase={ticketSelected.priceBase}
+          priceTotal={ticketSelected.priceTotal}
+          addOns={ticketSelected.addOnsSelected}
+          fee={this.calculateFee(ticketSelected.priceTotal)}
+          priceTotalFeeIncl={priceTotalFeeIncl}
         />
         <Content.Spacing />
         {paypalError}
@@ -425,13 +412,7 @@ class Checkout extends React.Component {
         checkoutComponent = selectTicket;
     }
 
-    return (
-      <Content.PaddingBottom>
-        <FONTS.H1>Checkout</FONTS.H1>
-        <Content.Seperator />
-        {checkoutComponent}
-      </Content.PaddingBottom>
-    );
+    return <Content.PaddingBottom>{checkoutComponent}</Content.PaddingBottom>;
   }
 }
 

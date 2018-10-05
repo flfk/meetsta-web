@@ -23,7 +23,7 @@ class LandingPage extends Component {
       <Redirect
         push
         to={{
-          pathname: '/checkout-vip',
+          pathname: '/checkout',
           search: `?eventID=${DEFAULT_EVENT_ID}`
         }}
       />

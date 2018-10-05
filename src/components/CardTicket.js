@@ -11,25 +11,32 @@ const propTypes = {
   ticketID: PropTypes.string,
   eventID: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  influencerName: PropTypes.string.isRequired,
   description: PropTypes.string,
   lengthMins: PropTypes.number.isRequired,
   priceBase: PropTypes.number.isRequired,
   onSelect: PropTypes.func.isRequired,
   isPremium: PropTypes.bool.isRequired,
+  baseOptions: PropTypes.array,
   addOns: PropTypes.array
 };
 
 const defaultProps = {
   ticketID: '',
   description: '',
+  baseOptions: [],
   addOns: []
 };
 
+const DEFAULT_BASE_OPTION = 0;
+
 class Ticket extends React.Component {
   state = {
+    baseOptionSelected: '',
     ticketID: '',
     eventID: '',
     name: '',
+    influencerName: '',
     lengthMins: '',
     priceBase: '',
     isPremium: true,
@@ -42,11 +49,25 @@ class Ticket extends React.Component {
   }
 
   loadTicketDate = () => {
-    const { name, priceBase, ticketID, eventID, lengthMins, isPremium, addOns } = this.props;
+    const {
+      name,
+      influencerName,
+      priceBase,
+      ticketID,
+      eventID,
+      lengthMins,
+      isPremium,
+      addOns,
+      baseOptions
+    } = this.props;
+
+    const baseOptionSelected = baseOptions ? baseOptions[DEFAULT_BASE_OPTION] : '';
     const state = {
+      baseOptionSelected,
       ticketID: ticketID,
       eventID: eventID,
       name: name,
+      influencerName,
       lengthMins: lengthMins,
       priceBase: priceBase,
       isPremium: isPremium,
@@ -75,14 +96,29 @@ class Ticket extends React.Component {
     this.setState({ addOnsSelected: addOnsSelectedUpdated, priceTotal: priceTotalUpdated });
   };
 
+  handleBaseOptionSelect = event => {
+    const { name } = event.target;
+    this.setState({ baseOptionSelected: name });
+  };
+
   createTicket = () => {};
 
   render() {
-    const { ticketID, eventID, name, lengthMins, priceBase, priceTotal, isPremium } = this.state;
+    const {
+      baseOptionSelected,
+      ticketID,
+      eventID,
+      name,
+      influencerName,
+      lengthMins,
+      priceBase,
+      priceTotal,
+      isPremium
+    } = this.state;
 
-    const { addOns, onSelect } = this.props;
+    const { addOns, onSelect, baseOptions } = this.props;
 
-    let addOnsDiv = <div />;
+    let addOnsDiv = null;
     if (addOns) {
       const addOnsSorted = addOns.sort((a, b) => b.price - a.price);
       addOnsDiv = addOnsSorted.map(addOn => (
@@ -90,39 +126,63 @@ class Ticket extends React.Component {
           key={addOn.name}
           name={addOn.name}
           price={addOn.price}
-          handleAddOnSelect={this.handleAddOnSelect}
+          handleSelect={this.handleAddOnSelect}
         />
       ));
     }
 
-    const ticketName =
-      eventID === 'meet-mostly-luca-mini'
-        ? 'Say hi to Luca and take a selfie together on a one-on-one video call'
-        : `${lengthMins} minute one-on-one video call`;
-
-    return (
-      <Card>
-        <Card.H1>{name}</Card.H1>
-        <TicketImage isPremium={isPremium} eventID={eventID} />
-        <br />
-        <Content.Row>
-          <Card.P>{ticketName}</Card.P>
-          <Card.P>${priceBase}</Card.P>
-        </Content.Row>
-        <Content.Seperator />
-        <Card.H3> Optional Add-ons</Card.H3>
-        {addOnsDiv}
-        <Content.Seperator />
-        <Content.Center>
-          <Card.H2>$ {priceTotal}</Card.H2>
-        </Content.Center>
-        <div>
-          <Btn.Full primary onClick={() => onSelect({ ...this.state })} id={ticketID}>
-            Get Ticket
-          </Btn.Full>
-        </div>
-      </Card>
+    const baseNonSelectableDiv = (
+      <Content.Row>
+        <Card.P>{lengthMins} minute one-on-one video call</Card.P>
+        <Card.P>${priceBase}</Card.P>
+      </Content.Row>
     );
+
+    let baseOptionsDiv = null;
+    if (baseOptions) {
+      const baseOptionsList = baseOptions.map(option => {
+        const isChecked = option === baseOptionSelected;
+        return (
+          <SelectableFeature
+            key={option}
+            name={option}
+            isBaseOption={true}
+            isChecked={isChecked}
+            handleSelect={this.handleBaseOptionSelect}
+          />
+        );
+      });
+      baseOptionsDiv = (
+        <div>
+          <Card.H3>What will you and {influencerName} do?</Card.H3>
+          {baseOptionsList}
+        </div>
+      );
+    }
+
+    const ticketDescription = baseOptions ? baseOptionsDiv : baseNonSelectableDiv;
+
+    if (baseOptions)
+      return (
+        <Card>
+          <Card.H1>{name}</Card.H1>
+          <TicketImage isPremium={isPremium} eventID={eventID} />
+          <br />
+          {ticketDescription}
+          <Content.Seperator />
+          <Card.H3> Optional Add-ons</Card.H3>
+          {addOnsDiv}
+          <Content.Seperator />
+          <Content.Center>
+            <Card.H2>$ {priceTotal}</Card.H2>
+          </Content.Center>
+          <div>
+            <Btn.Full primary onClick={() => onSelect({ ...this.state })} id={ticketID}>
+              Get Ticket
+            </Btn.Full>
+          </div>
+        </Card>
+      );
   }
 }
 
