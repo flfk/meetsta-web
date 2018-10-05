@@ -40,7 +40,7 @@ class Ticket extends React.Component {
     name: '',
     influencerName: '',
     lengthMins: '',
-    priceBase: '',
+    priceBase: 0,
     isPremium: true,
     addOnsSelected: [],
     priceTotal: '',

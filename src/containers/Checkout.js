@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import validator from 'validator';
-import qs from 'qs';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
+import { getParams } from '../utils/helpers';
 import InputText from '../components/InputText';
 import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';
@@ -63,7 +63,6 @@ class Checkout extends React.Component {
   componentDidMount() {
     try {
       this.loadFormattedData();
-      this.getEventID();
     } catch (err) {
       console.error('Error in getting documents', err);
     }
@@ -74,7 +73,7 @@ class Checkout extends React.Component {
   }
 
   getEventID = () => {
-    let { eventID } = this.getParams();
+    let { eventID } = getParams(this.props);
     if (!eventID) {
       eventID = DEFAULT_EVENT_ID;
     }
@@ -82,15 +81,11 @@ class Checkout extends React.Component {
   };
 
   getTicketID = () => {
-    let { ticketID } = this.getParams();
+    let { ticketID } = getParams(this.props);
     if (!ticketID) {
       ticketID = DEFAULT_EVENT_ID;
     }
     return ticketID;
-  };
-
-  getParams = () => {
-    return qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
   };
 
   loadFormattedData = async () => {
@@ -299,7 +294,7 @@ class Checkout extends React.Component {
       ));
     }
 
-    const params = this.getParams();
+    const params = getParams(this.props);
     if (params.souvenirs && addOns) {
       const souvenirs = addOns.filter(addOn => !addOn.additionalMins);
       ticketCards = (

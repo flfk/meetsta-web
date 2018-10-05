@@ -16,6 +16,7 @@ import Schedule from './containers/Schedule';
 import Main from './components/Main';
 import NavBar from './containers/NavBar';
 import TermsConditions from './containers/TermsConditions';
+import TicketOptions from './containers/TicketOptions';
 import PrivacyPolicy from './containers/PrivacyPolicy';
 import OrderConfirmation from './containers/OrderConfirmation';
 import WinnerCountdown from './containers/WinnerCountdown';
@@ -46,6 +47,7 @@ class App extends Component {
                 <Route path="/status" component={Status} />
                 <Route path="/schedule" component={Schedule} />
                 <Route path="/register" component={Register} />
+                <Route path="/options" component={TicketOptions} />
                 <Route path="/termsConditions" component={TermsConditions} />
                 <Route path="/privacyPolicy" component={PrivacyPolicy} />
                 <Route path="/contactus" component={ContactUs} />
