@@ -91,18 +91,24 @@ const Title = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-  height: 48px;
-  width: 220px;
+  height: 64px;
+  width: 292px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 28px;
+  font-size: 36px;
   color: ${props => (props.isPremium ? 'white' : COLORS.primary.red)};
   font-family: PTSansNarrow;
   font-weight: 800;
   letter-spacing: 0.08em;
+
+  ${MEDIA.tablet} {
+    height: 48px;
+    width: 220px;
+    font-size: 28px;
+  }
 
   // background-color: blue;
   // opacity: 0.5;
@@ -111,19 +117,27 @@ const Title = styled.div`
 const Subtitle = styled.div`
   position: absolute;
   left: 0px;
-  top: 44px;
-  height: 24px;
-  width: 220px;
+  top: 52px;
+  height: 32px;
+  width: 292px;
+  font-size: 16px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
   color: ${props => (props.isPremium ? 'white' : COLORS.primary.red)};
-  font-size: 12px;
   font-family: Nunito, sans-serif;
   font-weight: 600;
   letter-spacing: 0.05em;
+
+  ${MEDIA.tablet} {
+    left: 0px;
+    top: 44px;
+    height: 24px;
+    width: 220px;
+    font-size: 12px;
+  }
 
   // background-color: green;
   // opacity: 0.5;
@@ -132,9 +146,10 @@ const Subtitle = styled.div`
 const Time = styled.div`
   position: absolute;
   left: 0px;
-  top: 74px;
-  height: 46px;
-  width: 220px;
+  top: 98px;
+  height: 58px;
+  width: 292px;
+  font-size: 12px;
 
   display: flex;
   flex-direction: column;
@@ -143,8 +158,15 @@ const Time = styled.div`
 
   font-family: Nunito, sans-serif;
   font-weight: 600;
-  font-size: 8px;
   color: white;
+
+  ${MEDIA.tablet} {
+    left: 0px;
+    top: 74px;
+    height: 46px;
+    width: 220px;
+    font-size: 8px;
+  }
 
   // background-color: orange;
   // opacity: 0.5;
@@ -153,21 +175,29 @@ const Time = styled.div`
 const StubTitle = styled.div`
   position: absolute;
   right: 2px;
-  top: 32px;
-  height: 16px;
-  width: 82px;
+  top: 42px;
+  height: 20px;
+  width: 108px;
+  font-size: 10px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 8px;
   font-family: Nunito, sans-serif;
   font-weight: 600;
   letter-spacing: 0.05em;
 
   color: #c6c6c6;
   background-color: #f4f4f4;
+
+  ${MEDIA.tablet} {
+    right: 2px;
+    top: 32px;
+    height: 16px;
+    width: 82px;
+    font-size: 8px;
+  }
 
   // background-color: red;
   // opacity: 0.5;
@@ -175,22 +205,30 @@ const StubTitle = styled.div`
 
 const StubSubtitle = styled.div`
   position: absolute;
-  right: 40px;
-  top: 50px;
-  height: 32px;
-  width: 40px;
+  right: 52px;
+  top: 68px;
+  height: 40px;
+  width: 56px;
+  font-size: 12px;
 
   display: flex;
   justify-content: flex-start;
   align-items: center;
 
-  font-size: 10px;
   font-family: Nunito, sans-serif;
   font-weight: 600;
   letter-spacing: 0.05em;
 
   color: #c6c6c6;
   background-color: #f4f4f4;
+
+  ${MEDIA.tablet} {
+    right: 40px;
+    top: 50px;
+    height: 32px;
+    width: 40px;
+    font-size: 10px;
+  }
 
   // background-color: red;
   // opacity: 0.5;
