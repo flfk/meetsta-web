@@ -6,9 +6,7 @@ import Card from './Card';
 import Content from './Content';
 import { getTimeRange, getDate } from '../utils/helpers';
 import PopupTime from '../containers/PopupTime';
-// TODO RESOLVE THESE XX
 import TicketImage from './TicketImage';
-import ImageTicket from './ImageTicket';
 import SelectableFeature from './SelectableFeature';
 
 const propTypes = {
@@ -198,7 +196,7 @@ class Ticket extends React.Component {
     ) : null;
 
     const ticketImg = (
-      <ImageTicket
+      <TicketImage
         isPremium={isPremium}
         eventID={eventID}
         influencerName={influencerName}
@@ -207,13 +205,10 @@ class Ticket extends React.Component {
       />
     );
 
-    console.log('CardTicket influencerName', influencerName);
-
     return (
       <Card>
         <Card.H1>Create Your Ticket</Card.H1>
         {ticketImg}
-        <TicketImage isPremium={isPremium} eventID={eventID} />
         <br />
         {eventTimeDiv}
         <Content.Seperator />

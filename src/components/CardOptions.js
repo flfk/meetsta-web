@@ -58,8 +58,8 @@ const Container = styled.div`
 
 const WrapperPreviewImg = styled.div`
   margin: auto;
-  height: 272px;
-  width: 416px;
+  height: 400px;
+  width: 600px;
   border-radius: 5px;
   margin: 8px 0;
   img {

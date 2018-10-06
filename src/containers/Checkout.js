@@ -10,7 +10,6 @@ import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import { getParams } from '../utils/helpers';
 import InputText from '../components/InputText';
-import ImageTicket from '../components/ImageTicket';
 import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';
 
