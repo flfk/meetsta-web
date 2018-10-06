@@ -69,8 +69,8 @@ const WrapperPreviewImg = styled.div`
   }
 
   ${MEDIA.tablet} {
-    height: 208px;
-    width: 312px;
+    height: 224px;
+    width: 336px;
   }
 `;
 
