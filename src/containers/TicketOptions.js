@@ -12,7 +12,7 @@ class TicketOptions extends React.Component {
     eventID: '',
     tickets: [],
     ticketSelectedID: '',
-    toConfirmation: false
+    toCheckout: false
   };
 
   componentDidMount() {

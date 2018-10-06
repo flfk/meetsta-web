@@ -4,14 +4,15 @@ import { Redirect, Link } from 'react-router-dom';
 import validator from 'validator';
 
 import Btn from '../components/Btn';
+import CardTicket from '../components/CardTicket';
+import CardSouvenirs from '../components/CardSouvenirs';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import { getParams } from '../utils/helpers';
 import InputText from '../components/InputText';
+import ImageTicket from '../components/ImageTicket';
 import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';
-import CardTicket from '../components/CardTicket';
-import CardSouvenirs from '../components/CardSouvenirs';
 
 import actions from '../data/actions';
 

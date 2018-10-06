@@ -1,0 +1,202 @@
+import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
+import React from 'react';
+import styled from 'styled-components';
+
+import TicketRegular from '../assets/TicketRegular.png';
+import TicketPremium from '../assets/TicketPremium.png';
+import MEDIA from '../utils/Media';
+import COLORS from '../utils/Colors';
+
+const propTypes = {
+  eventID: PropTypes.string.isRequired,
+  influencerName: PropTypes.string.isRequired,
+  dateEnd: PropTypes.number,
+  dateStart: PropTypes.number,
+  isPremium: PropTypes.bool
+};
+
+const defaultProps = {
+  isPremium: false,
+  influencerName: 'default',
+  dateEnd: 0,
+  dateStart: 0
+};
+
+const ImageTicket = props => {
+  const { isPremium, eventID, influencerName, dateEnd, dateStart } = props;
+
+  const ticketBackground = isPremium ? TicketPremium : TicketRegular;
+
+  const title = isPremium ? (
+    <Title isPremium>{influencerName.toUpperCase()}</Title>
+  ) : (
+    <Title>{influencerName.toUpperCase()}</Title>
+  );
+
+  const subtitle = isPremium ? (
+    <Subtitle isPremium>ONLINE MEET & GREET</Subtitle>
+  ) : (
+    <Subtitle>ONLINE MEET & GREET</Subtitle>
+  );
+
+  const timeStart = moment.tz(dateStart, 'America/Los_Angeles');
+  const timeEnd = moment.tz(dateEnd, 'America/Los_Angeles');
+
+  const day = timeStart.format('dddd');
+  const dateLong = timeStart.format('MMM Do, YYYY');
+  const dateShort = timeStart.format('MMM Do');
+  const year = timeStart.format('YYYY');
+  const timeRange = `${timeStart.format('H:mm')} - ${timeEnd.format('H:mm')} (PDT)`;
+
+  return (
+    <WrapperTicketImage>
+      {title}
+      {subtitle}
+      <Time>
+        <div>{day.toUpperCase()}</div>
+        <div>{dateLong.toUpperCase()}</div>
+        <div>{timeRange.toUpperCase()}</div>
+      </Time>
+      <StubTitle>{influencerName.toUpperCase()}</StubTitle>
+      <StubSubtitle>
+        {dateShort} <br />
+        {year}
+      </StubSubtitle>
+      <img src={ticketBackground} alt="Event ticket" />
+    </WrapperTicketImage>
+  );
+};
+
+const WrapperTicketImage = styled.div`
+  position: relative;
+  height: 200px;
+  width: 416px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px 0;
+  img {
+    height: 100%;
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  ${MEDIA.tablet} {
+    height: 156px;
+    width: 312px;
+  }
+`;
+
+const Title = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 48px;
+  width: 220px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 28px;
+  color: ${props => (props.isPremium ? 'white' : COLORS.primary.red)};
+  font-family: PTSansNarrow;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+
+  // background-color: blue;
+  // opacity: 0.5;
+`;
+
+const Subtitle = styled.div`
+  position: absolute;
+  left: 0px;
+  top: 44px;
+  height: 24px;
+  width: 220px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${props => (props.isPremium ? 'white' : COLORS.primary.red)};
+  font-size: 12px;
+  font-family: Nunito, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+
+  // background-color: green;
+  // opacity: 0.5;
+`;
+
+const Time = styled.div`
+  position: absolute;
+  left: 0px;
+  top: 74px;
+  height: 46px;
+  width: 220px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-family: Nunito, sans-serif;
+  font-weight: 600;
+  font-size: 8px;
+  color: white;
+
+  // background-color: orange;
+  // opacity: 0.5;
+`;
+
+const StubTitle = styled.div`
+  position: absolute;
+  right: 2px;
+  top: 32px;
+  height: 16px;
+  width: 82px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 8px;
+  font-family: Nunito, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+
+  color: #c6c6c6;
+  background-color: #f4f4f4;
+
+  // background-color: red;
+  // opacity: 0.5;
+`;
+
+const StubSubtitle = styled.div`
+  position: absolute;
+  right: 40px;
+  top: 50px;
+  height: 32px;
+  width: 40px;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  font-size: 10px;
+  font-family: Nunito, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+
+  color: #c6c6c6;
+  background-color: #f4f4f4;
+
+  // background-color: red;
+  // opacity: 0.5;
+`;
+
+ImageTicket.propTypes = propTypes;
+ImageTicket.defaultProps = defaultProps;
+
+export default ImageTicket;
