@@ -132,6 +132,8 @@ class Ticket extends React.Component {
       showPopupTime
     } = this.state;
 
+    console.log('name is ', name);
+
     const { addOns, onSelect, baseOptions, dateStart, dateEnd } = this.props;
 
     let addOnsDiv = null;
@@ -146,13 +148,6 @@ class Ticket extends React.Component {
         />
       ));
     }
-
-    const baseNonSelectableDiv = (
-      <Content.Row>
-        <Card.P>{lengthMins} minute one-on-one video call</Card.P>
-        <Card.P>${priceBase}</Card.P>
-      </Content.Row>
-    );
 
     let baseOptionsDiv = null;
     if (baseOptions.length > 0) {
@@ -178,7 +173,10 @@ class Ticket extends React.Component {
     } else {
       baseOptionsDiv = (
         <Content.Row>
-          <Card.P>{lengthMins} minute one-on-one video call</Card.P>
+          <Card.P>
+            {name} on a {lengthMins} minute <br />
+            one-on-one video call
+          </Card.P>
           <Card.P>${priceBase}</Card.P>
         </Content.Row>
       );

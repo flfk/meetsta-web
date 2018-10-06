@@ -14,7 +14,13 @@ import actions from '../data/actions';
 
 const MEETSTA_COMMISSION = 0.15;
 
-const TEST_EVENT_IDS = ['freemium-test', 'cookie-cutters', 'meet-lexi-jayde', 'meet-mackenzie-sol'];
+const TEST_EVENT_IDS = [
+  'freemium-test',
+  'cookie-cutters',
+  'meet-lexi-jayde',
+  'meet-mackenzie-sol',
+  'masterclass-test'
+];
 
 class Sales extends React.Component {
   state = {
