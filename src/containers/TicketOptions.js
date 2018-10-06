@@ -1,16 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import styled from 'styled-components';
 
-import Btn from '../components/Btn';
+import CardOptions from '../components/CardOptions';
 import Content from '../components/Content';
-import FONTS from '../utils/Fonts';
 import { getParams } from '../utils/helpers';
-import MEDIA from '../utils/Media';
-
-import MasterclassTest0 from '../assets/teaserImages/MasterclassTest0.png';
-import MasterclassTest1 from '../assets/teaserImages/MasterclassTest1.png';
-import MasterclassTest2 from '../assets/teaserImages/MasterclassTest2.png';
 
 import actions from '../data/actions';
 
@@ -75,75 +68,22 @@ class TicketOptions extends React.Component {
 
     let ticketsDiv = null;
     if (tickets) {
-      ticketsDiv = tickets.map((ticket, index) => {
-        const btnTicket = ticket.isPremium ? (
-          <Btn value={ticket.ticketID} primary fill="true" onClick={this.handleSelect}>
-            Get Ticket
-          </Btn>
-        ) : (
-          <Btn value={ticket.ticketID} fill="true" onClick={this.handleSelect}>
-            Get Ticket
-          </Btn>
-        );
-
-        let teaserImg = null;
-        switch (index) {
-          case 0:
-            teaserImg = MasterclassTest0;
-            break;
-          case 1:
-            teaserImg = MasterclassTest1;
-            break;
-          case 2:
-            teaserImg = MasterclassTest2;
-            break;
-          default:
-            teaserImg = null;
-        }
-
-        return (
-          <OptionContainer key={ticket.ticketID}>
-            <FONTS.H1>{ticket.name}</FONTS.H1>
-            <WrapperTeaserImage>
-              <img src={teaserImg} alt={influencerName} />
-            </WrapperTeaserImage>
-            <br />
-            <FONTS.P centered>{ticket.description}</FONTS.P>
-            <FONTS.H3>From ${ticket.priceBase}</FONTS.H3>
-            {btnTicket}
-            <br />
-            <br />
-          </OptionContainer>
-        );
-      });
+      ticketsDiv = tickets.map(ticket => (
+        <CardOptions
+          key={ticket.ticketID}
+          description={ticket.description}
+          isPremium={ticket.isPremium}
+          handleSelect={this.handleSelect}
+          name={ticket.name}
+          priceBase={ticket.priceBase}
+          previewImgURL={ticket.previewImgURL}
+          ticketID={ticket.ticketID}
+        />
+      ));
     }
 
     return <Content>{ticketsDiv}</Content>;
   }
 }
-
-const OptionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const WrapperTeaserImage = styled.div`
-  margin: auto;
-  height: 272px;
-  width: 416px;
-  border-radius: 5px;
-  margin: 8px 0;
-  img {
-    height: 100%;
-    width: 100%;
-    border-radius: 5px;
-  }
-
-  ${MEDIA.tablet} {
-    height: 208px;
-    width: 312px;
-  }
-`;
 
 export default TicketOptions;
