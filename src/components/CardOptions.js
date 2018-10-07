@@ -35,11 +35,11 @@ const CardOptions = props => {
 
   return (
     <Container>
-      <FONTS.H1>{name}</FONTS.H1>
+      <FONTS.H1 centered>{name}</FONTS.H1>
       <WrapperPreviewImg>{previewImg}</WrapperPreviewImg>
       <br />
       <FONTS.P centered>{description}</FONTS.P>
-      <FONTS.H3>From ${priceBase}</FONTS.H3>
+      <FONTS.H3 centered>From ${priceBase}</FONTS.H3>
       {btnTicket}
       <br />
       <br />
