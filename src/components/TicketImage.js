@@ -189,7 +189,7 @@ const StubTitle = styled.div`
   letter-spacing: 0.05em;
 
   color: #c6c6c6;
-  background-color: #f4f4f4;
+  background-color: ${props => (props.isPremium ? '#f4f4f4' : '#F8F8F8')};
 
   ${MEDIA.tablet} {
     right: 2px;
@@ -216,17 +216,16 @@ const StubSubtitle = styled.div`
   align-items: center;
 
   font-family: Nunito, sans-serif;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.05em;
 
   color: #c6c6c6;
-  background-color: #f4f4f4;
 
   ${MEDIA.tablet} {
-    right: 40px;
+    right: 38px;
     top: 50px;
     height: 32px;
-    width: 40px;
+    width: 46px;
     font-size: 10px;
   }
 
