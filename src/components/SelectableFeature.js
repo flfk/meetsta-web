@@ -72,6 +72,7 @@ const Item = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  margin-right: 8px;
 `;
 
 const Checkbox = styled.span`

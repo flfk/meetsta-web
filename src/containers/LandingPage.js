@@ -7,7 +7,7 @@ import EmailForm from '../components/EmailForm';
 import Header from '../components/Header';
 import Screenshots from '../components/Screenshots';
 
-const DEFAULT_EVENT_ID = 'meet-mostly-luca';
+const DEFAULT_EVENT_ID = 'meet-mackenzie-sol-3';
 
 class LandingPage extends Component {
   // <Background>
@@ -23,7 +23,7 @@ class LandingPage extends Component {
       <Redirect
         push
         to={{
-          pathname: '/checkout',
+          pathname: '/options',
           search: `?eventID=${DEFAULT_EVENT_ID}`
         }}
       />

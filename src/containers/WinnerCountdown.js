@@ -9,7 +9,6 @@ import Countdown from '../components/Countdown';
 import FONTS from '../utils/Fonts';
 import PopupTrivia from '../components/PopupTrivia';
 import PopupInvite from '../components/PopupInvite';
-import TicketCard from '../components/TicketCard';
 import TicketImage from '../components/TicketImage';
 
 import actions from '../data/actions';

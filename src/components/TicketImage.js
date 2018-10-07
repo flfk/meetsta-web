@@ -40,6 +40,12 @@ const TicketImage = props => {
     <Subtitle>ONLINE MEET & GREET</Subtitle>
   );
 
+  const stubTitle = isPremium ? (
+    <StubTitle isPremium>{influencerName.toUpperCase()}</StubTitle>
+  ) : (
+    <StubTitle>{influencerName.toUpperCase()}</StubTitle>
+  );
+
   const timeStart = moment.tz(dateStart, 'America/Los_Angeles');
   const timeEnd = moment.tz(dateEnd, 'America/Los_Angeles');
 
@@ -58,7 +64,7 @@ const TicketImage = props => {
         <div>{dateLong.toUpperCase()}</div>
         <div>{timeRange.toUpperCase()}</div>
       </Time>
-      <StubTitle>{influencerName.toUpperCase()}</StubTitle>
+      {stubTitle}
       <StubSubtitle>
         {dateShort} <br />
         {year}
@@ -146,7 +152,7 @@ const Subtitle = styled.div`
 const Time = styled.div`
   position: absolute;
   left: 0px;
-  top: 98px;
+  top: 96px;
   height: 58px;
   width: 292px;
   font-size: 12px;
@@ -209,7 +215,7 @@ const StubSubtitle = styled.div`
   top: 68px;
   height: 40px;
   width: 56px;
-  font-size: 12px;
+  font-size: 10px;
 
   display: flex;
   justify-content: flex-start;

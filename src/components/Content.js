@@ -31,6 +31,10 @@ const Row = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
+  > divp:first-child {
+    margin-right: 8px;
+  }
 `;
 
 const RowGrid = styled.div`

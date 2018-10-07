@@ -172,8 +172,7 @@ class Ticket extends React.Component {
       baseOptionsDiv = (
         <Content.Row>
           <Card.P>
-            {name} on a {lengthMins} minute <br />
-            one-on-one video call
+            {name} on a {lengthMins} minute one-on-one video call
           </Card.P>
           <Card.P>${priceBase}</Card.P>
         </Content.Row>
