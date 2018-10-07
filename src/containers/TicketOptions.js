@@ -68,7 +68,8 @@ class TicketOptions extends React.Component {
 
     let ticketsDiv = null;
     if (tickets) {
-      ticketsDiv = tickets.map(ticket => (
+      const ticketsSorted = tickets.sort((a, b) => b.priceBase - a.priceBase);
+      ticketsDiv = ticketsSorted.map(ticket => (
         <CardOptions
           key={ticket.ticketID}
           description={ticket.description}
