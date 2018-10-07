@@ -49,6 +49,8 @@ const Tertiary = styled.button`
   :focus {
     outline: none;
   }
+
+  ${props => (props.noPadding ? 'padding: 0' : '')};
 `;
 
 const Inline = Tertiary.extend`

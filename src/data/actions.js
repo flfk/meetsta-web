@@ -97,6 +97,45 @@ const getCollEventTickets = async eventID => {
   }
 };
 
+const getDocEventTicket = async (eventID, ticketID) => {
+  try {
+    const ticketsRef = db
+      .collection(COLL_EVENTS)
+      .doc(eventID)
+      .collection(COLL_TICKETS)
+      .doc(ticketID);
+    const snapshot = await ticketsRef.get();
+    const data = await snapshot.data();
+    const { id } = snapshot;
+    const ticket = { ...data, ticketID: id };
+    return ticket;
+  } catch (error) {
+    console.error('Error loading event ticket doc ', error);
+  }
+};
+
+const getCollEventTicketAddOns = async (eventID, ticketID) => {
+  try {
+    const addOnsRef = db
+      .collection(COLL_EVENTS)
+      .doc(eventID)
+      .collection(COLL_TICKETS)
+      .doc(ticketID)
+      .collection(COLL_ADD_ONS);
+    const snapshot = await addOnsRef.get();
+    const addOns = [];
+    snapshot.forEach(snap => {
+      const addOn = snap.data();
+      const { addOnID } = snap;
+      addOn.addOnID = addOnID;
+      addOns.push(addOn);
+    });
+    return addOns;
+  } catch (error) {
+    console.error('Error getting addOns ', error);
+  }
+};
+
 const getCollAddOns = async eventID => {
   try {
     const addOnsRef = db
@@ -169,6 +208,8 @@ const actions = {};
 actions.getDocEvent = getDocEvent;
 actions.getDocsEvent = getDocsEvent;
 actions.getCollEventTickets = getCollEventTickets;
+actions.getDocEventTicket = getDocEventTicket;
+actions.getCollEventTicketAddOns = getCollEventTicketAddOns;
 actions.getCollAddOns = getCollAddOns;
 
 actions.getDocsRegistrations = getDocsRegistrations;

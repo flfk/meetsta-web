@@ -38,7 +38,7 @@ class WinnerCountdown extends React.Component {
     showPopupInvite: false,
     hasDoneSurvey: false,
     surveyURL: 'https://goo.gl/forms/lAbNKLOjzHx4Tamx1',
-    toCheckoutVIP: false,
+    toCheckout: false,
     ticketVIP: {}
   };
 
@@ -106,7 +106,7 @@ class WinnerCountdown extends React.Component {
   };
 
   handleVIPSelect = () => {
-    this.setState({ toCheckoutVIP: true });
+    this.setState({ toCheckout: true });
   };
 
   handleSurvey = () => {
@@ -144,11 +144,11 @@ class WinnerCountdown extends React.Component {
       hasDoneInvite,
       showPopupInvite,
       hasDoneSurvey,
-      toCheckoutVIP,
+      toCheckout,
       ticketVIP
     } = this.state;
 
-    if (toCheckoutVIP === true)
+    if (toCheckout === true)
       return (
         <Redirect
           push

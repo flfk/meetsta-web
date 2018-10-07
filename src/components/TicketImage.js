@@ -1,111 +1,75 @@
+import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
-import TICKET_PREMIUM_MACKENZIE from '../assets/ticketImages/TicketPremiumMackenzieSol2.png';
-import TICKET_STANDARD_MACKENZIE from '../assets/ticketImages/TicketStandardMackenzieSol2.png';
-import TICKET_PREMIUM_WILL from '../assets/ticketImages/TicketPremiumWillSimmons.png';
-import TICKET_STANDARD_WILL from '../assets/ticketImages/TicketStandardWillSimmons.png';
-import TICKET_PREMIUM_DENJIEL from '../assets/ticketImages/TicketPremiumDenjiel2.png';
-import TICKET_STANDARD_DENJIEL from '../assets/ticketImages/TicketStandardDenjiel2.png';
-import TICKET_PREMIUM_DYLAN from '../assets/ticketImages/TicketPremiumDylanHartman.png';
-import TICKET_STANDARD_DYLAN from '../assets/ticketImages/TicketStandardDylanHartman.png';
-import TICKET_PREMIUM_LUIGI from '../assets/ticketImages/TicketPremiumLuigiCastillo.png';
-import TICKET_STANDARD_LUIGI from '../assets/ticketImages/TicketStandardLuigiCastillo.png';
-import TICKET_PREMIUM_JON from '../assets/ticketImages/TicketPremiumJonKlaasen.png';
-import TICKET_STANDARD_JON from '../assets/ticketImages/TicketStandardJonKlaasen.png';
-import TICKET_PREMIUM_LUCA from '../assets/ticketImages/TicketPremiumMostlyLuca.png';
-import TICKET_STANDARD_LUCA from '../assets/ticketImages/TicketStandardMostlyLuca.png';
-import TICKET_PREMIUM_LUCA_MINI from '../assets/ticketImages/TicketPremiumMostlyLucaMini.png';
+import TicketRegular from '../assets/TicketRegular.png';
+import TicketPremium from '../assets/TicketPremium.png';
 import MEDIA from '../utils/Media';
+import COLORS from '../utils/Colors';
 
 const propTypes = {
   eventID: PropTypes.string.isRequired,
+  influencerName: PropTypes.string.isRequired,
+  dateEnd: PropTypes.number,
+  dateStart: PropTypes.number,
   isPremium: PropTypes.bool
 };
 
 const defaultProps = {
-  isPremium: false
+  isPremium: false,
+  influencerName: 'default',
+  dateEnd: 0,
+  dateStart: 0
 };
 
-const ImageTicket = props => {
-  const { isPremium, eventID } = props;
+const TicketImage = props => {
+  const { isPremium, eventID, influencerName, dateEnd, dateStart } = props;
 
-  let ticketImg = null;
-  switch (eventID) {
-    case 'meet-will-simmons':
-      if (isPremium) {
-        ticketImg = TICKET_PREMIUM_WILL;
-      } else {
-        ticketImg = TICKET_STANDARD_WILL;
-      }
-      break;
-    case 'meet-mackenzie-sol-2':
-      if (isPremium) {
-        ticketImg = TICKET_PREMIUM_MACKENZIE;
-      } else {
-        ticketImg = TICKET_STANDARD_MACKENZIE;
-      }
-      break;
-    case 'meet-denjiel-2':
-      if (isPremium) {
-        ticketImg = TICKET_PREMIUM_DENJIEL;
-      } else {
-        ticketImg = TICKET_STANDARD_DENJIEL;
-      }
-      break;
-    case 'meet-dylan-hartman':
-      if (isPremium) {
-        ticketImg = TICKET_PREMIUM_DYLAN;
-      } else {
-        ticketImg = TICKET_STANDARD_DYLAN;
-      }
-      break;
-    case 'meet-luigi-castillo':
-      if (isPremium) {
-        ticketImg = TICKET_PREMIUM_LUIGI;
-      } else {
-        ticketImg = TICKET_STANDARD_LUIGI;
-      }
-      break;
-    case 'meet-jon-klaasen':
-      if (isPremium) {
-        ticketImg = TICKET_PREMIUM_JON;
-      } else {
-        ticketImg = TICKET_STANDARD_JON;
-      }
-      break;
-    case 'meet-mostly-luca':
-      if (isPremium) {
-        ticketImg = TICKET_PREMIUM_LUCA;
-      } else {
-        ticketImg = TICKET_STANDARD_LUCA;
-      }
-      break;
-    default:
-      if (isPremium) {
-        ticketImg = null;
-      } else {
-        ticketImg = null;
-      }
-  }
+  const ticketBackground = isPremium ? TicketPremium : TicketRegular;
 
-  if (eventID === 'meet-mostly-luca-mini') {
-    return (
-      <WrapperTicketImageLuca>
-        <img src={TICKET_PREMIUM_LUCA_MINI} alt="Event ticket" />
-      </WrapperTicketImageLuca>
-    );
-  }
+  const title = isPremium ? (
+    <Title isPremium>{influencerName.toUpperCase()}</Title>
+  ) : (
+    <Title>{influencerName.toUpperCase()}</Title>
+  );
+
+  const subtitle = isPremium ? (
+    <Subtitle isPremium>ONLINE MEET & GREET</Subtitle>
+  ) : (
+    <Subtitle>ONLINE MEET & GREET</Subtitle>
+  );
+
+  const timeStart = moment.tz(dateStart, 'America/Los_Angeles');
+  const timeEnd = moment.tz(dateEnd, 'America/Los_Angeles');
+
+  const day = timeStart.format('dddd');
+  const dateLong = timeStart.format('MMM Do, YYYY');
+  const dateShort = timeStart.format('MMM Do');
+  const year = timeStart.format('YYYY');
+  const timeRange = `${timeStart.format('H:mm')} - ${timeEnd.format('H:mm')} (PDT)`;
 
   return (
     <WrapperTicketImage>
-      <img src={ticketImg} alt="Event ticket" />
+      {title}
+      {subtitle}
+      <Time>
+        <div>{day.toUpperCase()}</div>
+        <div>{dateLong.toUpperCase()}</div>
+        <div>{timeRange.toUpperCase()}</div>
+      </Time>
+      <StubTitle>{influencerName.toUpperCase()}</StubTitle>
+      <StubSubtitle>
+        {dateShort} <br />
+        {year}
+      </StubSubtitle>
+      <img src={ticketBackground} alt="Event ticket" />
     </WrapperTicketImage>
   );
 };
 
 const WrapperTicketImage = styled.div`
+  position: relative;
   height: 200px;
   width: 416px;
   border-radius: 5px;
@@ -123,25 +87,153 @@ const WrapperTicketImage = styled.div`
   }
 `;
 
-const WrapperTicketImageLuca = styled.div`
-  height: 272px;
-  width: 416px;
-  border-radius: 5px;
-  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2);
-  margin: 8px 0;
-  img {
-    height: 100%;
-    width: 100%;
-    border-radius: 5px;
-  }
+const Title = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 64px;
+  width: 292px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 36px;
+  color: ${props => (props.isPremium ? 'white' : COLORS.primary.red)};
+  font-family: PTSansNarrow;
+  font-weight: 800;
+  letter-spacing: 0.08em;
 
   ${MEDIA.tablet} {
-    height: 208px;
-    width: 312px;
+    height: 48px;
+    width: 220px;
+    font-size: 28px;
   }
+
+  // background-color: blue;
+  // opacity: 0.5;
 `;
 
-ImageTicket.propTypes = propTypes;
-ImageTicket.defaultProps = defaultProps;
+const Subtitle = styled.div`
+  position: absolute;
+  left: 0px;
+  top: 52px;
+  height: 32px;
+  width: 292px;
+  font-size: 16px;
 
-export default ImageTicket;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: ${props => (props.isPremium ? 'white' : COLORS.primary.red)};
+  font-family: Nunito, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+
+  ${MEDIA.tablet} {
+    left: 0px;
+    top: 44px;
+    height: 24px;
+    width: 220px;
+    font-size: 12px;
+  }
+
+  // background-color: green;
+  // opacity: 0.5;
+`;
+
+const Time = styled.div`
+  position: absolute;
+  left: 0px;
+  top: 98px;
+  height: 58px;
+  width: 292px;
+  font-size: 12px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-family: Nunito, sans-serif;
+  font-weight: 600;
+  color: white;
+
+  ${MEDIA.tablet} {
+    left: 0px;
+    top: 74px;
+    height: 46px;
+    width: 220px;
+    font-size: 8px;
+  }
+
+  // background-color: orange;
+  // opacity: 0.5;
+`;
+
+const StubTitle = styled.div`
+  position: absolute;
+  right: 2px;
+  top: 42px;
+  height: 20px;
+  width: 108px;
+  font-size: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: Nunito, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+
+  color: #c6c6c6;
+  background-color: ${props => (props.isPremium ? '#f4f4f4' : '#F8F8F8')};
+
+  ${MEDIA.tablet} {
+    right: 2px;
+    top: 32px;
+    height: 16px;
+    width: 82px;
+    font-size: 8px;
+  }
+
+  // background-color: red;
+  // opacity: 0.5;
+`;
+
+const StubSubtitle = styled.div`
+  position: absolute;
+  right: 52px;
+  top: 68px;
+  height: 40px;
+  width: 56px;
+  font-size: 12px;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  font-family: Nunito, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+
+  color: #c6c6c6;
+
+  ${MEDIA.tablet} {
+    right: 38px;
+    top: 50px;
+    height: 32px;
+    width: 46px;
+    font-size: 10px;
+  }
+
+  // background-color: red;
+  // opacity: 0.5;
+`;
+
+TicketImage.propTypes = propTypes;
+TicketImage.defaultProps = defaultProps;
+
+export default TicketImage;
