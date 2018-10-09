@@ -8,7 +8,8 @@ export const getTimeRange = (dateStart, dateEnd) => {
   return timeRange;
 };
 
-export const getDate = dateStart => moment(dateStart).format('dddd, MMM Do, YYYY');
+export const getDate = dateStart =>
+  moment.tz(dateStart, 'America/Los_Angeles').format('dddd, MMM Do, YYYY');
 
 export const getParams = props => {
   return qs.parse(props.location.search, { ignoreQueryPrefix: true });
