@@ -20,14 +20,16 @@ const propTypes = {
   onSelect: PropTypes.func.isRequired,
   isPremium: PropTypes.bool.isRequired,
   baseOptions: PropTypes.array,
-  addOns: PropTypes.array
+  addOns: PropTypes.array,
+  addOnsIncluded: PropTypes.array
 };
 
 const defaultProps = {
   ticketID: '',
   description: '',
   baseOptions: [],
-  addOns: []
+  addOns: [],
+  addOnsIncluded: []
 };
 
 const DEFAULT_BASE_OPTION = 0;
@@ -61,6 +63,7 @@ class Ticket extends React.Component {
       lengthMins,
       isPremium,
       addOns,
+      addOnsIncluded,
       baseOptions
     } = this.props;
 
@@ -132,12 +135,12 @@ class Ticket extends React.Component {
       showPopupTime
     } = this.state;
 
-    const { addOns, onSelect, baseOptions, dateStart, dateEnd } = this.props;
+    const { addOns, addOnsIncluded, onSelect, baseOptions, dateStart, dateEnd } = this.props;
 
     let addOnsDiv = null;
-    if (addOns) {
+    if (addOns.length > 0) {
       const addOnsSorted = addOns.sort((a, b) => b.price - a.price);
-      addOnsDiv = addOnsSorted.map(addOn => (
+      const addOnsList = addOnsSorted.map(addOn => (
         <SelectableFeature
           key={addOn.name}
           name={addOn.name}
@@ -145,6 +148,34 @@ class Ticket extends React.Component {
           handleSelect={this.handleAddOnSelect}
         />
       ));
+
+      addOnsDiv = (
+        <div>
+          <Card.H3> Optional Add-ons</Card.H3>
+          {addOnsList}
+          <Content.Seperator />
+        </div>
+      );
+    }
+
+    let addOnsIncludedDiv = null;
+    if (addOnsIncluded.length > 0) {
+      const addOnsIncludedList = addOnsIncluded.map(addOn => (
+        <Card.P>
+          <span role="img" aria-label="Tick">
+            ✅
+          </span>{' '}
+          {addOn}
+        </Card.P>
+      ));
+
+      addOnsIncludedDiv = (
+        <div>
+          <Card.H3> Includes</Card.H3>
+          {addOnsIncludedList}
+          <Content.Seperator />
+        </div>
+      );
     }
 
     let baseOptionsDiv = null;
@@ -170,12 +201,15 @@ class Ticket extends React.Component {
       );
     } else {
       baseOptionsDiv = (
-        <Content.Row>
-          <Card.P>
-            {name} on a {lengthMins} minute one-on-one video call
-          </Card.P>
-          <Card.P>${priceBase}</Card.P>
-        </Content.Row>
+        <div>
+          <Card.H3>Ticket Selected</Card.H3>
+          <Content.Row>
+            <Card.P>
+              {name} on a {lengthMins} minute one-on-one video call
+            </Card.P>
+            <Card.P>${priceBase}</Card.P>
+          </Content.Row>
+        </div>
       );
     }
 
@@ -213,9 +247,8 @@ class Ticket extends React.Component {
         <Content.Seperator />
         {baseOptionsDiv}
         <Content.Seperator />
-        <Card.H3> Optional Add-ons</Card.H3>
+        {addOnsIncludedDiv}
         {addOnsDiv}
-        <Content.Seperator />
         <Content.Center>
           <Card.H2>$ {priceTotal}</Card.H2>
         </Content.Center>

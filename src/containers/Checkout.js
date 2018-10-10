@@ -288,6 +288,7 @@ class Checkout extends React.Component {
           isPremium={ticket.isPremium}
           baseOptions={ticket.baseOptions}
           addOns={addOns}
+          addOnsIncluded={ticket.addOnsIncluded}
           dateStart={dateStart}
           dateEnd={dateEnd}
         />
