@@ -302,10 +302,14 @@ class Checkout extends React.Component {
         <CardSouvenirs
           eventID={eventID}
           name={'Souvenirs'}
+          influencerName={influencerName}
+          isPremium
           lengthMins={0}
           priceBase={0}
           onSelect={this.handleTicketSelect}
           addOns={souvenirs}
+          dateStart={dateStart}
+          dateEnd={dateEnd}
         />
       );
     }

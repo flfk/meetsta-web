@@ -12,6 +12,7 @@ import EVENT_IMAGE_LUIGI from '../assets/eventImages/EventImageLuigiCastillo.png
 import EVENT_IMAGE_JON from '../assets/eventImages/EventImageJonKlaasen.png';
 import EVENT_IMAGE_LUCA from '../assets/eventImages/EventImageMostlyLuca.png';
 import SelectableFeature from './SelectableFeature';
+import TicketImage from './TicketImage';
 import Wrapper from './Wrapper';
 
 const NAME_SOUVENIRS = 'Souvenirs';
@@ -75,8 +76,26 @@ class Ticket extends React.Component {
     this.setState({ addOnsSelected: addOnsSelectedUpdated, priceTotal });
   };
 
+  handleSelectTicket = () => {
+    const { onSelect } = this.props;
+    const ticket = this.createTicket();
+    onSelect(ticket);
+  };
+
   render() {
-    const { ticketID, eventID, name, lengthMins, priceBase, addOns, onSelect } = this.props;
+    const {
+      ticketID,
+      eventID,
+      name,
+      lengthMins,
+      priceBase,
+      addOns,
+      onSelect,
+      influencerName,
+      isPremium,
+      dateStart,
+      dateEnd
+    } = this.props;
 
     const { priceTotal } = this.state;
 
@@ -88,7 +107,7 @@ class Ticket extends React.Component {
           key={addOn.name}
           name={addOn.name}
           price={addOn.price}
-          handleAddOnSelect={this.handleAddOnSelect}
+          handleSelect={this.handleAddOnSelect}
         />
       ));
     }
@@ -122,10 +141,20 @@ class Ticket extends React.Component {
 
     const ticketSelected = this.createTicket();
 
+    const ticketImg = (
+      <TicketImage
+        isPremium
+        eventID={eventID}
+        influencerName={influencerName}
+        dateStart={dateStart}
+        dateEnd={dateEnd}
+      />
+    );
+
     return (
       <Card>
         <Card.H1>Souvenirs</Card.H1>
-        <Wrapper.EventImage>{eventImg}</Wrapper.EventImage>
+        {ticketImg}
         <br />
         <Content.Seperator />
         {addOnsDiv}
@@ -134,7 +163,7 @@ class Ticket extends React.Component {
           <Card.H2>$ {priceTotal}</Card.H2>
         </Content.Center>
         <div>
-          <Btn.Full primary onClick={() => onSelect(ticketSelected)} id={ticketID}>
+          <Btn.Full primary onClick={this.handleSelectTicket} id={ticketID}>
             Get Souvenirs
           </Btn.Full>
         </div>
