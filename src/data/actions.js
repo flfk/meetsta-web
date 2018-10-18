@@ -126,8 +126,7 @@ const getCollEventTicketAddOns = async (eventID, ticketID) => {
     const addOns = [];
     snapshot.forEach(snap => {
       const addOn = snap.data();
-      const { addOnID } = snap;
-      addOn.addOnID = addOnID;
+      addOn.addOnID = snap.id;
       addOns.push(addOn);
     });
     return addOns;

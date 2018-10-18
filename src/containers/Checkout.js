@@ -103,6 +103,7 @@ class Checkout extends React.Component {
       const ticket = await actions.getDocEventTicket(eventID, ticketID);
       const tickets = [ticket];
       const addOns = await actions.getCollEventTicketAddOns(eventID, ticketID);
+      console.log('Checkout, addOns,', addOns);
       this.setState({ eventID, ...formattedDataEvent, tickets, addOns });
     } catch (error) {
       console.error('Error loading formatted data ', error);

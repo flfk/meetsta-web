@@ -138,6 +138,8 @@ class Ticket extends React.Component {
     const { addOns, addOnsIncluded, onSelect, baseOptions, dateStart, dateEnd } = this.props;
 
     let addOnsDiv = null;
+    let baseOptionsDiv = null;
+    console.log('addOns ', addOns);
     if (addOns.length > 0) {
       const addOnsSorted = addOns.sort((a, b) => b.price - a.price);
       const addOnsList = addOnsSorted.map(addOn => (
@@ -178,7 +180,6 @@ class Ticket extends React.Component {
       );
     }
 
-    let baseOptionsDiv = null;
     if (baseOptions.length > 0) {
       const baseOptionsList = baseOptions.map(option => {
         const isChecked = option === baseOptionSelected;
