@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import Btn from '../components/Btn';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
+import PopupInfo from '../components/leaderboards/PopupInfo';
 
 import DATA_LEADERBOARD from '../data/leaderboards/Socookiecutters';
 
@@ -13,7 +15,9 @@ const propTypes = {};
 const defaultProps = {};
 
 class LeaderboardSocookiecutters extends React.Component {
-  state = {};
+  state = {
+    showPopupInfo: false
+  };
 
   getFormattedNumber = number => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
@@ -46,7 +50,13 @@ class LeaderboardSocookiecutters extends React.Component {
     }
   };
 
+  handlePopupInfoClose = () => this.setState({ showPopupInfo: false });
+
+  handlePopupInfoOpen = () => this.setState({ showPopupInfo: true });
+
   render() {
+    const { showPopupInfo } = this.state;
+
     const leaderboardData = this.getLeaderBoardData();
 
     const leaderboard = leaderboardData.map((fan, index) => (
@@ -58,6 +68,9 @@ class LeaderboardSocookiecutters extends React.Component {
       </Content.Row>
     ));
 
+    const popupInfo = showPopupInfo ? <PopupInfo handleClose={this.handlePopupInfoClose} /> : null;
+    console.log('showPopupInfo is', showPopupInfo);
+
     return (
       <Content>
         <Fonts.H1>
@@ -67,8 +80,10 @@ class LeaderboardSocookiecutters extends React.Component {
             💯
           </span>
         </Fonts.H1>
+        <Btn.Tertiary onClick={this.handlePopupInfoOpen}>How does it work?</Btn.Tertiary>
         {leaderboard}
         <br />
+        {popupInfo}
       </Content>
     );
   }
