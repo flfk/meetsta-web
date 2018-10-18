@@ -23,7 +23,7 @@ class PopupInfo extends React.Component {
         <Popup.Background />
         <Popup.Card>
           <Content>
-            <Fonts.H1>How does it work?</Fonts.H1>
+            <Fonts.H1>How It Works</Fonts.H1>
             <Fonts.H3>
               We analyse instagram to see which fans have been most active. <br />
               <br />
