@@ -21,6 +21,8 @@ import PrivacyPolicy from './containers/PrivacyPolicy';
 import OrderConfirmation from './containers/OrderConfirmation';
 import WinnerCountdown from './containers/WinnerCountdown';
 
+import LeaderboardSocookiecutters from './containers/LeaderboardSocookiecutters';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -52,6 +54,8 @@ class App extends Component {
                 <Route path="/privacyPolicy" component={PrivacyPolicy} />
                 <Route path="/contactus" component={ContactUs} />
                 <Route path="/countdown" component={WinnerCountdown} />
+
+                <Route path="/socookiecutterstop100" component={LeaderboardSocookiecutters} />
               </Switch>
             </Main>
           </div>
