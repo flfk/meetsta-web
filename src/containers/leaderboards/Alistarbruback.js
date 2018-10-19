@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Btn from '../components/Btn';
-import Content from '../components/Content';
-import Fonts from '../utils/Fonts';
-import PopupInfo from '../components/leaderboards/PopupInfo';
+import Btn from '../../components/Btn';
+import Content from '../../components/Content';
+import Fonts from '../../utils/Fonts';
+import PopupInfo from '../../components/leaderboards/PopupInfo';
 
-import DATA_LEADERBOARD from '../data/leaderboards/Socookiecutters';
+import DATA_LEADERBOARD from '../../data/leaderboards/Alistarbruback20181019';
 
 const POINTS_MULTIPLIER = 257;
 
@@ -60,9 +60,9 @@ class LeaderboardSocookiecutters extends React.Component {
     const leaderboardData = this.getLeaderBoardData();
 
     const leaderboard = leaderboardData.map((fan, index) => (
-      <Content.Row key={fan.handle}>
+      <Content.Row key={fan.username}>
         <Fonts.H3>
-          {index + 1}. {fan.handle} {this.getTrophy(index)}
+          {index + 1}. {fan.username} {this.getTrophy(index)}
         </Fonts.H3>
         <Fonts.H3>{this.getFormattedNumber(fan.points * POINTS_MULTIPLIER)}</Fonts.H3>
       </Content.Row>
