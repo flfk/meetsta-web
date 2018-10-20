@@ -2,10 +2,10 @@ import React from 'react';
 
 import Leaderboard from '../../components/leaderboard';
 
-import DATA_LEADERBOARD from '../../data/leaderboards/Socookiecutters20181019';
+import DATA_LEADERBOARD from '../../data/leaderboards/Jacksonnfelt20181020';
 
-const INFLUENCER_DISPLAY_NAME = 'Cookie Cutters';
-const INFLUENCER_USERNAME = 'socookiecutters';
+const INFLUENCER_DISPLAY_NAME = 'Jackson Felt';
+const INFLUENCER_USERNAME = 'jacksonnfelt';
 
 class LeaderboardAlistarBruback extends React.Component {
   render() {
