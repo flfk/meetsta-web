@@ -5,8 +5,7 @@ import Btn from '../Btn';
 import Content from '../Content';
 import Fonts from '../../utils/Fonts';
 import PopupInfo from './PopupInfo';
-
-import DATA_LEADERBOARD from '../../data/leaderboards/Alistarbruback20181019';
+import LeaderboardRow from './LeaderboardRow';
 
 const POINTS_MULTIPLIER = 257;
 
@@ -34,10 +33,6 @@ class Leaderboard extends React.Component {
   };
 
   getFormattedNumber = number => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-  getLeaderBoardData = () => DATA_LEADERBOARD;
-
-  getInfluencerName = () => 'Leaderboard component';
 
   getTrophy = index => {
     switch (true) {
@@ -75,12 +70,13 @@ class Leaderboard extends React.Component {
     const leaderboardData = data;
 
     const leaderboard = leaderboardData.map((fan, index) => (
-      <Content.Row key={fan.username}>
-        <Fonts.H3>
-          {index + 1}. {fan.username} {this.getTrophy(index)}
-        </Fonts.H3>
-        <Fonts.H3>{this.getFormattedNumber(fan.points * POINTS_MULTIPLIER)}</Fonts.H3>
-      </Content.Row>
+      <LeaderboardRow
+        points={this.getFormattedNumber(fan.points * POINTS_MULTIPLIER)}
+        profileImgUrl={fan.profilePicUrl}
+        rank={index + 1}
+        trophy={this.getTrophy(index)}
+        username={fan.username}
+      />
     ));
 
     const popupInfo = showPopupInfo ? <PopupInfo handleClose={this.handlePopupInfoClose} /> : null;

@@ -31,6 +31,7 @@ const Row = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  align-items: ${props => (props.alignCenter ? 'center' : '')};
 
   > divp:first-child {
     margin-right: 8px;
