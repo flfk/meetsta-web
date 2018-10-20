@@ -4,7 +4,7 @@ import React from 'react';
 import Btn from '../../components/Btn';
 import Content from '../../components/Content';
 import Fonts from '../../utils/Fonts';
-import PopupInfo from '../../components/leaderboards/PopupInfo';
+import PopupInfo from '../../components/leaderboard/PopupInfo';
 
 import DATA_LEADERBOARD from '../../data/leaderboards/Socookiecutters20181019';
 
@@ -73,7 +73,7 @@ class LeaderboardSocookiecutters extends React.Component {
 
     return (
       <Content>
-        <Fonts.H1>
+        <Fonts.H1 centered>
           {this.getInfluencerName()}
           's Top{' '}
           <span role="img" aria-label="100">
