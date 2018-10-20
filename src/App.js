@@ -22,6 +22,7 @@ import OrderConfirmation from './containers/OrderConfirmation';
 import WinnerCountdown from './containers/WinnerCountdown';
 
 import LeaderboardAlistarbruback from './containers/leaderboards/Alistarbruback';
+import LeaderboardJacksonnfelt from './containers/leaderboards/Jacksonnfelt';
 import LeaderboardSocookiecutters from './containers/leaderboards/Socookiecutters';
 
 class App extends Component {
@@ -57,6 +58,7 @@ class App extends Component {
                 <Route path="/countdown" component={WinnerCountdown} />
 
                 <Route path="/alistarbrubacktop100" component={LeaderboardAlistarbruback} />
+                <Route path="/top100-jacksonfelt" component={LeaderboardJacksonnfelt} />
                 <Route path="/socookiecutterstop100" component={LeaderboardSocookiecutters} />
               </Switch>
             </Main>
