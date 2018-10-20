@@ -12,10 +12,10 @@ import Wrapper from '../Wrapper';
 const INSTAGRAM_URL_BASE = 'https://www.instagram.com/';
 
 const propTypes = {
-  points: PropTypes.number.isRequired,
+  points: PropTypes.string.isRequired,
   profileImgUrl: PropTypes.string.isRequired,
   rank: PropTypes.number.isRequired,
-  rank: PropTypes.element.isRequired,
+  trophy: PropTypes.element.isRequired,
   username: PropTypes.string.isRequired
 };
 

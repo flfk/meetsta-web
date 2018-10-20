@@ -3,9 +3,13 @@ import React from 'react';
 
 import Btn from '../Btn';
 import Content from '../Content';
+import Footer from './Footer';
 import Fonts from '../../utils/Fonts';
+import { getTimestamp } from '../../utils/helpers';
 import PopupInfo from './PopupInfo';
 import LeaderboardRow from './LeaderboardRow';
+
+import actions from '../../data/actions';
 
 const POINTS_MULTIPLIER = 257;
 
@@ -29,6 +33,9 @@ const defaultProps = {};
 
 class Leaderboard extends React.Component {
   state = {
+    signupInput: '',
+    signupInputErrMsg: '',
+    hasClaimedPoints: false,
     showPopupInfo: false
   };
 
@@ -42,21 +49,41 @@ class Leaderboard extends React.Component {
             👑
           </span>
         );
-      case index <= 5:
+      case index < 10:
         return (
           <span role="img" aria-label="1">
             ⭐
           </span>
         );
-      case index <= 10:
+      case index < 30:
         return (
           <span role="img" aria-label="1">
             🏅
           </span>
         );
       default:
-        return null;
+        return <span />;
     }
+  };
+
+  handleChangeInput = event => this.setState({ signupInput: event.target.value });
+
+  handleClaimPoints = () => {
+    const { signupInput } = this.state;
+    const { influencer } = this.props;
+    if (signupInput === '') {
+      this.setState({
+        signupInputErrMsg: 'Type in your instagram username above to claim your points.'
+      });
+      return;
+    }
+    const user = {
+      username: signupInput,
+      influencer: influencer.username,
+      timestamp: getTimestamp()
+    };
+    actions.leaderboardSignup(user);
+    this.setState({ hasClaimedPoints: true });
   };
 
   handlePopupInfoClose = () => this.setState({ showPopupInfo: false });
@@ -64,13 +91,14 @@ class Leaderboard extends React.Component {
   handlePopupInfoOpen = () => this.setState({ showPopupInfo: true });
 
   render() {
-    const { showPopupInfo } = this.state;
+    const { signupInput, signupInputErrMsg, hasClaimedPoints, showPopupInfo } = this.state;
     const { influencer, data } = this.props;
 
     const leaderboardData = data;
 
     const leaderboard = leaderboardData.map((fan, index) => (
       <LeaderboardRow
+        key={fan.username}
         points={this.getFormattedNumber(fan.points * POINTS_MULTIPLIER)}
         profileImgUrl={fan.profilePicUrl}
         rank={index + 1}
@@ -79,22 +107,30 @@ class Leaderboard extends React.Component {
       />
     ));
 
-    const popupInfo = showPopupInfo ? <PopupInfo handleClose={this.handlePopupInfoClose} /> : null;
-
     return (
-      <Content>
-        <Fonts.H1 centered>
-          {influencer.displayName}
-          's Top{' '}
-          <span role="img" aria-label="100">
-            💯
-          </span>
-        </Fonts.H1>
-        <Btn.Tertiary onClick={this.handlePopupInfoOpen}>How does it work?</Btn.Tertiary>
-        {leaderboard}
-        <br />
-        {popupInfo}
-      </Content>
+      <div>
+        <Content.PaddingBottom>
+          <Fonts.H1 centered noMarginBottom>
+            {influencer.displayName}
+            's Top{' '}
+            <span role="img" aria-label="100">
+              💯
+            </span>
+          </Fonts.H1>
+          <Fonts.H3 centered>Earn points by commenting on and liking posts.</Fonts.H3>
+          {leaderboard}
+          <br />
+          <Content.Spacing />
+          <Content.Spacing />
+        </Content.PaddingBottom>
+        <Footer
+          handleSubmit={this.handleClaimPoints}
+          hasClaimedPoints={hasClaimedPoints}
+          onChange={this.handleChangeInput}
+          value={signupInput}
+          errMsg={signupInputErrMsg}
+        />
+      </div>
     );
   }
 }

@@ -1,12 +1,13 @@
 import db from './firebase';
 
 // Collection and document Names
+const COLL_ADD_ONS = 'addOns';
 const COLL_EMAILS = 'emails';
 const COLL_EVENTS = 'events';
+const COLL_LEADERBOARD_SIGNUPS = 'leaderboardSignups';
 const COLL_TICKETS = 'tickets';
-const COLL_ADD_ONS = 'addOns';
-const COLL_UTILS = 'utils';
 const COLL_REGISTRATIONS = 'registrations';
+const COLL_UTILS = 'utils';
 
 const DOC_LAST_ORDER = 'lastOrder';
 
@@ -202,6 +203,14 @@ const addDocEmailRequest = async emailRequest => {
   return email;
 };
 
+const leaderboardSignup = async user => {
+  try {
+    await db.collection(COLL_LEADERBOARD_SIGNUPS).add(user);
+  } catch (error) {
+    console.error('Actions, leaderboardSignup, ', error);
+  }
+};
+
 const actions = {};
 
 actions.getDocEvent = getDocEvent;
@@ -223,5 +232,7 @@ actions.getNewOrderNum = getNewOrderNum;
 actions.getDocsTicketsSold = getDocsTicketsSold;
 
 actions.addDocEmailRequest = addDocEmailRequest;
+
+actions.leaderboardSignup = leaderboardSignup;
 
 export default actions;
