@@ -1,3 +1,4 @@
+import mixpanel from 'mixpanel-browser';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -82,6 +83,7 @@ class Leaderboard extends React.Component {
     };
     actions.leaderboardSignup(user);
     this.setState({ hasClaimedPoints: true });
+    mixpanel.track('Claiming points', { influencer: influencer.username });
   };
 
   handlePopupInfoClose = () => this.setState({ showPopupInfo: false });
