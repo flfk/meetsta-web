@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import Content from '../Content';
+import Countdown from '../Countdown';
 import Footer from './Footer';
 import Fonts from '../../utils/Fonts';
-import { getTimestamp } from '../../utils/helpers';
+import { getTimestamp } from '../../utils/Helpers';
 import LeaderboardRow from './LeaderboardRow';
 
 import actions from '../../data/actions';
@@ -34,36 +35,10 @@ class Leaderboard extends React.Component {
   state = {
     signupInput: '',
     signupInputErrMsg: '',
-    hasClaimedPoints: false,
-    showPopupInfo: false
+    hasClaimedPoints: false
   };
 
   getFormattedNumber = number => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-  getTrophy = index => {
-    switch (true) {
-      case index === 0:
-        return (
-          <span role="img" aria-label="1">
-            👑
-          </span>
-        );
-      case index < 10:
-        return (
-          <span role="img" aria-label="1">
-            ⭐
-          </span>
-        );
-      case index < 30:
-        return (
-          <span role="img" aria-label="1">
-            🏅
-          </span>
-        );
-      default:
-        return <span />;
-    }
-  };
 
   handleChangeInput = event => this.setState({ signupInput: event.target.value });
 

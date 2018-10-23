@@ -10,8 +10,6 @@ class Countdown extends React.Component {
     super(props);
 
     this.state = {
-      date: 86400000,
-      days: 0,
       hours: 0,
       min: 0,
       sec: 0

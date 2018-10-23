@@ -4,7 +4,7 @@ import React from 'react';
 import Btn from './Btn';
 import Card from './Card';
 import Content from './Content';
-import { getTimeRange, getDate } from '../utils/helpers';
+import { getTimeRange, getDate } from '../utils/Helpers';
 import PopupTime from './popups/PopupTime';
 import TicketImage from './TicketImage';
 import SelectableFeature from './SelectableFeature';

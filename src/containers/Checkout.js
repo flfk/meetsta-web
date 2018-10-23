@@ -9,7 +9,7 @@ import CardTicket from '../components/CardTicket';
 import CardSouvenirs from '../components/CardSouvenirs';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
-import { getParams } from '../utils/helpers';
+import { getParams } from '../utils/Helpers';
 import InputText from '../components/InputText';
 import PayPalCheckout from '../components/PayPalCheckout';
 import PaymentSummary from '../components/PaymentSummary';

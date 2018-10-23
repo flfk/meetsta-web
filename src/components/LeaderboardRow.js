@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
-import Content from '../Content';
-import Colors from '../../utils/Colors';
-import Fonts from '../../utils/Fonts';
-import Wrapper from '../Wrapper';
+import Content from './Content';
+import Colors from '../utils/Colors';
+import Fonts from '../utils/Fonts';
+import Wrapper from './Wrapper';
 
 const INSTAGRAM_URL_BASE = 'https://www.instagram.com/';
 

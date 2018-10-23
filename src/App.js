@@ -8,18 +8,17 @@ import Checkout from './containers/Checkout';
 import ContactUs from './containers/ContactUs';
 import EventSales from './containers/EventSales';
 import LandingPage from './containers/LandingPage';
+import Leaderboard from './containers/Leaderboard';
 import Sales from './containers/Sales';
 import SalesTotalAdmin from './containers/SalesTotalAdmin';
 import Schedule from './containers/Schedule';
 import NavBar from './containers/NavBar';
 import TermsConditions from './containers/TermsConditions';
 import TicketOptions from './containers/TicketOptions';
+import StoreMerch from './containers/StoreMerch';
+import StorePoints from './containers/StorePoints';
 import PrivacyPolicy from './containers/PrivacyPolicy';
 import OrderConfirmation from './containers/OrderConfirmation';
-
-import LeaderboardAlistarbruback from './containers/leaderboards/Alistarbruback';
-import LeaderboardJacksonnfelt from './containers/leaderboards/Jacksonnfelt';
-import LeaderboardSocookiecutters from './containers/leaderboards/Socookiecutters';
 
 class App extends Component {
   constructor(props) {
@@ -53,17 +52,16 @@ class App extends Component {
               <Route path="/checkout" component={Checkout} />
               <Route path="/confirmation" component={OrderConfirmation} />
               <Route path="/eventSales" component={EventSales} />
+              <Route path="/top" component={Leaderboard} />
               <Route path="/sales" component={Sales} />
               <Route path="/sales-total-admin" component={SalesTotalAdmin} />
               <Route path="/schedule" component={Schedule} />
               <Route path="/options" component={TicketOptions} />
               <Route path="/termsConditions" component={TermsConditions} />
+              <Route path="/get-points" component={StorePoints} />
+              <Route path="/get-merch" component={StoreMerch} />
               <Route path="/privacyPolicy" component={PrivacyPolicy} />
               <Route path="/contactus" component={ContactUs} />
-
-              <Route path="/alistarbrubacktop100" component={LeaderboardAlistarbruback} />
-              <Route path="/top100-jacksonfelt" component={LeaderboardJacksonnfelt} />
-              <Route path="/socookiecutterstop100" component={LeaderboardSocookiecutters} />
             </Switch>
           </div>
         </BrowserRouter>
