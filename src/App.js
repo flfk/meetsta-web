@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactGA from 'react-ga';
+import mixpanel from 'mixpanel-browser';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { StripeProvider } from 'react-stripe-elements';
 
@@ -25,6 +26,9 @@ class App extends Component {
     super(props);
     ReactGA.initialize('UA-122667442-1');
     ReactGA.pageview(window.location.pathname + window.location.search);
+    mixpanel.init('dcb46e80a7ae1ac8a31fa5b703be8b32');
+    mixpanel.track('An event');
+    console.log('load');
   }
 
   render() {
