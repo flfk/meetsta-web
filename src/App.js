@@ -24,12 +24,22 @@ import LeaderboardSocookiecutters from './containers/leaderboards/Socookiecutter
 class App extends Component {
   constructor(props) {
     super(props);
-    ReactGA.initialize('UA-122667442-1');
-    ReactGA.pageview(window.location.pathname + window.location.search);
-    mixpanel.init('dcb46e80a7ae1ac8a31fa5b703be8b32');
-    mixpanel.track('An event');
-    console.log('load');
+    this.initAnalaytics();
   }
+
+  initAnalaytics = () => {
+    if (process.env.NODE_ENV === 'development') {
+      mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN_DEV);
+    } else {
+      this.initGoogleAnalytics(process.env.REACT_APP_GOOGLE_ANALYTICS_TOKEN);
+      mixpanel.init(process.env.REACT_APP_MIXPANEL_TOKEN_PROD);
+    }
+  };
+
+  initGoogleAnalytics = token => {
+    ReactGA.initialize(token);
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  };
 
   render() {
     return (
