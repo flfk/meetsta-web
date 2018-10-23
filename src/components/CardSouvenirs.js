@@ -24,12 +24,16 @@ const propTypes = {
   lengthMins: PropTypes.number.isRequired,
   priceBase: PropTypes.number.isRequired,
   onSelect: PropTypes.func.isRequired,
-  addOns: PropTypes.array
+  addOns: PropTypes.array,
+  dateStart: PropTypes.number,
+  dateEnd: PropTypes.number
 };
 
 const defaultProps = {
   ticketID: '',
-  addOns: []
+  addOns: [],
+  dateStart: 0,
+  dateEnd: 0
 };
 
 class Ticket extends React.Component {

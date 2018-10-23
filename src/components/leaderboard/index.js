@@ -91,7 +91,7 @@ class Leaderboard extends React.Component {
   handlePopupInfoOpen = () => this.setState({ showPopupInfo: true });
 
   render() {
-    const { signupInput, signupInputErrMsg, hasClaimedPoints, showPopupInfo } = this.state;
+    const { signupInput, signupInputErrMsg, hasClaimedPoints } = this.state;
     const { influencer, data } = this.props;
 
     const leaderboardData = data;

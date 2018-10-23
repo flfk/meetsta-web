@@ -298,6 +298,7 @@ class Checkout extends React.Component {
 
     const params = getParams(this.props);
     if (params.souvenirs && addOns) {
+      console.log('addOns');
       const souvenirs = addOns.filter(addOn => !addOn.additionalMins);
       ticketCards = (
         <CardSouvenirs

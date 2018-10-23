@@ -29,7 +29,7 @@ const LeaderboardFooter = ({ errMsg, handleSubmit, hasClaimedPoints, onChange, v
           onChange={onChange}
         />
         <Btn primary onClick={handleSubmit}>
-          Claim My Points
+          Use My Points
         </Btn>
       </Content>
     </FooterEvents>
