@@ -1,4 +1,5 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+import mixpanel from 'mixpanel-browser';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import validator from 'validator';
@@ -17,13 +18,8 @@ import actions from '../data/actions';
 
 const PAYPAL_VARIABLE_FEE = 0.036;
 const PAYPAL_FIXED_FEE = 0.3;
-const TICKETS_PER_BREAK = 5;
-const BREAK_LENGTH_MINS = 5;
-const QUEUE_START_PRE_EVENT_MINS = 20;
-const MILLISECS_PER_MIN = 60000;
 
 const DEFAULT_EVENT_ID = 'default-event-id';
-const DEFAULT_TICKET_ID = 'default-ticket-id';
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
@@ -66,6 +62,9 @@ class Checkout extends React.Component {
     } catch (err) {
       console.error('Error in getting documents', err);
     }
+
+    const { eventID } = this.state;
+    mixpanel.track('Visited Checkout', { eventID });
   }
 
   componentDidUpdate() {
@@ -103,7 +102,6 @@ class Checkout extends React.Component {
       const ticket = await actions.getDocEventTicket(eventID, ticketID);
       const tickets = [ticket];
       const addOns = await actions.getCollEventTicketAddOns(eventID, ticketID);
-      console.log('Checkout, addOns,', addOns);
       this.setState({ eventID, ...formattedDataEvent, tickets, addOns });
     } catch (error) {
       console.error('Error loading formatted data ', error);
@@ -170,6 +168,8 @@ class Checkout extends React.Component {
     this.setState({ ticketOrdered: ticket });
     const newTicket = await actions.addDocTicket(ticket);
     this.setState({ ticketID: newTicket.id });
+    mixpanel.track('Purchased Ticket', { eventID });
+    mixpanel.people.track_charge(ticketSelected.priceTotal);
   };
 
   toConfirmation = () => {

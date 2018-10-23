@@ -5,7 +5,7 @@ import Btn from './Btn';
 import Card from './Card';
 import Content from './Content';
 import { getTimeRange, getDate } from '../utils/helpers';
-import PopupTime from '../containers/PopupTime';
+import PopupTime from './popups/PopupTime';
 import TicketImage from './TicketImage';
 import SelectableFeature from './SelectableFeature';
 
@@ -21,7 +21,9 @@ const propTypes = {
   isPremium: PropTypes.bool.isRequired,
   baseOptions: PropTypes.array,
   addOns: PropTypes.array,
-  addOnsIncluded: PropTypes.array
+  addOnsIncluded: PropTypes.array,
+  dateStart: PropTypes.number.isRequired,
+  dateEnd: PropTypes.number.isRequired
 };
 
 const defaultProps = {
@@ -62,8 +64,6 @@ class Ticket extends React.Component {
       eventID,
       lengthMins,
       isPremium,
-      addOns,
-      addOnsIncluded,
       baseOptions
     } = this.props;
 
@@ -135,11 +135,10 @@ class Ticket extends React.Component {
       showPopupTime
     } = this.state;
 
-    const { addOns, addOnsIncluded, onSelect, baseOptions, dateStart, dateEnd } = this.props;
+    const { addOns, addOnsIncluded, baseOptions, dateStart, dateEnd } = this.props;
 
     let addOnsDiv = null;
     let baseOptionsDiv = null;
-    console.log('addOns ', addOns);
     if (addOns.length > 0) {
       const addOnsSorted = addOns.sort((a, b) => b.price - a.price);
       const addOnsList = addOnsSorted.map(addOn => (
@@ -188,7 +187,7 @@ class Ticket extends React.Component {
             key={option}
             name={option}
             price={priceBase}
-            isBaseOption={true}
+            isBaseOption
             isChecked={isChecked}
             handleSelect={this.handleBaseOptionSelect}
           />

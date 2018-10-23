@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import styled from 'styled-components';
 
 import Content from './Content';
 import FONTS from '../utils/Fonts';
@@ -20,7 +19,7 @@ const defaultProps = {
 };
 
 const PaymentSummary = props => {
-  const { item, lengthMins, priceBase, fee, addOns, priceTotal, priceTotalFeeIncl } = props;
+  const { lengthMins, priceBase, fee, addOns, priceTotalFeeIncl } = props;
 
   let callDiv = <div />;
   let addOnsDiv = <div />;

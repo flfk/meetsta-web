@@ -53,7 +53,7 @@ class TicketOptions extends React.Component {
   goToCheckout = () => this.setState({ toCheckout: true });
 
   render() {
-    const { eventID, influencerName, tickets, ticketSelectedID, toCheckout } = this.state;
+    const { eventID, tickets, ticketSelectedID, toCheckout } = this.state;
 
     if (toCheckout === true)
       return (

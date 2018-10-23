@@ -1,12 +1,11 @@
+import mixpanel from 'mixpanel-browser';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Btn from '../Btn';
 import Content from '../Content';
 import Footer from './Footer';
 import Fonts from '../../utils/Fonts';
 import { getTimestamp } from '../../utils/helpers';
-import PopupInfo from './PopupInfo';
 import LeaderboardRow from './LeaderboardRow';
 
 import actions from '../../data/actions';
@@ -84,6 +83,7 @@ class Leaderboard extends React.Component {
     };
     actions.leaderboardSignup(user);
     this.setState({ hasClaimedPoints: true });
+    mixpanel.track('Claiming points', { influencer: influencer.username });
   };
 
   handlePopupInfoClose = () => this.setState({ showPopupInfo: false });

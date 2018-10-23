@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import React from 'react';
 import qs from 'qs';
 
@@ -15,7 +15,6 @@ const MEETSTA_COMISSION = 0.15;
 
 class EventSales extends React.Component {
   state = {
-    eventID: '',
     title: '',
     influencerName: '',
     tickets: [],
@@ -100,7 +99,7 @@ class EventSales extends React.Component {
   };
 
   render() {
-    const { title, influencerName, ticketsSold, revenue, tickets } = this.state;
+    const { title, ticketsSold, revenue, tickets } = this.state;
 
     let detailedSales = <div />;
 

@@ -15,7 +15,7 @@ const propTypes = {
   value: PropTypes.string.isRequired
 };
 
-const defaultProps = {};
+// const defaultProps = {};
 
 const LeaderboardFooter = ({ errMsg, handleSubmit, hasClaimedPoints, onChange, value }) => {
   const contentUnclaimed = (

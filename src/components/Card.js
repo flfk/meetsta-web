@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
-import COLORS from '../utils/Colors';
-import FONTS from '../utils/Fonts';
-import MEDIA from '../utils/Media';
+import Fonts from '../utils/Fonts';
+import Media from '../utils/Media';
 
 const Card = styled.div`
   display: flex;
@@ -12,29 +11,29 @@ const Card = styled.div`
   padding-top: 0px;
   margin-bottom: 32px;
 
-  ${MEDIA.tablet} {
+  ${Media.tablet} {
     box-shadow: none;
     border: none;
     margin-bottom: 16px;
   }
 `;
 
-const H1 = FONTS.H1.extend`
+const H1 = Fonts.H1.extend`
   margin-top: 16px;
   margin-bottom: 8px;
 `;
 
-const H2 = FONTS.H2.extend`
+const H2 = Fonts.H2.extend`
   margin-top: 0;
   margin-bottom: 16px;
 `;
 
-const H3 = FONTS.H3.extend`
+const H3 = Fonts.H3.extend`
   margin-top: 0;
   margin-bottom: 16px;
 `;
 
-const P = FONTS.P.extend`
+const P = Fonts.P.extend`
   margin: 8px 0;
 `;
 

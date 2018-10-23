@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import qs from 'qs';
 import moment from 'moment-timezone';
@@ -7,10 +6,6 @@ import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 
 import actions from '../data/actions';
-
-// const propTypes = {};
-
-// const defaultProps = {};
 
 class Schedule extends React.Component {
   state = {

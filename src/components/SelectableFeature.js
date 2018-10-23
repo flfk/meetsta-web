@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import Content from './Content';
 import FONTS from '../utils/Fonts';
 
 const propTypes = {

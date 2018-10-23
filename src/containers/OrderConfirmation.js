@@ -7,18 +7,18 @@ import Btn from '../components/Btn';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 import InputText from '../components/InputText';
-import PopupTime from './PopupTime';
+import PopupTime from '../components/popups/PopupTime';
 
 // import db from '../data/firebase';
 import actions from '../data/actions';
 
 const URL_APPEARIN_IPHONE =
   'https://itunes.apple.com/au/app/appear-in-video-meetings/id878583078?mt=8';
-const URL_APPEARIN_ANDROID = 'https://play.google.com/store/apps/details?id=appear.in.app&hl=en';
+// const URL_APPEARIN_ANDROID = 'https://play.google.com/store/apps/details?id=appear.in.app&hl=en';
 const CONTACT_EMAIL = 'contact.meetsta@gmail.com';
 const CONTACT_INSTAGRAM = 'https://www.instagram.com/meetsta.app/';
 
-const propTypes = {};
+// const propTypes = {};
 
 // const defaultProps = {};
 
@@ -159,7 +159,6 @@ class OrderConfirmation extends React.Component {
   render() {
     const {
       ticket,
-      startTimeFormatted,
       showTimePopup,
       dateStart,
       dateEnd,
@@ -173,7 +172,7 @@ class OrderConfirmation extends React.Component {
         handleClose={this.handleTimePopupClose}
         dateStart={dateStart}
         dateEnd={dateEnd}
-        fromConfirmation={true}
+        fromConfirmation
         handleLocalTimeSubmit={this.handleLocalTimeSubmit}
       />
     ) : null;
@@ -218,8 +217,6 @@ class OrderConfirmation extends React.Component {
         </div>
       ));
     }
-
-    const checkedStartTime = true;
 
     const timeBtn = (
       <Btn primary fill="true" onClick={this.handleTimePopupOpen}>
@@ -367,7 +364,7 @@ class OrderConfirmation extends React.Component {
       </div>
     );
 
-    const confirmation = ticket.lengthMins == 0 ? confirmationSouvenirs : confirmationTickets;
+    const confirmation = ticket.lengthMins === 0 ? confirmationSouvenirs : confirmationTickets;
 
     return (
       <Content>

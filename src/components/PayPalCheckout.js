@@ -1,12 +1,12 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import scriptLoader from 'react-async-script-loader';
 import paypal from 'paypal-checkout';
 
-const propTypes = {};
+// const propTypes = {};
 
-const defaultProps = {};
+// const defaultProps = {};
 
 class PaypalButton extends React.Component {
   constructor(props) {
@@ -40,18 +40,7 @@ class PaypalButton extends React.Component {
   }
 
   render() {
-    const {
-      total,
-      currency,
-      env,
-      commit,
-      client,
-      onSuccess,
-      onError,
-      onCancel,
-      isFormValid,
-      validateForm
-    } = this.props;
+    const { total, currency, env, commit, client, onSuccess, onError, onCancel } = this.props;
 
     const { showButton } = this.state;
 
@@ -102,7 +91,7 @@ class PaypalButton extends React.Component {
   }
 }
 
-PaypalButton.propTypes = propTypes;
-PaypalButton.defaultProps = defaultProps;
+// PaypalButton.propTypes = propTypes;
+// PaypalButton.defaultProps = defaultProps;
 
 export default scriptLoader('https://www.paypalobjects.com/api/checkout.js')(PaypalButton);

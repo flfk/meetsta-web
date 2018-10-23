@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { FaTimes } from 'react-icons/fa';
 
-import Btn from './Btn';
-import MEDIA from '../utils/Media';
+import Btn from '../Btn';
+import MEDIA from '../../utils/Media';
 
 const Background = styled.div`
   position: fixed;

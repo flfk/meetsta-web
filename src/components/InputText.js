@@ -51,12 +51,6 @@ const ErrLabel = Label.extend`
   font-weight: bold;
 `;
 
-const ErrInput = Input.extend`
-  border: 1px solid ${COLORS.error.primary};
-  background-color: ${COLORS.error.light};
-  margin-bottom: 8px;
-`;
-
 const InputText = props => {
   const { value, label, onChange, placeholder, errMsg, noMargin } = props;
 
