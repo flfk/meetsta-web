@@ -18,13 +18,12 @@ const propTypes = {
 
 const defaultProps = {
   isPremium: false,
-  influencerName: 'default',
   dateEnd: 0,
   dateStart: 0
 };
 
 const TicketImage = props => {
-  const { isPremium, eventID, influencerName, dateEnd, dateStart } = props;
+  const { isPremium, influencerName, dateEnd, dateStart } = props;
 
   const ticketBackground = isPremium ? TicketPremium : TicketRegular;
 

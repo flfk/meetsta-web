@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FaTimes } from 'react-icons/fa';
 
 import styled from 'styled-components';
 
-import Btn from '../components/Btn';
-import Content from '../components/Content';
-import FONTS from '../utils/Fonts';
-import Popup from '../components/Popup';
-import PlacesAutocomplete from '../components/PlacesAutocomplete';
+import Btn from '../Btn';
+import Content from '../Content';
+import FONTS from '../../utils/Fonts';
+import Popup from './Popup';
+import PlacesAutocomplete from '../PlacesAutocomplete';
 
 const propTypes = {
   dateStart: PropTypes.number,

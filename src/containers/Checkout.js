@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import React from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import validator from 'validator';
@@ -17,13 +17,8 @@ import actions from '../data/actions';
 
 const PAYPAL_VARIABLE_FEE = 0.036;
 const PAYPAL_FIXED_FEE = 0.3;
-const TICKETS_PER_BREAK = 5;
-const BREAK_LENGTH_MINS = 5;
-const QUEUE_START_PRE_EVENT_MINS = 20;
-const MILLISECS_PER_MIN = 60000;
 
 const DEFAULT_EVENT_ID = 'default-event-id';
-const DEFAULT_TICKET_ID = 'default-ticket-id';
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,

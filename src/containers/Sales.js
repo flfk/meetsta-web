@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import React from 'react';
 import qs from 'qs';
 import moment from 'moment-timezone';
@@ -16,7 +16,6 @@ const MEETSTA_COMMISSION = 0.15;
 
 class Sales extends React.Component {
   state = {
-    eventID: '',
     eventTitle: '',
     tickets: [],
     registrations: []
@@ -65,24 +64,6 @@ class Sales extends React.Component {
     const { tickets, eventTitle, registrations } = this.state;
 
     const totalRegistrations = registrations.length;
-    const surveyCompletions = registrations.reduce((total, registration) => {
-      if (registration.hasDoneSurvey) {
-        return total + 1;
-      }
-      return total;
-    }, 0);
-    const inviteCompletions = registrations.reduce((total, registration) => {
-      if (registration.hasDoneInvite) {
-        return total + 1;
-      }
-      return total;
-    }, 0);
-    const triviaCompletions = registrations.reduce((total, registration) => {
-      if (registration.hasDoneTrivia) {
-        return total + 1;
-      }
-      return total;
-    }, 0);
 
     const totalRevenue = tickets.reduce((total, ticket) => total + ticket.priceTotal, 0);
     const totalRevenueInfluencer = (totalRevenue * (1 - MEETSTA_COMMISSION)).toFixed(2);

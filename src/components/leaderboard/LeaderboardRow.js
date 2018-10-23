@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
-import BtnProfile from '../BtnProfile';
 import Content from '../Content';
 import Colors from '../../utils/Colors';
 import Fonts from '../../utils/Fonts';

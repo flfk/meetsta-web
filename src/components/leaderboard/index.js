@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Btn from '../Btn';
 import Content from '../Content';
 import Footer from './Footer';
 import Fonts from '../../utils/Fonts';
 import { getTimestamp } from '../../utils/helpers';
-import PopupInfo from './PopupInfo';
 import LeaderboardRow from './LeaderboardRow';
 
 import actions from '../../data/actions';
