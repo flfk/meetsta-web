@@ -1,5 +1,6 @@
 import mixpanel from 'mixpanel-browser';
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 
 import actions from '../data/actions';
 import CardMerch from '../components/CardMerch';
@@ -45,13 +46,27 @@ const MERCH = [
 
 class StoreMerch extends React.Component {
   state = {
-    merch: []
+    merch: [],
+    toAuth: false
   };
 
   componentDidMount() {
     mixpanel.track('Visited Merch Store');
     this.setMerch();
   }
+
+  goToAuth = () => {
+    return (
+      <Redirect
+        push
+        to={{
+          pathname: '/auth'
+        }}
+      />
+    );
+  };
+
+  handleSelect = () => this.setState({ toAuth: true });
 
   setMerch = async () => {
     const merch = await Promise.all(
@@ -64,9 +79,20 @@ class StoreMerch extends React.Component {
   };
 
   render() {
-    const { merch } = this.state;
+    const { merch, toAuth } = this.state;
+
+    if (toAuth) {
+      return this.goToAuth();
+    }
+
     const merchDiv = merch.map(item => (
-      <CardMerch key={item.merchID} name={item.name} price={item.price} imgURL={item.imgURL} />
+      <CardMerch
+        key={item.merchID}
+        name={item.name}
+        price={item.price}
+        imgURL={item.imgURL}
+        handleSelect={this.handleSelect}
+      />
     ));
 
     return <Content>{merchDiv}</Content>;

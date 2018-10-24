@@ -140,16 +140,19 @@ class Leaderboard extends React.Component {
       return this.goToGetMerch(influencerID);
     }
 
-    const leaderboard = fans.map((fan, index) => (
-      <LeaderboardRow
-        key={fan.username}
-        points={getFormattedNumber(fan.points * POINTS_MULTIPLIER)}
-        profileImgUrl={fan.profilePicUrl}
-        rank={index + 1}
-        trophy={this.getTrophy(index)}
-        username={fan.username}
-      />
-    ));
+    let leaderboard = null;
+    if (fans) {
+      leaderboard = fans.map((fan, index) => (
+        <LeaderboardRow
+          key={fan.username}
+          points={getFormattedNumber(fan.points * POINTS_MULTIPLIER)}
+          profileImgUrl={fan.profilePicUrl}
+          rank={index + 1}
+          trophy={this.getTrophy(index)}
+          username={fan.username}
+        />
+      ));
+    }
 
     return (
       <div>

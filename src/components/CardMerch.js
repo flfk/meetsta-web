@@ -7,6 +7,7 @@ import Fonts from '../utils/Fonts';
 import Media from '../utils/Media';
 
 const propTypes = {
+  handleSelect: PropTypes.func.isRequired,
   imgURL: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired
@@ -14,13 +15,13 @@ const propTypes = {
 
 const defaultProps = {};
 
-const CardOptions = ({ imgURL, name, price }) => (
+const CardOptions = ({ handleSelect, imgURL, name, price }) => (
   <Container>
     <WrapperPreviewImg>
       <img src={imgURL} alt="" />
     </WrapperPreviewImg>
     <Fonts.H2 centered>{name}</Fonts.H2>
-    <Btn primary fill="true">
+    <Btn primary fill="true" onClick={handleSelect}>
       {price} Points
     </Btn>
     <br />

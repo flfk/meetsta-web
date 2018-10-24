@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaInstagram } from 'react-icons/fa';
 
 import Btn from '../components/Btn';
 import Content from '../components/Content';
@@ -13,14 +14,17 @@ class Auth extends React.Component {
       <Content>
         <Fonts.H1 centered>Meetsta</Fonts.H1>
 
-        <Fonts.H3 centered>Get rewards for being your favorite influencer </Fonts.H3>
+        <Fonts.H3 centered>Get rewards for being a top fan.</Fonts.H3>
         <br />
-        <Btn primary> Continue with Instagram</Btn>
+        <Btn primary>
+          <FaInstagram /> Continue with Instagram
+        </Btn>
+        <br />
         <Fonts.FinePrint>
           By continuing, you agree to our{' '}
           <Link to="/termsConditions" target="_blank">
             Terms and Conditions of Use
-          </Link>{' '}
+          </Link>
           ,{' '}
           <Link to="/privacyPolicy" target="_blank">
             Privacy Policy
