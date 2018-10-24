@@ -2,7 +2,6 @@ import mixpanel from 'mixpanel-browser';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import actions from '../data/actions';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import LeaderboardRow from '../components/LeaderboardRow';

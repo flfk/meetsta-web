@@ -6,8 +6,6 @@ import Btn from './Btn';
 import Fonts from '../utils/Fonts';
 import Media from '../utils/Media';
 
-import MerchImgPlaceholder from '../assets/Merch_Image_Placeholder.png';
-
 const propTypes = {
   imgURL: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
