@@ -1,4 +1,5 @@
-import db from './firebase';
+import { db } from './firebase';
+import { storage } from './firebase';
 
 // Collection and document Names
 const COLL_ADD_ONS = 'addOns';
@@ -10,6 +11,9 @@ const COLL_REGISTRATIONS = 'registrations';
 const COLL_UTILS = 'utils';
 
 const DOC_LAST_ORDER = 'lastOrder';
+
+const STORAGE_MERCH_BASE_PATH = 'gs://online-meet-and-greets.appspot.com/merch/';
+const STORAGE_MERCH_EXTENSION = '.png/';
 
 const getDocEvent = async eventID => {
   try {
@@ -203,6 +207,19 @@ const addDocEmailRequest = async emailRequest => {
   return email;
 };
 
+// LEADERBOARD RELATED
+
+const fetchMerchImgUrl = async merchID => {
+  let downloadURL = null;
+  try {
+    const refPath = STORAGE_MERCH_BASE_PATH + merchID + STORAGE_MERCH_EXTENSION;
+    downloadURL = await storage.refFromURL(refPath).getDownloadURL();
+  } catch (error) {
+    console.error('Actions, fetchMerchImgUrl', error);
+  }
+  return downloadURL;
+};
+
 const leaderboardSignup = async user => {
   try {
     await db.collection(COLL_LEADERBOARD_SIGNUPS).add(user);
@@ -210,6 +227,8 @@ const leaderboardSignup = async user => {
     console.error('Actions, leaderboardSignup, ', error);
   }
 };
+
+// EXPORTS
 
 const actions = {};
 
@@ -233,6 +252,7 @@ actions.getDocsTicketsSold = getDocsTicketsSold;
 
 actions.addDocEmailRequest = addDocEmailRequest;
 
+actions.fetchMerchImgUrl = fetchMerchImgUrl;
 actions.leaderboardSignup = leaderboardSignup;
 
 export default actions;

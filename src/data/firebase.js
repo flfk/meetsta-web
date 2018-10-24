@@ -15,10 +15,10 @@ firebase.initializeApp(config);
 
 const db = firebase.firestore();
 
-export const storage = firebase.storage();
+const storage = firebase.storage();
 
 // To ensure ensure firestore timestamp objects supported in future
 const settings = { timestampsInSnapshots: true };
 db.settings(settings);
 
-export default db;
+export { db, storage };

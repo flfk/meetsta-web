@@ -5,7 +5,7 @@ import qs from 'qs';
 import Content from '../components/Content';
 import FONTS from '../utils/Fonts';
 
-import db from '../data/firebase';
+import { db } from '../data/firebase';
 
 const MEETSTA_COMISSION = 0.15;
 
