@@ -16,6 +16,11 @@ const Background = styled.div`
   opacity: 0.2;
 `;
 
+const BackgroundLight = styled(Background)`
+  background-color: white
+  opacity: 0.9;
+`;
+
 const Card = styled.div`
   position: fixed;
   top: 20px;
@@ -35,8 +40,12 @@ const Card = styled.div`
   }
 `;
 
+const CardTransparent = styled(Card)`
+  background-color: transparent;
+`;
+
 const propTypes = {
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
 };
 
 const defaultProps = {};
@@ -56,7 +65,9 @@ BtnClose.defaultProps = defaultProps;
 
 const Popup = {};
 Popup.Background = Background;
+Popup.BackgroundLight = BackgroundLight;
 Popup.Card = Card;
+Popup.CardTransparent = CardTransparent;
 Popup.BtnClose = BtnClose;
 
 export default Popup;

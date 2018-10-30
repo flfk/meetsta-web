@@ -9,8 +9,10 @@ const Content = styled.div`
   flex-direction: column;
   width: 600px;
   margin: auto;
-  padding-left: 40px;
-  padding-right: 40px;
+  padding-left: 24px;
+  padding-right: 24px;
+
+  align-items: ${props => (props.alignCenter ? 'centered' : '')};
 
   ${MEDIA.tablet} {
     width: auto;

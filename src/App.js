@@ -7,6 +7,7 @@ import { StripeProvider } from 'react-stripe-elements';
 import Auth from './containers/Auth';
 import Checkout from './containers/Checkout';
 import ContactUs from './containers/ContactUs';
+import Dashboard from './containers/Dashboard';
 import EventSales from './containers/EventSales';
 import LandingPage from './containers/LandingPage';
 import Leaderboard from './containers/Leaderboard';
@@ -55,6 +56,7 @@ class App extends Component {
               <Route path="/auth" component={Auth} />
               <Route path="/checkout" component={Checkout} />
               <Route path="/confirmation" component={OrderConfirmation} />
+              <Route path="/dashboard" component={Dashboard} />
               <Route path="/eventSales" component={EventSales} />
               <Route path="/top" component={Leaderboard} />
               <Route path="/sales" component={Sales} />

@@ -15,6 +15,9 @@ const DOC_LAST_ORDER = 'lastOrder';
 const STORAGE_MERCH_BASE_PATH = 'gs://online-meet-and-greets.appspot.com/merch/';
 const STORAGE_MERCH_EXTENSION = '.png/';
 
+const STORAGE_DASHBOARD_TEASER_PATH = 'gs://online-meet-and-greets.appspot.com/dashboardTeasers/';
+const STORAGE_DASHBOARD_TEASER_EXTENSION = '.png/';
+
 const getDocEvent = async eventID => {
   try {
     const eventRef = db.collection(COLL_EVENTS).doc(eventID);
@@ -209,6 +212,17 @@ const addDocEmailRequest = async emailRequest => {
 
 // LEADERBOARD RELATED
 
+const fetchDashboardTeaserImgURL = async username => {
+  let downloadURL = null;
+  try {
+    const refPath = STORAGE_DASHBOARD_TEASER_PATH + username + STORAGE_DASHBOARD_TEASER_EXTENSION;
+    downloadURL = await storage.refFromURL(refPath).getDownloadURL();
+  } catch (error) {
+    console.error('Actions, fetchMerchImgUrl', error);
+  }
+  return downloadURL;
+};
+
 const fetchMerchImgUrl = async merchID => {
   let downloadURL = null;
   try {
@@ -252,6 +266,7 @@ actions.getDocsTicketsSold = getDocsTicketsSold;
 
 actions.addDocEmailRequest = addDocEmailRequest;
 
+actions.fetchDashboardTeaserImgURL = fetchDashboardTeaserImgURL;
 actions.fetchMerchImgUrl = fetchMerchImgUrl;
 actions.leaderboardSignup = leaderboardSignup;
 
