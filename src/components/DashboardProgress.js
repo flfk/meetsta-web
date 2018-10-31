@@ -7,63 +7,57 @@ import Colors from '../utils/Colors';
 import Fonts from '../utils/Fonts';
 
 const propTypes = {
+  levels: PropTypes.shape({
+    current: PropTypes.shape({
+      color: PropTypes.string.isRequired,
+      emoji: PropTypes.string.isRequired,
+      index: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      pointsReq: PropTypes.number.isRequired,
+    }).isRequired,
+    next: PropTypes.shape({
+      color: PropTypes.string.isRequired,
+      emoji: PropTypes.string.isRequired,
+      index: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      pointsReq: PropTypes.number.isRequired,
+    }),
+  }),
   points: PropTypes.number.isRequired,
 };
 
-const defaultProps = {};
+const defaultProps = {
+  next: null,
+};
 
-const FAN_RANKS = [
-  { color: 'green', index: 0, name: 'Green Fan Club', pointsReq: 0 },
-  { color: 'purple', index: 1, name: 'Purple Fan Club', pointsReq: 10000 },
-  { color: 'orange', index: 2, name: 'Orange Fan Club', pointsReq: 100000 },
-];
+const DashboardProgress = ({ levels, points }) => {
+  const { current, next } = levels;
 
-const DashboardProgress = ({ points }) => {
-  const getEmoji = rank => {
-    switch (rank.color) {
-      case 'green':
-        return '💚';
-      case 'purple':
-        return '💜';
-      case 'orange':
-        return '🧡';
-      default:
-        return '';
-    }
-  };
-
-  const fanRankCurrent = FAN_RANKS.reduce((aggr, rank) => {
-    if (rank.pointsReq <= points) {
-      return rank;
-    }
-    return aggr;
-  }, {});
-
-  const fanRankNext = FAN_RANKS[fanRankCurrent.index + 1]
-    ? FAN_RANKS[fanRankCurrent.index + 1]
-    : fanRankCurrent;
-
-  const isFinalRank = fanRankCurrent.index === FAN_RANKS.length - 1;
-
-  const percent = isFinalRank
-    ? 100
-    : ((points - fanRankCurrent.pointsReq) / fanRankNext.pointsReq) * 100;
-
-  const levelUpTxt = isFinalRank ? (
-    <Fonts.P centered>
-      Congratulations you've made it to the{' '}
-      <NextClubText color={fanRankNext.color}>{fanRankNext.name}</NextClubText>
-    </Fonts.P>
-  ) : (
-    <Fonts.P centered>
-      1250 points to <NextClubText color={fanRankNext.color}>{fanRankNext.name}</NextClubText>
-    </Fonts.P>
-  );
+  let percent = null;
+  let levelUpTxt = null;
+  let nextEmoji = null;
+  if (next) {
+    percent = ((points - current.pointsReq) / next.pointsReq) * 100;
+    nextEmoji = next.emoji;
+    levelUpTxt = (
+      <Fonts.P centered>
+        1250 points to <NextClubText color={next.color}>{next.name}</NextClubText>
+      </Fonts.P>
+    );
+  } else {
+    percent = 100;
+    nextEmoji = current.emoji;
+    levelUpTxt = (
+      <Fonts.P centered>
+        You made it to the <NextClubText color={current.color}>{current.name}</NextClubText>
+      </Fonts.P>
+    );
+  }
 
   return (
     <div>
       <ProgressBarContainer>
-        <Emoji>{getEmoji(fanRankCurrent)}</Emoji>
+        <Emoji>{current.emoji}</Emoji>
         <Line
           percent={percent}
           strokeWidth={4}
@@ -71,7 +65,7 @@ const DashboardProgress = ({ points }) => {
           style={ProgressBar}
           trailWidth={4}
         />
-        <Emoji>{getEmoji(fanRankNext)}</Emoji>
+        <Emoji>{nextEmoji}</Emoji>
       </ProgressBarContainer>
       {levelUpTxt}
     </div>

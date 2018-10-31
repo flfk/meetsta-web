@@ -6,6 +6,7 @@ import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getFormattedNumber } from '../utils/Helpers';
 import DashboardMedals from '../components/DashboardMedals';
+import DashboardProfile from '../components/DashboardProfile';
 import DashboardProgress from '../components/DashboardProgress';
 import DashboardStats from '../components/DashboardStats';
 import PopupNoUser from '../components/popups/PopupNoUser';
@@ -18,12 +19,41 @@ import Wrapper from '../components/Wrapper';
 class Dashboard extends React.Component {
   state = {};
 
+  getLevels = points => {
+    const current = FAN_LEVELS.reduce((aggr, level) => {
+      if (level.pointsReq <= points) {
+        return level;
+      }
+      return aggr;
+    }, {});
+
+    const next = FAN_LEVELS[current.index + 1] ? FAN_LEVELS[current.index + 1] : null;
+
+    return {
+      current,
+      next,
+    };
+  };
+
+  getMedals = user => {
+    const { comments, likes, rank, uniqueTags } = user;
+    const medals = {
+      hasMedalComments: comments >= MEDAL_REQUIREMENTS.comments,
+      hasMedalLikes: likes >= MEDAL_REQUIREMENTS.likes,
+      hasMedalRank: rank <= MEDAL_REQUIREMENTS.rank,
+      hasMedalTags: uniqueTags >= MEDAL_REQUIREMENTS.tags,
+    };
+    return medals;
+  };
+
   render() {
     const popupNoUser = (
       <PopupNoUser influencerName={INFLUENCER.name} influencerUsername={INFLUENCER.username} />
     );
 
     const user = DEFAULT_USER;
+    const levels = this.getLevels(user.points);
+    const medals = this.getMedals(user);
 
     const merch = MERCH.sort((a, b) => a.price - b.price).map(item => {
       const btn =
@@ -35,7 +65,7 @@ class Dashboard extends React.Component {
           <Btn narrow>Get More Points</Btn>
         );
       return (
-        <div>
+        <div key={item.name}>
           <Content.Row>
             <Fonts.P>{item.name}</Fonts.P>
             {btn}
@@ -52,13 +82,25 @@ class Dashboard extends React.Component {
           <Fonts.P centered>
             #{user.rank} of {getFormattedNumber(INFLUENCER.fanCount)}
           </Fonts.P>
-          <Wrapper.ProfileImgLarge>
-            <img src={user.profileImgURL} alt="profile" />
-          </Wrapper.ProfileImgLarge>
-          <Fonts.H1 centered>🎉 {getFormattedNumber(user.points)} 🎉</Fonts.H1>
+          <DashboardProfile
+            levelEmoji={levels.current.emoji}
+            medals={medals}
+            profileImgURL={user.profileImgURL}
+          />
+          <Fonts.H1 centered>
+            <span role="img" aria-label="party popper">
+              🎉
+            </span>{' '}
+            {getFormattedNumber(user.points)}{' '}
+            <Content.FlipHorizontal>
+              <span role="img" aria-label="party popper">
+                🎉
+              </span>{' '}
+            </Content.FlipHorizontal>{' '}
+          </Fonts.H1>
           <Fonts.P centered>
-            {INFLUENCER.coinName} earned on {INFLUENCER.name}
-            's posts
+            Points earned on {INFLUENCER.name}
+            's newest 50 posts
           </Fonts.P>
           <Content.Spacing />
           <DashboardStats
@@ -67,14 +109,9 @@ class Dashboard extends React.Component {
             uniqueTags={user.uniqueTags}
           />
           <Content.Spacing />
-          <DashboardProgress points={user.points} />
+          <DashboardProgress points={user.points} levels={levels} />
           <Content.Spacing />
-          <DashboardMedals
-            comments={user.comments}
-            likes={user.likes}
-            rank={user.rank}
-            uniqueTags={user.uniqueTags}
-          />
+          <DashboardMedals medals={medals} />
           <Content.Spacing />
           {merch}
         </Content>
@@ -84,16 +121,22 @@ class Dashboard extends React.Component {
 }
 
 const DEFAULT_USER = {
-  comments: 12,
-  likes: 20,
+  comments: 100,
+  likes: 21,
   name: 'Jane Doe',
   username: 'JaneDoe',
-  points: 269800,
+  points: 26980,
   profileImgURL:
     'https://instagram.faep4-1.fna.fbcdn.net/vp/6047d91c888be7a7da1de00c98f16519/5C643E3D/t51.2885-19/s320x320/38787686_2067233979976840_7161741697020329984_n.jpg',
-  rank: 4,
-  uniqueTags: 10,
+  rank: 101,
+  uniqueTags: 9,
 };
+
+const FAN_LEVELS = [
+  { color: 'green', emoji: '💚', index: 0, name: 'Green Fan Club', pointsReq: 0 },
+  { color: 'purple', emoji: '💜', index: 1, name: 'Purple Fan Club', pointsReq: 10000 },
+  { color: 'orange', emoji: '🧡', index: 2, name: 'Orange Fan Club', pointsReq: 100000 },
+];
 
 const MERCH = [
   {
@@ -138,6 +181,13 @@ const INFLUENCER = {
   fanCount: 16400,
   name: 'Jon Klaasen',
   username: 'jon_klaasen',
+};
+
+const MEDAL_REQUIREMENTS = {
+  comments: 100,
+  likes: 20,
+  tags: 10,
+  rank: 100,
 };
 
 // Dashboard.propTypes = propTypes;

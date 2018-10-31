@@ -93,6 +93,11 @@ const Anchor = styled.a`
   }
 `;
 
+const FlipHorizontal = styled.div`
+  transform: scale(-1, 1);
+  display: inline-block;
+`;
+
 const Divider = () => {
   return (
     <Center>
@@ -113,5 +118,6 @@ Content.Spacing = Spacing;
 Content.Center = Center;
 Content.CenteredBothAxis = CenteredBothAxis;
 Content.Anchor = Anchor;
+Content.FlipHorizontal = FlipHorizontal;
 
 export default Content;
