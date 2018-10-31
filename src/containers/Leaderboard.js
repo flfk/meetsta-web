@@ -6,7 +6,7 @@ import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import LeaderboardRow from '../components/LeaderboardRow';
 import LeaderboardFooter from '../components/LeaderboardFooter';
-import { getParams, getTimestamp, getFormattedNumber } from '../utils/Helpers';
+import { getParams, getFormattedNumber } from '../utils/Helpers';
 
 import DATA_LEADERBOARD_ALISTAR from '../data/leaderboards/Alistarbruback20181019';
 import DATA_LEADERBOARD_JACKSON from '../data/leaderboards/Jacksonnfelt20181020';

@@ -12,7 +12,7 @@ class TicketOptions extends React.Component {
     eventID: '',
     tickets: [],
     ticketSelectedID: '',
-    toCheckout: false
+    toCheckout: false,
   };
 
   componentDidMount() {
@@ -34,7 +34,7 @@ class TicketOptions extends React.Component {
       const event = await actions.getDocEvent(eventID);
       const formattedDataEvent = {
         eventID,
-        influencerName: event.organiserName
+        influencerName: event.organiserName,
       };
       const tickets = await actions.getCollEventTickets(eventID);
       this.setState({ eventID, ...formattedDataEvent, tickets });
@@ -60,7 +60,7 @@ class TicketOptions extends React.Component {
           push
           to={{
             pathname: '/checkout',
-            search: `?eventID=${eventID}&ticketID=${ticketSelectedID}`
+            search: `?eventID=${eventID}&ticketID=${ticketSelectedID}`,
           }}
         />
       );
