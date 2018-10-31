@@ -24,19 +24,19 @@ const DashboardMedals = ({ medals }) => {
     <Content.Row>
       <MedalContainer>
         <Medals.Likes hasMedal={hasMedalLikes} />
-        <Fonts.P centered>20 POSTS LIKED</Fonts.P>
+        <Fonts.P centered>20 Posts Liked</Fonts.P>
       </MedalContainer>
       <MedalContainer>
         <Medals.Comments hasMedal={hasMedalComments} />
-        <Fonts.P centered>100 COMMENTS</Fonts.P>
+        <Fonts.P centered>100 Comments</Fonts.P>
       </MedalContainer>
       <MedalContainer>
         <Medals.Tags hasMedal={hasMedalTags} />
-        <Fonts.P centered>10 FRIENDS TAGGED</Fonts.P>
+        <Fonts.P centered>10 Friends Tagged</Fonts.P>
       </MedalContainer>
       <MedalContainer>
         <Medals.Rank hasMedal={hasMedalRank} />
-        <Fonts.P centered>TOP 100</Fonts.P>
+        <Fonts.P centered>Top 100</Fonts.P>
       </MedalContainer>
     </Content.Row>
   );

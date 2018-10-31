@@ -22,7 +22,7 @@ const DashboardProfile = ({ levelEmoji, medals, profileImgURL }) => {
 
   return (
     <Container img={profileImgURL}>
-      <FanClubContainer>{levelEmoji}</FanClubContainer>
+      <Level>{levelEmoji}</Level>
       <MedalsContainer>
         <Medals.Likes hasMedal={hasMedalLikes} isSmall />
         <Medals.Comments hasMedal={hasMedalComments} isSmall />
@@ -41,8 +41,8 @@ const Container = styled.div`
 
   // border: 1px solid red;
 
-  height: 80px;
-  width: 80px;
+  height: 96px;
+  width: 96px;
   background-image: url(${props => props.img});
   background-size: cover;
   border-radius: 50%;
@@ -56,8 +56,9 @@ const Container = styled.div`
 //   border-radius: 50%;
 // `;
 
-const FanClubContainer = styled.div`
+const Level = styled.div`
   background-image: linear-gradient(#ffffff30, #ffffff00);
+  font-size: 20px;
 `;
 
 const MedalsContainer = styled.div`

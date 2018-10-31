@@ -128,8 +128,8 @@ const DEFAULT_USER = {
   points: 26980,
   profileImgURL:
     'https://instagram.faep4-1.fna.fbcdn.net/vp/6047d91c888be7a7da1de00c98f16519/5C643E3D/t51.2885-19/s320x320/38787686_2067233979976840_7161741697020329984_n.jpg',
-  rank: 101,
-  uniqueTags: 9,
+  rank: 99,
+  uniqueTags: 99,
 };
 
 const FAN_LEVELS = [
