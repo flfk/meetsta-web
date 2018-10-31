@@ -10,7 +10,7 @@ const Btn = styled.button`
   flex: 1 0 1;
   width: ${props => (props.fill ? '100%' : '')};
   width: ${props => (props.narrow ? '132px' : '')};
-  padding: 0.5em 0.5em;
+  padding: ${props => (props.short ? '0.5em 0.5em' : '1em 1em')};
   background-color: transparent;
   border-radius: 5px;
   font-size: 16px;
@@ -41,7 +41,7 @@ const Btn = styled.button`
 `;
 
 const Tertiary = styled.button`
-  padding: 1em 1em;
+  padding: 0.5em 0.5em;
   font-size: 16px;
   font-weight: bold;
   background-color: transparent;

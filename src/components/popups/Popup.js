@@ -18,7 +18,7 @@ const Background = styled.div`
 
 const BackgroundLight = styled(Background)`
   background-color: white
-  opacity: 0.9;
+  opacity: 0.95;
 `;
 
 const Card = styled.div`
@@ -42,6 +42,17 @@ const Card = styled.div`
 
 const CardTransparent = styled(Card)`
   background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  ${MEDIA.tablet} {
+    width: 90%;
+    margin: 0;
+  }
+`;
+
+const Emoji = styled.div`
+  font-size: 142px;
+  align-self: center;
 `;
 
 const propTypes = {
@@ -50,11 +61,9 @@ const propTypes = {
 
 const defaultProps = {};
 
-const BtnClose = props => {
-  const { handleClose } = props;
-
+const BtnClose = ({ handleClose }) => {
   return (
-    <Btn.Tertiary primary onClick={handleClose}>
+    <Btn.Tertiary primary onClick={handleClose} style={{ alignSelf: 'flex-start' }}>
       <FaTimes /> Close
     </Btn.Tertiary>
   );
@@ -69,5 +78,6 @@ Popup.BackgroundLight = BackgroundLight;
 Popup.Card = Card;
 Popup.CardTransparent = CardTransparent;
 Popup.BtnClose = BtnClose;
+Popup.Emoji = Emoji;
 
 export default Popup;

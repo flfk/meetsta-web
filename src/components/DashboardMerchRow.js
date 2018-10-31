@@ -19,11 +19,11 @@ const defaultProps = {};
 
 const DashboardMerchRow = ({ handleClick, hasPointsReq, imgURL, price, name }) => {
   const btn = hasPointsReq ? (
-    <Btn primary narrow onClick={handleClick}>
+    <Btn primary narrow short onClick={handleClick}>
       Get Prize
     </Btn>
   ) : (
-    <Btn narrow onClick={handleClick}>
+    <Btn narrow short onClick={handleClick}>
       Get More Points
     </Btn>
   );

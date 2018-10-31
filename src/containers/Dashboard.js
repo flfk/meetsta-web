@@ -5,12 +5,14 @@ import React from 'react';
 import actions from '../data/actions';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
-import { getFormattedNumber } from '../utils/Helpers';
+import { getParams, getFormattedNumber } from '../utils/Helpers';
 import DashboardMedals from '../components/DashboardMedals';
 import DashboardMerchRow from '../components/DashboardMerchRow';
 import DashboardProfile from '../components/DashboardProfile';
 import DashboardProgress from '../components/DashboardProgress';
 import DashboardStats from '../components/DashboardStats';
+import PopupBuyPoints from '../components/popups/PopupBuyPoints';
+import PopupComingSoon from '../components/popups/PopupComingSoon';
 import PopupNoUser from '../components/popups/PopupNoUser';
 
 // const propTypes = {};
@@ -19,14 +21,29 @@ import PopupNoUser from '../components/popups/PopupNoUser';
 
 class Dashboard extends React.Component {
   state = {
+    influencer: {
+      coinName: '',
+      fanCount: 0,
+      name: '',
+      username: '',
+    },
     merch: [],
     username: '',
+    showPopupBuyPoints: false,
+    showPopupComingSoon: false,
+    showPopupNoUser: false,
   };
 
   componentDidMount() {
     mixpanel.track('Visited Dashboard');
+    this.setInfluencer();
     this.setMerch();
   }
+
+  getInfluencerID = () => {
+    const { i } = getParams(this.props);
+    return i;
+  };
 
   getLevels = points => {
     const current = FAN_LEVELS.reduce((aggr, level) => {
@@ -55,6 +72,40 @@ class Dashboard extends React.Component {
     return medals;
   };
 
+  handleBuyPoints = () => {
+    mixpanel.track('Clicked Buy Points');
+    this.setState({ showPopupBuyPoints: false });
+    this.setState({ showPopupComingSoon: true });
+  };
+
+  handleGetPoints = () => {
+    mixpanel.track('Clicked Get Points');
+    this.setState({ showPopupBuyPoints: true });
+  };
+
+  handleGetPrize = () => {
+    mixpanel.track('Clicked Get Prize');
+    this.setState({ showPopupComingSoon: true });
+  };
+
+  handlePopupClose = popupName => {
+    const key = `showPopup${popupName}`;
+    return () => this.setState({ [key]: false });
+  };
+
+  setInfluencer = () => {
+    const influencerID = this.getInfluencerID();
+    let influencer = {};
+    switch (influencerID) {
+      case 'jon_klaasen':
+        influencer = JON_KLAASEN;
+        break;
+      default:
+        influencer = JON_KLAASEN;
+    }
+    this.setState({ influencer });
+  };
+
   setMerch = async () => {
     const merch = await Promise.all(
       MERCH.map(async item => {
@@ -66,28 +117,53 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { merch } = this.state;
-
-    const popupNoUser = (
-      <PopupNoUser influencerName={INFLUENCER.name} influencerUsername={INFLUENCER.username} />
-    );
+    const {
+      influencer,
+      merch,
+      showPopupBuyPoints,
+      showPopupComingSoon,
+      showPopupNoUser,
+    } = this.state;
 
     const user = DEFAULT_USER;
     const levels = this.getLevels(user.points);
     const medals = this.getMedals(user);
 
-    const merchDiv = merch
-      .sort((a, b) => a.price - b.price)
-      .map(item => (
+    const merchDiv = merch.sort((a, b) => a.price - b.price).map(item => {
+      const hasPointsReq = user.points >= item.price;
+      const handleClick = hasPointsReq ? this.handleGetPrize : this.handleGetPoints;
+      return (
         <DashboardMerchRow
           key={item.name}
-          hasPointsReq={user.points >= item.price}
-          handleClick={() => true}
+          hasPointsReq={hasPointsReq}
+          handleClick={handleClick}
           imgURL={item.imgURL}
           name={item.name}
           price={item.price}
         />
-      ));
+      );
+    });
+
+    const popupNoUser = showPopupNoUser ? (
+      <PopupNoUser
+        handleClose={this.handlePopupClose('NoUser')}
+        influencerName={influencer.name}
+        influencerUsername={influencer.username}
+      />
+    ) : null;
+
+    const popupBuyPoints = showPopupBuyPoints ? (
+      <PopupBuyPoints
+        coinName={influencer.coinName}
+        handleClose={this.handlePopupClose('BuyPoints')}
+        influencerName={influencer.name}
+        handleBuyPoints={this.handleBuyPoints}
+      />
+    ) : null;
+
+    const popupComingSoon = showPopupComingSoon ? (
+      <PopupComingSoon handleClose={this.handlePopupClose('ComingSoon')} />
+    ) : null;
 
     return (
       <div>
@@ -97,7 +173,7 @@ class Dashboard extends React.Component {
           </Fonts.H3>
           <Fonts.P centered>
             <strong>
-              #{user.rank} of {getFormattedNumber(INFLUENCER.fanCount)}
+              #{user.rank} of {getFormattedNumber(influencer.fanCount)}
             </strong>
           </Fonts.P>
           <br />
@@ -118,7 +194,7 @@ class Dashboard extends React.Component {
             </Content.FlipHorizontal>{' '}
           </Fonts.H1>
           <Fonts.P centered>
-            Points earned on {INFLUENCER.name}
+            Points earned on {influencer.name}
             's 50 most recents
           </Fonts.P>
           <Content.Spacing />
@@ -133,6 +209,10 @@ class Dashboard extends React.Component {
           <DashboardMedals medals={medals} />
           <Content.Spacing />
           {merchDiv}
+
+          {popupBuyPoints}
+          {popupComingSoon}
+          {popupNoUser}
         </Content>
       </div>
     );
@@ -156,6 +236,13 @@ const FAN_LEVELS = [
   { color: 'purple', emoji: '💜', index: 1, name: 'Purple Fan Club', pointsReq: 10000 },
   { color: 'orange', emoji: '🧡', index: 2, name: 'Orange Fan Club', pointsReq: 100000 },
 ];
+
+const JON_KLAASEN = {
+  coinName: 'Klassen Koins',
+  fanCount: 16400,
+  name: 'Jon Klaasen',
+  username: 'jon_klaasen',
+};
 
 const MERCH = [
   {
@@ -194,13 +281,6 @@ const MERCH = [
     price: 25000,
   },
 ];
-
-const INFLUENCER = {
-  coinName: 'Klassen Koins',
-  fanCount: 16400,
-  name: 'Jon Klaasen',
-  username: 'jon_klaasen',
-};
 
 const MEDAL_REQUIREMENTS = {
   comments: 100,

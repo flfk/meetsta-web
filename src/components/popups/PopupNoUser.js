@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
 import actions from '../../data/actions';
 import Btn from '../Btn';
-import Content from '../Content';
 import Fonts from '../../utils/Fonts';
 import InputText from '../InputText';
 import Popup from './Popup';
@@ -61,7 +59,6 @@ class PopupNoUser extends React.Component {
           <Btn primary fill>
             Show Me
           </Btn>
-          <Content />
         </Popup.CardTransparent>
       </div>
     );

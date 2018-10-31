@@ -21,7 +21,7 @@ class Leaderboard extends React.Component {
     influencerDisplayName: '',
     influencerID: '',
     toStorePoints: false,
-    toStoreMerch: false
+    toStoreMerch: false,
   };
 
   componentDidMount() {
@@ -110,7 +110,7 @@ class Leaderboard extends React.Component {
         push
         to={{
           pathname: '/get-points',
-          search: `?i=${influencerID}`
+          search: `?i=${influencerID}`,
         }}
       />
     );
@@ -122,7 +122,7 @@ class Leaderboard extends React.Component {
         push
         to={{
           pathname: '/get-merch',
-          search: `?i=${influencerID}`
+          search: `?i=${influencerID}`,
         }}
       />
     );
