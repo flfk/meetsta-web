@@ -10,12 +10,12 @@ const propTypes = {
   handleSelect: PropTypes.func.isRequired,
   imgURL: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired
+  price: PropTypes.number.isRequired,
 };
 
 const defaultProps = {};
 
-const CardOptions = ({ handleSelect, imgURL, name, price }) => (
+const CardMerch = ({ handleSelect, imgURL, name, price }) => (
   <Container>
     <WrapperPreviewImg>
       <img src={imgURL} alt="" />
@@ -53,7 +53,7 @@ const WrapperPreviewImg = styled.div`
   }
 `;
 
-CardOptions.propTypes = propTypes;
-CardOptions.defaultProps = defaultProps;
+CardMerch.propTypes = propTypes;
+CardMerch.defaultProps = defaultProps;
 
-export default CardOptions;
+export default CardMerch;

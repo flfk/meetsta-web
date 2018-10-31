@@ -9,8 +9,8 @@ const Content = styled.div`
   flex-direction: column;
   width: 600px;
   margin: auto;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 16px;
+  padding-right: 16px;
 
   align-items: ${props => (props.alignCenter ? 'centered' : '')};
 

@@ -1,23 +1,32 @@
+import mixpanel from 'mixpanel-browser';
 // import PropTypes from 'prop-types';
 import React from 'react';
 
-import Btn from '../components/Btn';
+import actions from '../data/actions';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getFormattedNumber } from '../utils/Helpers';
 import DashboardMedals from '../components/DashboardMedals';
+import DashboardMerchRow from '../components/DashboardMerchRow';
 import DashboardProfile from '../components/DashboardProfile';
 import DashboardProgress from '../components/DashboardProgress';
 import DashboardStats from '../components/DashboardStats';
 import PopupNoUser from '../components/popups/PopupNoUser';
-import Wrapper from '../components/Wrapper';
 
 // const propTypes = {};
 
 // const defaultProps = {};
 
 class Dashboard extends React.Component {
-  state = {};
+  state = {
+    merch: [],
+    username: '',
+  };
+
+  componentDidMount() {
+    mixpanel.track('Visited Dashboard');
+    this.setMerch();
+  }
 
   getLevels = points => {
     const current = FAN_LEVELS.reduce((aggr, level) => {
@@ -46,7 +55,19 @@ class Dashboard extends React.Component {
     return medals;
   };
 
+  setMerch = async () => {
+    const merch = await Promise.all(
+      MERCH.map(async item => {
+        const imgURL = await actions.fetchMerchImgUrl(item.merchID);
+        return { ...item, imgURL };
+      })
+    );
+    this.setState({ merch });
+  };
+
   render() {
+    const { merch } = this.state;
+
     const popupNoUser = (
       <PopupNoUser influencerName={INFLUENCER.name} influencerUsername={INFLUENCER.username} />
     );
@@ -55,25 +76,18 @@ class Dashboard extends React.Component {
     const levels = this.getLevels(user.points);
     const medals = this.getMedals(user);
 
-    const merch = MERCH.sort((a, b) => a.price - b.price).map(item => {
-      const btn =
-        user.points > item.price ? (
-          <Btn primary narrow>
-            Get Prize
-          </Btn>
-        ) : (
-          <Btn narrow>Get More Points</Btn>
-        );
-      return (
-        <div key={item.name}>
-          <Content.Row>
-            <Fonts.P>{item.name}</Fonts.P>
-            {btn}
-          </Content.Row>
-          <Content.Spacing />
-        </div>
-      );
-    });
+    const merchDiv = merch
+      .sort((a, b) => a.price - b.price)
+      .map(item => (
+        <DashboardMerchRow
+          key={item.name}
+          hasPointsReq={user.points >= item.price}
+          handleClick={() => true}
+          imgURL={item.imgURL}
+          name={item.name}
+          price={item.price}
+        />
+      ));
 
     return (
       <div>
@@ -82,6 +96,7 @@ class Dashboard extends React.Component {
           <Fonts.P centered>
             #{user.rank} of {getFormattedNumber(INFLUENCER.fanCount)}
           </Fonts.P>
+          <br />
           <DashboardProfile
             levelEmoji={levels.current.emoji}
             medals={medals}
@@ -100,7 +115,7 @@ class Dashboard extends React.Component {
           </Fonts.H1>
           <Fonts.P centered>
             Points earned on {INFLUENCER.name}
-            's newest 50 posts
+            's 50 most recents
           </Fonts.P>
           <Content.Spacing />
           <DashboardStats
@@ -113,7 +128,7 @@ class Dashboard extends React.Component {
           <Content.Spacing />
           <DashboardMedals medals={medals} />
           <Content.Spacing />
-          {merch}
+          {merchDiv}
         </Content>
       </div>
     );
@@ -141,17 +156,17 @@ const FAN_LEVELS = [
 const MERCH = [
   {
     merchID: 'VidCall10Min',
-    name: '10 minute one-on-one video call',
+    name: '10 min 1-on-1 facetime',
     price: 90000,
   },
   {
     merchID: 'VidCall5Min',
-    name: '5 minute one-on-one video call',
+    name: '5 min 1-on-1 facetime',
     price: 80000,
   },
   {
     merchID: 'LikeCommentSpam',
-    name: 'Like / comment spam',
+    name: 'Like & comment spam',
     price: 50000,
   },
   {
@@ -161,18 +176,18 @@ const MERCH = [
   },
   {
     merchID: 'Shoutout',
-    name: 'Shoutout on story',
+    name: 'Personal story shoutout',
     price: 20000,
   },
   {
     merchID: 'DMReply',
-    name: 'DM reply',
+    name: 'Personal DM',
     price: 10000,
   },
   {
     merchID: 'SelfieVid',
-    name: 'Personalised selfie video',
-    price: 50,
+    name: 'Selfie thank-you video',
+    price: 25000,
   },
 ];
 

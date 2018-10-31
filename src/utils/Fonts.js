@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import 'typeface-roboto';
 
-import COLORS from './Colors';
+import Colors from './Colors';
+import Media from './Media';
 
 const FONT_FAMILY = {
   logo: 'LeckerliOne, sans-serif',
   header: 'Roboto, sans-serif',
-  body: 'Roboto, sans-serif'
+  body: 'Roboto, sans-serif',
 };
 
 const FONT_SIZES = {
@@ -15,7 +16,7 @@ const FONT_SIZES = {
   h2: '24px',
   h3: '20px',
   p: '16px',
-  finePrint: '12px'
+  finePrint: '12px',
 };
 
 const LOGO = styled.span`
@@ -27,7 +28,7 @@ const LOGO = styled.span`
 const H1 = styled.h1`
   font-size: ${FONT_SIZES.h1};
   font-family: ${FONT_FAMILY.header};
-  color: ${COLORS.greys.primary};
+  color: ${Colors.greys.primary};
   font-weight: 500;
   text-align: ${props => (props.centered ? 'center' : '')};
   margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
@@ -36,7 +37,7 @@ const H1 = styled.h1`
 const H2 = styled.h2`
   font-size: ${FONT_SIZES.h2};
   font-family: ${FONT_FAMILY.header};
-  color: ${COLORS.greys.primary};
+  color: ${Colors.greys.primary};
   font-weight: 400;
   text-align: ${props => (props.centered ? 'center' : '')};
   margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
@@ -45,7 +46,7 @@ const H2 = styled.h2`
 const H3 = styled.h3`
   font-size: ${FONT_SIZES.h3};
   font-family: ${FONT_FAMILY.header};
-  color: ${COLORS.greys.primary};
+  color: ${Colors.greys.primary};
   font-weight: 400;
   text-align: ${props => (props.centered ? 'center' : '')};
   margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
@@ -55,16 +56,20 @@ const P = styled.p`
   font-size: ${FONT_SIZES.p};
   font-family: ${FONT_FAMILY.body};
   font-weight: 300;
-  color: ${COLORS.greys.primary};
+  color: ${Colors.greys.primary};
   margin: 0;
   text-align: ${props => (props.centered ? 'center' : '')};
+
+  ${Media.tablet} {
+    font-size: 14px;
+  }
 `;
 
 const FinePrint = styled.span`
   font-size: ${FONT_SIZES.finePrint};
   font-family: ${FONT_FAMILY.body};
   font-weight: 300;
-  color: ${COLORS.greys.secondary};
+  color: ${Colors.greys.secondary};
   margin: 8px 0;
   text-align: center;
 `;
@@ -81,7 +86,7 @@ const ERROR = styled.p`
 
 const A = styled.a`
   text-decoration: none;
-  color: ${COLORS.primary.red};
+  color: ${Colors.primary.red};
   font-weight: bold;
   cursor: pointer;
   :hover {
