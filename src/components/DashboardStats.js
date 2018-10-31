@@ -60,8 +60,8 @@ const StatText = styled.span`
 `;
 
 const WrapperNotifBubble = styled.div`
-  height: 55px;
-  width: 55px;
+  height: 56px;
+  width: 64px;
   background-image: url(${NotifBubble});
   background-size: cover;
   margin-bottom: 4px;

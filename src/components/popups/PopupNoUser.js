@@ -9,27 +9,33 @@ import Popup from './Popup';
 import Wrapper from '../Wrapper';
 
 const propTypes = {
+  handleChangeUsername: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  handleSearch: PropTypes.func.isRequired,
   influencerName: PropTypes.string.isRequired,
   influencerUsername: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  usernameErrMsg: PropTypes.string,
 };
 
-const defaultProps = {};
+const defaultProps = {
+  usernameErrMsg: '',
+};
 
 class PopupNoUser extends React.Component {
   state = {
     teaserImgURL: '',
-    username: '',
-    usernameErrMsg: '',
   };
 
   componentDidMount() {
     this.loadTeaserImg();
   }
 
-  handleChangeUsername = event => this.setState({ username: event.target.value });
-
   loadTeaserImg = async () => {
-    const { influencerUsername } = this.props;
+    // XX TODO MAKE DYNAMIC
+    // const { influencerUsername } = this.props;
+    // console.log('influencerUsername in props', influencerUsername);
+    const influencerUsername = 'jon_klaasen';
     const teaserImgURL = await actions.fetchDashboardTeaserImgURL(influencerUsername);
     this.setState({ teaserImgURL });
   };
@@ -37,7 +43,13 @@ class PopupNoUser extends React.Component {
   render() {
     const { teaserImgURL } = this.state;
 
-    const { influencerName, username, usernameErrMsg } = this.props;
+    const {
+      handleChangeUsername,
+      handleSearch,
+      influencerName,
+      username,
+      usernameErrMsg,
+    } = this.props;
 
     return (
       <div>
@@ -51,12 +63,12 @@ class PopupNoUser extends React.Component {
             <img src={teaserImgURL} alt={influencerName} />
           </Wrapper.EventImage>
           <InputText
-            onChange={this.handleChangeUsername}
+            onChange={handleChangeUsername}
             errMsg={usernameErrMsg}
             value={username}
             placeholder="@YourInstagramUsername"
           />
-          <Btn primary fill>
+          <Btn primary fill="true" onClick={handleSearch}>
             Show Me
           </Btn>
         </Popup.CardTransparent>

@@ -9,7 +9,7 @@ import Media from '../utils/Media';
 const Btn = styled.button`
   flex: 1 0 1;
   width: ${props => (props.fill ? '100%' : '')};
-  width: ${props => (props.narrow ? '132px' : '')};
+  width: ${props => (props.narrow ? '134px' : '')};
   padding: ${props => (props.short ? '0.5em 0.5em' : '1em 1em')};
   background-color: transparent;
   border-radius: 5px;

@@ -28,10 +28,21 @@ class Dashboard extends React.Component {
       username: '',
     },
     merch: [],
-    username: '',
+    usernameInput: '',
+    usernameInputErrMsg: '',
     showPopupBuyPoints: false,
     showPopupComingSoon: false,
-    showPopupNoUser: false,
+    showPopupNoUser: true,
+    user: {
+      comments: 0,
+      likes: 0,
+      name: '',
+      username: '',
+      points: 0,
+      profileImgURL: '',
+      rank: 0,
+      uniqueTags: 0,
+    },
   };
 
   componentDidMount() {
@@ -39,6 +50,8 @@ class Dashboard extends React.Component {
     this.setInfluencer();
     this.setMerch();
   }
+
+  formatUsername = username => username.toLowerCase().replace('@', '');
 
   getInfluencerID = () => {
     const { i } = getParams(this.props);
@@ -78,6 +91,8 @@ class Dashboard extends React.Component {
     this.setState({ showPopupComingSoon: true });
   };
 
+  handleChangeUsernameInput = event => this.setState({ usernameInput: event.target.value });
+
   handleGetPoints = () => {
     mixpanel.track('Clicked Get Points');
     this.setState({ showPopupBuyPoints: true });
@@ -91,6 +106,29 @@ class Dashboard extends React.Component {
   handlePopupClose = popupName => {
     const key = `showPopup${popupName}`;
     return () => this.setState({ [key]: false });
+  };
+
+  handleSearch = () => {
+    const { usernameInput } = this.state;
+    const usernameFormatted = this.formatUsername(usernameInput);
+    const user = TEST_USERS.find(data => data.username === usernameFormatted);
+    if (user) {
+      this.setState({ user, usernameErrMsg: '' });
+    } else {
+      this.handleSearchError(usernameFormatted);
+    }
+  };
+
+  handleSearchError = username => {
+    if (username === '') {
+      this.setState({
+        usernameInputErrMsg: 'Type in your Instagram username above before clicking the button.',
+      });
+    } else {
+      this.setState({
+        usernameInputErrMsg: 'Oops, there are no results for that username. Please try again.',
+      });
+    }
   };
 
   setInfluencer = () => {
@@ -123,6 +161,8 @@ class Dashboard extends React.Component {
       showPopupBuyPoints,
       showPopupComingSoon,
       showPopupNoUser,
+      usernameInput,
+      usernameInputErrMsg,
     } = this.state;
 
     const user = DEFAULT_USER;
@@ -146,9 +186,13 @@ class Dashboard extends React.Component {
 
     const popupNoUser = showPopupNoUser ? (
       <PopupNoUser
+        handleChangeUsername={this.handleChangeUsernameInput}
         handleClose={this.handlePopupClose('NoUser')}
+        handleSearch={this.handleSearch}
         influencerName={influencer.name}
         influencerUsername={influencer.username}
+        username={usernameInput}
+        usernameErrMsg={usernameInputErrMsg}
       />
     ) : null;
 
@@ -223,13 +267,15 @@ const DEFAULT_USER = {
   comments: 100,
   likes: 21,
   name: 'Jane Doe',
-  username: 'JaneDoe',
+  username: 'janedoe',
   points: 26980,
   profileImgURL:
     'https://instagram.faep4-1.fna.fbcdn.net/vp/6047d91c888be7a7da1de00c98f16519/5C643E3D/t51.2885-19/s320x320/38787686_2067233979976840_7161741697020329984_n.jpg',
   rank: 99,
   uniqueTags: 99,
 };
+
+const TEST_USERS = [DEFAULT_USER];
 
 const FAN_LEVELS = [
   { color: 'green', emoji: '💚', index: 0, name: 'Green Fan Club', pointsReq: 0 },
