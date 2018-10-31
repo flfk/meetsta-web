@@ -51,7 +51,11 @@ class Dashboard extends React.Component {
     this.setMerch();
   }
 
-  formatUsername = username => username.toLowerCase().replace('@', '');
+  formatUsername = username =>
+    username
+      .toLowerCase()
+      .replace('@', '')
+      .trim();
 
   getInfluencerID = () => {
     const { i } = getParams(this.props);
