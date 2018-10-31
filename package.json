@@ -14,6 +14,7 @@
         "paypal-checkout": "^4.0.215",
         "prop-types": "^15.6.2",
         "qs": "^6.5.2",
+        "rc-progress": "^2.2.6",
         "react": "^16.4.1",
         "react-async-script-loader": "^0.3.0",
         "react-dom": "^16.4.1",

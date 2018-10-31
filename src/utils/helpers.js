@@ -16,3 +16,5 @@ export const getTimestamp = () => moment().valueOf();
 export const getParams = props => {
   return qs.parse(props.location.search, { ignoreQueryPrefix: true });
 };
+
+export const getFormattedNumber = number => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');

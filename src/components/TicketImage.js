@@ -13,13 +13,13 @@ const propTypes = {
   influencerName: PropTypes.string.isRequired,
   dateEnd: PropTypes.number,
   dateStart: PropTypes.number,
-  isPremium: PropTypes.bool
+  isPremium: PropTypes.bool,
 };
 
 const defaultProps = {
   isPremium: false,
   dateEnd: 0,
-  dateStart: 0
+  dateStart: 0,
 };
 
 const TicketImage = props => {
@@ -74,6 +74,7 @@ const TicketImage = props => {
 };
 
 const WrapperTicketImage = styled.div`
+  align-self: center;
   position: relative;
   height: 200px;
   width: 416px;
@@ -103,7 +104,7 @@ const Title = styled.div`
   justify-content: center;
   align-items: center;
 
-  font-size: 36px;
+  font-size: 32px;
   color: ${props => (props.isPremium ? 'white' : COLORS.primary.red)};
   font-family: PTSansNarrow;
   font-weight: 800;
@@ -112,7 +113,7 @@ const Title = styled.div`
   ${MEDIA.tablet} {
     height: 48px;
     width: 220px;
-    font-size: 28px;
+    font-size: 24px;
   }
 
   // background-color: blue;
@@ -201,7 +202,7 @@ const StubTitle = styled.div`
     top: 32px;
     height: 16px;
     width: 82px;
-    font-size: 8px;
+    font-size: 6px;
   }
 
   // background-color: red;

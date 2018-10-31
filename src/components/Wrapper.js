@@ -32,6 +32,20 @@ const ProfileImage = styled.div`
   }
 `;
 
+const ProfileImgLarge = styled.div`
+  height: 80px;
+  width: 80px;
+  align-self: center;
+
+  margin: 16px;
+
+  img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+  }
+`;
+
 const StripeIcon = styled.div`
   height: 26px;
   width: 120px;
@@ -46,6 +60,7 @@ const StripeIcon = styled.div`
 const Wrapper = {};
 Wrapper.EventImage = EventImage;
 Wrapper.ProfileImage = ProfileImage;
+Wrapper.ProfileImgLarge = ProfileImgLarge;
 Wrapper.StripeIcon = StripeIcon;
 
 export default Wrapper;

@@ -10,37 +10,19 @@ import Popup from './Popup';
 
 const propTypes = {
   handleClose: PropTypes.func.isRequired,
-  handleComplete: PropTypes.func.isRequired,
-  question: PropTypes.string.isRequired,
-  answer: PropTypes.string.isRequired
 };
 
 const defaultProps = {};
 
 class PopupTrivia extends React.Component {
-  state = {
-    input: '',
-    errMsg: '',
-    isCorrect: false
-  };
+  state = {};
 
   handleChangeTrivia = event => {
     this.setState({ input: event.target.value });
   };
 
   handleSubmit = () => {
-    const { input } = this.state;
-    const { answer, handleComplete } = this.props;
-    console.log('input is ', input);
-    if (input) {
-      if (input.toLowerCase() === answer.toLowerCase()) {
-        handleComplete();
-        this.setState({ isCorrect: true });
-      } else {
-        const errMsg = "Nope, that's not it. Try again!";
-        this.setState({ errMsg: errMsg });
-      }
-    }
+    // XX TODO
   };
 
   render() {

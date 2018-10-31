@@ -1,4 +1,5 @@
 import firebase from 'firebase/app';
+import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
 
@@ -13,12 +14,14 @@ const config = {
 
 firebase.initializeApp(config);
 
+const auth = firebase.auth();
+
 const db = firebase.firestore();
 
-export const storage = firebase.storage();
+const storage = firebase.storage();
 
 // To ensure ensure firestore timestamp objects supported in future
 const settings = { timestampsInSnapshots: true };
 db.settings(settings);
 
-export default db;
+export { auth, db, storage };

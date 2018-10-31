@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 
 import CardOptions from '../components/CardOptions';
 import Content from '../components/Content';
-import { getParams } from '../utils/helpers';
+import { getParams } from '../utils/Helpers';
 
 import actions from '../data/actions';
 
@@ -18,7 +18,6 @@ class TicketOptions extends React.Component {
   componentDidMount() {
     try {
       this.loadFormattedData();
-      this.getEventID();
     } catch (err) {
       console.error('Error in getting documents', err);
     }

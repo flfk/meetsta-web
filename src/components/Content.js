@@ -9,9 +9,10 @@ const Content = styled.div`
   flex-direction: column;
   width: 600px;
   margin: auto;
-
   padding-left: 16px;
   padding-right: 16px;
+
+  align-items: ${props => (props.alignCenter ? 'centered' : '')};
 
   ${MEDIA.tablet} {
     width: auto;
@@ -92,6 +93,11 @@ const Anchor = styled.a`
   }
 `;
 
+const FlipHorizontal = styled.div`
+  transform: scale(-1, 1);
+  display: inline-block;
+`;
+
 const Divider = () => {
   return (
     <Center>
@@ -112,5 +118,6 @@ Content.Spacing = Spacing;
 Content.Center = Center;
 Content.CenteredBothAxis = CenteredBothAxis;
 Content.Anchor = Anchor;
+Content.FlipHorizontal = FlipHorizontal;
 
 export default Content;
