@@ -64,6 +64,7 @@ const WrapperNotifBubble = styled.div`
   width: 55px;
   background-image: url(${NotifBubble});
   background-size: cover;
+  margin-bottom: 4px;
 
   display: flex;
   justify-content: center;

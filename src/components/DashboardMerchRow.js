@@ -55,8 +55,6 @@ const MerchImg = styled.div`
   width: 32px;
   background-image: url(${props => props.src});
   background-size: cover;
-
-  border: 1px solid red;
 `;
 
 DashboardMerchRow.propTypes = propTypes;

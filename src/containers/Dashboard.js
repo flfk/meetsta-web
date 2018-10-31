@@ -92,9 +92,13 @@ class Dashboard extends React.Component {
     return (
       <div>
         <Content centered>
-          <Content.Spacing />
+          <Fonts.H3 centered noMarginBottom>
+            {user.username}
+          </Fonts.H3>
           <Fonts.P centered>
-            #{user.rank} of {getFormattedNumber(INFLUENCER.fanCount)}
+            <strong>
+              #{user.rank} of {getFormattedNumber(INFLUENCER.fanCount)}
+            </strong>
           </Fonts.P>
           <br />
           <DashboardProfile
