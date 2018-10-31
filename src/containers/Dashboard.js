@@ -5,7 +5,7 @@ import React from 'react';
 import actions from '../data/actions';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
-import { getParams, getFormattedNumber } from '../utils/Helpers';
+import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
 import DashboardMedals from '../components/DashboardMedals';
 import DashboardMerchRow from '../components/DashboardMerchRow';
 import DashboardProfile from '../components/DashboardProfile';
@@ -28,8 +28,6 @@ class Dashboard extends React.Component {
       username: '',
     },
     merch: [],
-    usernameInput: '',
-    usernameInputErrMsg: '',
     showPopupBuyPoints: false,
     showPopupComingSoon: false,
     showPopupNoUser: true,
@@ -43,6 +41,8 @@ class Dashboard extends React.Component {
       rank: 0,
       uniqueTags: 0,
     },
+    usernameInput: '',
+    usernameInputErrMsg: '',
   };
 
   componentDidMount() {
@@ -113,7 +113,10 @@ class Dashboard extends React.Component {
     const usernameFormatted = this.formatUsername(usernameInput);
     const user = TEST_USERS.find(data => data.username === usernameFormatted);
     if (user) {
-      this.setState({ user, usernameErrMsg: '' });
+      this.setState({ showPopupNoUser: false, user, usernameErrMsg: '' });
+      actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
+      mixpanel.identify(user.username);
+      mixpanel.track('User Signed In');
     } else {
       this.handleSearchError(usernameFormatted);
     }
@@ -161,11 +164,11 @@ class Dashboard extends React.Component {
       showPopupBuyPoints,
       showPopupComingSoon,
       showPopupNoUser,
+      user,
       usernameInput,
       usernameInputErrMsg,
     } = this.state;
 
-    const user = DEFAULT_USER;
     const levels = this.getLevels(user.points);
     const medals = this.getMedals(user);
 
@@ -213,7 +216,7 @@ class Dashboard extends React.Component {
       <div>
         <Content centered>
           <Fonts.H3 centered noMarginBottom>
-            {user.username}
+            @{user.username}
           </Fonts.H3>
           <Fonts.P centered>
             <strong>
@@ -251,8 +254,13 @@ class Dashboard extends React.Component {
           <DashboardProgress points={user.points} levels={levels} />
           <Content.Spacing />
           <DashboardMedals medals={medals} />
-          <Content.Spacing />
+          <br />
+          <Content.Seperator />
+          <br />
           {merchDiv}
+          <Content.Seperator />
+          <Fonts.P centered>Your points are updated every 72 hours</Fonts.P>
+          <Content.Spacing />
 
           {popupBuyPoints}
           {popupComingSoon}
@@ -270,7 +278,7 @@ const DEFAULT_USER = {
   username: 'janedoe',
   points: 26980,
   profileImgURL:
-    'https://instagram.faep4-1.fna.fbcdn.net/vp/6047d91c888be7a7da1de00c98f16519/5C643E3D/t51.2885-19/s320x320/38787686_2067233979976840_7161741697020329984_n.jpg',
+    'https://firebasestorage.googleapis.com/v0/b/online-meet-and-greets.appspot.com/o/default_profile.png?alt=media&token=abd27f4c-31e9-499e-a3aa-a97f61a5e7ea',
   rank: 99,
   uniqueTags: 99,
 };
