@@ -23,7 +23,7 @@ const DEFAULT_EVENT_ID = 'default-event-id';
 
 const CLIENT = {
   sandbox: process.env.REACT_APP_PAYPAL_CLIENT_ID_SANDBOX,
-  production: process.env.REACT_APP_PAYPAL_CLIENT_ID_PRODUCTION
+  production: process.env.REACT_APP_PAYPAL_CLIENT_ID_PRODUCTION,
 };
 const ENV = process.env.NODE_ENV === 'production' ? 'production' : 'sandbox';
 const CURRENCY = 'USD';
@@ -53,7 +53,7 @@ class Checkout extends React.Component {
     ticketSelected: {},
     ticketID: null,
     ticketOrdered: null,
-    toConfirmation: false
+    toConfirmation: false,
   };
 
   componentDidMount() {
@@ -97,7 +97,7 @@ class Checkout extends React.Component {
         title: event.title,
         influencerName: event.organiserName,
         dateStart: event.dateStart,
-        dateEnd: event.dateEnd
+        dateEnd: event.dateEnd,
       };
       const ticket = await actions.getDocEventTicket(eventID, ticketID);
       const tickets = [ticket];
@@ -131,7 +131,7 @@ class Checkout extends React.Component {
       nameFirst,
       nameLast,
       ticketSelected,
-      title
+      title,
     } = this.state;
     const orderNum = await actions.getNewOrderNum();
     const { addOnsSelected } = ticketSelected;
@@ -163,7 +163,7 @@ class Checkout extends React.Component {
       orderNum,
       payPalPaymentID,
       userID: '',
-      addOns: addOnsList
+      addOns: addOnsList,
     };
     this.setState({ ticketOrdered: ticket });
     const newTicket = await actions.addDocTicket(ticket);
@@ -186,14 +186,14 @@ class Checkout extends React.Component {
 
   onError = error => {
     this.setState({
-      paypalErrorMsg: 'Oops, looks like there was a PayPal payment error. Please try again.'
+      paypalErrorMsg: 'Oops, looks like there was a PayPal payment error. Please try again.',
     });
     console.error('Erroneous payment OR failed to load script', error);
   };
 
   onCancel = data => {
     this.setState({
-      paypalErrorMsg: 'Oops, looks like the Paypal payment was cancelled. Please try again.'
+      paypalErrorMsg: 'Oops, looks like the Paypal payment was cancelled. Please try again.',
     });
     console.error('Cancelled payment', data);
   };
@@ -258,7 +258,7 @@ class Checkout extends React.Component {
       ticketSelected,
       ticketID,
       ticketOrdered,
-      toConfirmation
+      toConfirmation,
     } = this.state;
 
     if (toConfirmation === true)
@@ -268,7 +268,7 @@ class Checkout extends React.Component {
           to={{
             pathname: '/confirmation',
             search: `?ticketID=${ticketID}`,
-            state: { ticket: ticketOrdered }
+            state: { ticket: ticketOrdered },
           }}
         />
       );
