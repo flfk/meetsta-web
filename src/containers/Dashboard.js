@@ -16,7 +16,7 @@ import PopupBuyPoints from '../components/popups/PopupBuyPoints';
 import PopupComingSoon from '../components/popups/PopupComingSoon';
 import PopupNoUser from '../components/popups/PopupNoUser';
 
-import FAN_DATA from '../data/dashboards/fanData_jon_klaasen';
+import FAN_DATA from '../data/dashboards/fanData-jon_klaasen';
 
 // const propTypes = {};
 
@@ -232,7 +232,7 @@ class Dashboard extends React.Component {
           </Fonts.H3>
           <Fonts.P centered>
             <strong>
-              #{user.rank} of {getFormattedNumber(influencer.fanCount)}
+              #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
             </strong>
           </Fonts.P>
           <br />
@@ -306,7 +306,7 @@ const FAN_LEVELS = [
 
 const JON_KLAASEN = {
   coinName: 'Klassen Koins',
-  fanCount: 16400,
+  fanCount: 21941,
   name: 'Jon Klaasen',
   username: 'jon_klaasen',
 };
