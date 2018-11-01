@@ -12,16 +12,19 @@ const propTypes = {
     hasMedalRank: PropTypes.bool,
     hasMedalTags: PropTypes.bool,
   }).isRequired,
-  profileImgURL: PropTypes.string.isRequired,
+  profilePicURL: PropTypes.string.isRequired,
 };
 
 const defaultProps = {};
 
-const DashboardProfile = ({ levelEmoji, medals, profileImgURL }) => {
+const DEFAULT_PROFILE_PIC_URL =
+  'https://firebasestorage.googleapis.com/v0/b/online-meet-and-greets.appspot.com/o/default_profile.png?alt=media&token=abd27f4c-31e9-499e-a3aa-a97f61a5e7ea';
+
+const DashboardProfile = ({ levelEmoji, medals, profilePicURL }) => {
   const { hasMedalComments, hasMedalLikes, hasMedalRank, hasMedalTags } = medals;
 
   return (
-    <Container img={profileImgURL}>
+    <Container img={profilePicURL || DEFAULT_PROFILE_PIC_URL}>
       <Level>{levelEmoji}</Level>
       <MedalsContainer>
         <Medals.Likes hasMedal={hasMedalLikes} isSmall />
@@ -51,7 +54,7 @@ const Container = styled.div`
 // const ProfileImg = styled.div`
 //   height: 80px;
 //   width: 80px;
-//   background-image: url(${props => props.profileImgURL});
+//   background-image: url(${props => props.profilePicURL});
 //   background-size: cover;
 //   border-radius: 50%;
 // `;

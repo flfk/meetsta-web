@@ -1,3 +1,4 @@
+import axios from 'axios';
 import mixpanel from 'mixpanel-browser';
 // import PropTypes from 'prop-types';
 import React from 'react';
@@ -14,6 +15,8 @@ import DashboardStats from '../components/DashboardStats';
 import PopupBuyPoints from '../components/popups/PopupBuyPoints';
 import PopupComingSoon from '../components/popups/PopupComingSoon';
 import PopupNoUser from '../components/popups/PopupNoUser';
+
+import FAN_DATA from '../data/dashboards/fanData_jon_klaasen';
 
 // const propTypes = {};
 
@@ -32,14 +35,13 @@ class Dashboard extends React.Component {
     showPopupComingSoon: false,
     showPopupNoUser: true,
     user: {
-      comments: 0,
-      likes: 0,
-      name: '',
+      postsCommented: [],
+      postsLiked: [],
       username: '',
       points: 0,
-      profileImgURL: '',
+      profilePicURL: '',
       rank: 0,
-      uniqueTags: 0,
+      uniqueTags: [],
     },
     usernameInput: '',
     usernameInputErrMsg: '',
@@ -79,12 +81,12 @@ class Dashboard extends React.Component {
   };
 
   getMedals = user => {
-    const { comments, likes, rank, uniqueTags } = user;
+    const { postsCommented, postsLiked, rank, uniqueTags } = user;
     const medals = {
-      hasMedalComments: comments >= MEDAL_REQUIREMENTS.comments,
-      hasMedalLikes: likes >= MEDAL_REQUIREMENTS.likes,
+      hasMedalComments: postsCommented.length >= MEDAL_REQUIREMENTS.comments,
+      hasMedalLikes: postsLiked.length >= MEDAL_REQUIREMENTS.likes,
       hasMedalRank: rank <= MEDAL_REQUIREMENTS.rank,
-      hasMedalTags: uniqueTags >= MEDAL_REQUIREMENTS.tags,
+      hasMedalTags: uniqueTags.length >= MEDAL_REQUIREMENTS.tags,
     };
     return medals;
   };
@@ -112,12 +114,16 @@ class Dashboard extends React.Component {
     return () => this.setState({ [key]: false });
   };
 
-  handleSearch = () => {
+  handleSearch = async () => {
     const { usernameInput } = this.state;
     const usernameFormatted = this.formatUsername(usernameInput);
-    const user = TEST_USERS.find(data => data.username === usernameFormatted);
+    const user = FAN_DATA.find(data => data.username === usernameFormatted);
     if (user) {
-      this.setState({ showPopupNoUser: false, user, usernameErrMsg: '' });
+      this.setState({
+        showPopupNoUser: false,
+        user,
+        usernameInputErrMsg: '',
+      });
       actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
       mixpanel.identify(user.username);
       mixpanel.track('User Signed In');
@@ -172,6 +178,8 @@ class Dashboard extends React.Component {
       usernameInput,
       usernameInputErrMsg,
     } = this.state;
+
+    console.log('user, ', user);
 
     const levels = this.getLevels(user.points);
     const medals = this.getMedals(user);
@@ -231,7 +239,7 @@ class Dashboard extends React.Component {
           <DashboardProfile
             levelEmoji={levels.current.emoji}
             medals={medals}
-            profileImgURL={user.profileImgURL}
+            profilePicURL={user.profilePicURL}
           />
           <Fonts.H1 centered>
             <span role="img" aria-label="party popper">
@@ -250,9 +258,9 @@ class Dashboard extends React.Component {
           </Fonts.P>
           <Content.Spacing />
           <DashboardStats
-            comments={user.comments}
-            likes={user.likes}
-            uniqueTags={user.uniqueTags}
+            comments={user.postsCommented.length}
+            likes={user.postsLiked.length}
+            uniqueTags={user.uniqueTags.length}
           />
           <Content.Spacing />
           <DashboardProgress points={user.points} levels={levels} />
@@ -281,18 +289,19 @@ const DEFAULT_USER = {
   name: 'Jane Doe',
   username: 'janedoe',
   points: 26980,
-  profileImgURL:
+  profilePicURL:
     'https://firebasestorage.googleapis.com/v0/b/online-meet-and-greets.appspot.com/o/default_profile.png?alt=media&token=abd27f4c-31e9-499e-a3aa-a97f61a5e7ea',
   rank: 99,
   uniqueTags: 99,
 };
 
-const TEST_USERS = [DEFAULT_USER];
-
 const FAN_LEVELS = [
-  { color: 'green', emoji: '💚', index: 0, name: 'Green Fan Club', pointsReq: 0 },
-  { color: 'purple', emoji: '💜', index: 1, name: 'Purple Fan Club', pointsReq: 10000 },
-  { color: 'orange', emoji: '🧡', index: 2, name: 'Orange Fan Club', pointsReq: 100000 },
+  { color: 'purple', emoji: '💜', index: 0, name: 'The Purple Hearts Club', pointsReq: 0 },
+  { color: 'blue', emoji: '💙', index: 1, name: 'The Blue Hearts Club', pointsReq: 10000 },
+  { color: 'green', emoji: '💚', index: 2, name: 'The Green Hearts Club', pointsReq: 25000 },
+  { color: 'yellow', emoji: '💛', index: 3, name: 'The Yellow Hearts Club', pointsReq: 100000 },
+  { color: 'orange', emoji: '🧡', index: 4, name: 'The Orange Hearts Club', pointsReq: 500000 },
+  { color: 'red', emoji: '❤️', index: 5, name: 'The Red Hearts Club', pointsReq: 1000000 },
 ];
 
 const JON_KLAASEN = {
@@ -306,12 +315,12 @@ const MERCH = [
   {
     merchID: 'VidCall10Min',
     name: '10 min 1-on-1 facetime',
-    price: 90000,
+    price: 1000000,
   },
   {
     merchID: 'VidCall5Min',
     name: '5 min 1-on-1 facetime',
-    price: 80000,
+    price: 600000,
   },
   {
     merchID: 'LikeCommentSpam',
@@ -321,29 +330,29 @@ const MERCH = [
   {
     merchID: 'FollowBack',
     name: 'Follow back',
-    price: 25000,
+    price: 500000,
   },
   {
     merchID: 'Shoutout',
     name: 'Personal story shoutout',
-    price: 20000,
+    price: 1500000,
   },
   {
     merchID: 'DMReply',
     name: 'Personal DM',
-    price: 10000,
+    price: 300000,
   },
   {
     merchID: 'SelfieVid',
     name: 'Selfie thank-you video',
-    price: 25000,
+    price: 400000,
   },
 ];
 
 const MEDAL_REQUIREMENTS = {
   comments: 100,
-  likes: 20,
-  tags: 10,
+  likes: 10,
+  tags: 20,
   rank: 100,
 };
 

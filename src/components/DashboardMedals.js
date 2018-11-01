@@ -24,7 +24,7 @@ const DashboardMedals = ({ medals }) => {
     <Content.Row>
       <MedalContainer>
         <Medals.Likes hasMedal={hasMedalLikes} />
-        <Fonts.P centered>20 Posts Liked</Fonts.P>
+        <Fonts.P centered>10 Posts Liked</Fonts.P>
       </MedalContainer>
       <MedalContainer>
         <Medals.Comments hasMedal={hasMedalComments} />

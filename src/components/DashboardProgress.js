@@ -41,7 +41,8 @@ const DashboardProgress = ({ levels, points }) => {
     nextEmoji = next.emoji;
     levelUpTxt = (
       <Fonts.P centered>
-        1250 points to <NextClubText color={next.color}>{next.name}</NextClubText>
+        {next.pointsReq - points} points to{' '}
+        <NextClubText color={next.color}>{next.name}</NextClubText>
       </Fonts.P>
     );
   } else {
