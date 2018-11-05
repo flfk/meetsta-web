@@ -10,7 +10,7 @@ import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
 import DashboardMedals from '../components/DashboardMedals';
 import DashboardMerchRow from '../components/DashboardMerchRow';
 import DashboardProfile from '../components/DashboardProfile';
-import DashboardProgress from '../components/DashboardProgress';
+// import DashboardProgress from '../components/DashboardProgress';
 import DashboardStats from '../components/DashboardStats';
 import PopupBuyPoints from '../components/popups/PopupBuyPoints';
 import PopupComingSoon from '../components/popups/PopupComingSoon';
@@ -33,7 +33,7 @@ class Dashboard extends React.Component {
     merch: [],
     showPopupBuyPoints: false,
     showPopupComingSoon: false,
-    showPopupNoUser: true,
+    showPopupNoUser: false,
     user: {
       postsCommented: [],
       postsLiked: [],
@@ -236,11 +236,7 @@ class Dashboard extends React.Component {
             </strong>
           </Fonts.P>
           <br />
-          <DashboardProfile
-            levelEmoji={levels.current.emoji}
-            medals={medals}
-            profilePicURL={user.profilePicURL}
-          />
+          <DashboardProfile medals={medals} profilePicURL={user.profilePicURL} />
           <Fonts.H1 centered>
             <span role="img" aria-label="party popper">
               🎉
@@ -263,7 +259,6 @@ class Dashboard extends React.Component {
             uniqueTags={user.uniqueTags.length}
           />
           <Content.Spacing />
-          <DashboardProgress points={user.points} levels={levels} />
           <Content.Spacing />
           <DashboardMedals medals={medals} />
           <br />

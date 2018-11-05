@@ -7,8 +7,8 @@ class LandingPage extends Component {
       <Redirect
         push
         to={{
-          pathname: '/top100-jacksonfelt',
-          search: ``
+          pathname: '/dashboard',
+          search: `?i=jon_klaasen`,
         }}
       />
     );

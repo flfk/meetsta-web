@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Medals from './Medals';
 
 const propTypes = {
-  levelEmoji: PropTypes.string.isRequired,
+  // levelEmoji: PropTypes.string.isRequired,
   medals: PropTypes.shape({
     hasMedalComments: PropTypes.bool,
     hasMedalLikes: PropTypes.bool,
@@ -25,7 +25,6 @@ const DashboardProfile = ({ levelEmoji, medals, profilePicURL }) => {
 
   return (
     <Container img={profilePicURL || DEFAULT_PROFILE_PIC_URL}>
-      <Level>{levelEmoji}</Level>
       <MedalsContainer>
         <Medals.Likes hasMedal={hasMedalLikes} isSmall />
         <Medals.Comments hasMedal={hasMedalComments} isSmall />
@@ -40,7 +39,7 @@ const Container = styled.div`
   align-self: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
 
   // border: 1px solid red;
 

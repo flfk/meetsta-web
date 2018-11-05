@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FaSearch } from 'react-icons/fa';
 
 import actions from '../../data/actions';
 import Btn from '../Btn';
@@ -57,7 +58,7 @@ class PopupNoUser extends React.Component {
         <Popup.CardTransparent>
           <Fonts.H1 centered>
             Find out if you're in {influencerName}
-            's most actives
+            's most active fans
           </Fonts.H1>
           <Wrapper.EventImage>
             <img src={teaserImgURL} alt={influencerName} />
@@ -69,7 +70,7 @@ class PopupNoUser extends React.Component {
             placeholder="@YourInstagramUsername"
           />
           <Btn primary fill="true" onClick={handleSearch}>
-            Show Me
+            <FaSearch /> Search
           </Btn>
         </Popup.CardTransparent>
       </div>
