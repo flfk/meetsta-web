@@ -1,12 +1,13 @@
 import mixpanel from 'mixpanel-browser';
 // import PropTypes from 'prop-types';
 import React from 'react';
+import { FaInstagram } from 'react-icons/fa';
 
 import actions from '../data/actions';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
-import { Medals, MerchRow, Profile, Stats } from '../components/dashboard';
+import { InfluencerProfile, Medals, MerchRow, Profile, Stats } from '../components/dashboard';
 import PopupBuyPoints from '../components/popups/PopupBuyPoints';
 import PopupComingSoon from '../components/popups/PopupComingSoon';
 import PopupNoUser from '../components/popups/PopupNoUser';
@@ -225,13 +226,15 @@ class Dashboard extends React.Component {
           <Fonts.H3 centered noMarginBottom>
             @{user.username}
           </Fonts.H3>
-          <Fonts.P centered>
+          <br />
+          <Fonts.A centered>
             <strong>
               #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
             </strong>
-          </Fonts.P>
+          </Fonts.A>
           <br />
           <Profile medals={medals} profilePicURL={user.profilePicURL} />
+
           <Fonts.H1 centered>
             <span role="img" aria-label="party popper">
               🎉
@@ -243,19 +246,24 @@ class Dashboard extends React.Component {
               </span>{' '}
             </Content.FlipHorizontal>{' '}
           </Fonts.H1>
-          <Fonts.P centered>{influencer.name} fan points earned</Fonts.P>
-          <Content.Spacing />
-          <div>@{influencer.username}</div>
+          <Fonts.H3 centered noMarginTop>
+            Points you earned on
+          </Fonts.H3>
+          <InfluencerProfile
+            influencerUsername={influencer.username}
+            influencerProfilePicURL={influencer.profilePicURL}
+          />
+          <br />
           <Stats
             comments={user.postsCommented.length}
             likes={user.postsLiked.length}
             uniqueTags={user.uniqueTags.length}
           />
           <Content.Spacing />
-          <Content.Spacing />
           <Medals medals={medals} />
           <br />
           <Content.Seperator />
+          <Fonts.H3 noMarginTop>Spend your points</Fonts.H3>
           <br />
           {merchDiv}
           <Content.Seperator />
@@ -296,6 +304,8 @@ const JON_KLAASEN = {
   coinName: 'Klassen Koins',
   fanCount: 21941,
   name: 'Jon Klaasen',
+  profilePicURL:
+    'https://instagram.faep4-1.fna.fbcdn.net/vp/4c623d035365d5ed4c537becae2afa94/5C87D8CD/t51.2885-19/s150x150/36563227_239821553286740_6380728175147614208_n.jpg',
   username: 'jon_klaasen',
 };
 

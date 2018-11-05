@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { FaComment, FaHeart, FaUser } from 'react-icons/fa';
+import { FaComment, FaHeart, FaUserTag } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import Content from '../Content';
+import { POINTS_BY_TYPE } from '../../utils/Constants';
+import Colors from '../../utils/Colors';
 import Fonts from '../../utils/Fonts';
 import NotifBubble from '../../assets/NotifBubble.png';
 
@@ -19,43 +21,41 @@ const DashboardStats = ({ comments, likes, uniqueTags }) => {
   return (
     <Content.Row>
       <Stat>
-        <WrapperNotifBubble>
-          <StatText>
-            <FaHeart /> {likes}
-          </StatText>
-        </WrapperNotifBubble>
-        <Fonts.P centered>Posts you've liked</Fonts.P>
+        <StatText>
+          <FaHeart /> {likes * POINTS_BY_TYPE.likes || 0}
+        </StatText>
+        <br />
+        <Fonts.P centered>From your likes</Fonts.P>
       </Stat>
       <Stat>
-        <WrapperNotifBubble>
-          <StatText>
-            <FaComment /> {comments}
-          </StatText>
-        </WrapperNotifBubble>
-        <Fonts.P centered>Comments you've made</Fonts.P>
+        <StatText>
+          <FaComment /> {comments * POINTS_BY_TYPE.comments || 0}
+        </StatText>
+        <br />
+        <Fonts.P centered>From your comments</Fonts.P>
       </Stat>
       <Stat>
-        <WrapperNotifBubble>
-          <StatText>
-            <FaUser /> {uniqueTags}
-          </StatText>
-        </WrapperNotifBubble>
-        <Fonts.P centered>Friends you've tagged</Fonts.P>
+        <StatText>
+          <FaUserTag /> {uniqueTags * POINTS_BY_TYPE.comments || 0}
+        </StatText>
+        <br />
+        <Fonts.P centered>From tagging your friends</Fonts.P>
       </Stat>
     </Content.Row>
   );
 };
 
 const Stat = styled.div`
+  flex: 1 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const StatText = styled.span`
-  color: white;
+  color: ${Colors.greys.primary};
   font-weight: bold;
-  font-weight: 16px;
+  font-size: 20px;
   margin-top: 12px;
 `;
 
