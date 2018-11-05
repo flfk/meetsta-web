@@ -6,22 +6,16 @@ import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import LeaderboardRow from '../components/LeaderboardRow';
 import LeaderboardFooter from '../components/LeaderboardFooter';
-import { getParams, getFormattedNumber } from '../utils/Helpers';
+import { getParams } from '../utils/Helpers';
 
-import DATA_LEADERBOARD_ALISTAR from '../data/leaderboards/Alistarbruback20181019';
-import DATA_LEADERBOARD_JACKSON from '../data/leaderboards/Jacksonnfelt20181020';
-import DATA_LEADERBOARD_JON from '../data/leaderboards/Jon_klaasen20181021';
-import DATA_LEADERBOARD_SOCOOKIECUTTERS from '../data/leaderboards/Socookiecutters20181019';
-
-const POINTS_MULTIPLIER = 257;
+import DATA_LEADERBOARD_JON from '../data/dashboards/fanData-jon_klaasen';
 
 class Leaderboard extends React.Component {
   state = {
     fans: [],
     influencerDisplayName: '',
     influencerID: '',
-    toStorePoints: false,
-    toStoreMerch: false,
+    toDashboard: false,
   };
 
   componentDidMount() {
@@ -37,14 +31,8 @@ class Leaderboard extends React.Component {
 
   getFanData = influencerID => {
     switch (influencerID) {
-      case 'alistarbruback':
-        return DATA_LEADERBOARD_ALISTAR;
       case 'jon_klaasen':
-        return DATA_LEADERBOARD_JON;
-      case 'jacksonnfelt':
-        return DATA_LEADERBOARD_JACKSON;
-      case 'socookiecutters':
-        return DATA_LEADERBOARD_SOCOOKIECUTTERS;
+        return DATA_LEADERBOARD_JON.slice(0, 100);
       default:
         return null;
     }
@@ -52,14 +40,8 @@ class Leaderboard extends React.Component {
 
   getInfluencerDisplayName = influencerID => {
     switch (influencerID) {
-      case 'alistarbruback':
-        return 'Alistar Bruback';
       case 'jon_klaasen':
         return 'Jon Klaasen';
-      case 'jacksonnfelt':
-        return 'Jackson Felt';
-      case 'socookiecutters':
-        return 'Cookie Cutters';
       default:
         return null;
     }
@@ -90,12 +72,12 @@ class Leaderboard extends React.Component {
     }
   };
 
-  handleGetPoints = () => {
-    console.log('handlingGetPoints');
-    this.setState({ toStorePoints: true });
+  handleClaimPoints = () => {
+    console.log('handleClaimPoints');
+    const { influencerID } = this.state;
+    mixpanel.track('Clicked Claim Points', { influencerID });
+    this.setState({ toDashboard: true });
   };
-
-  handleUsePoints = () => this.setState({ toStoreMerch: true });
 
   setLeaderboardData = () => {
     const influencerID = this.getInfluencerID();
@@ -104,40 +86,22 @@ class Leaderboard extends React.Component {
     this.setState({ fans, influencerDisplayName, influencerID });
   };
 
-  goToGetPoints = influencerID => {
-    return (
-      <Redirect
-        push
-        to={{
-          pathname: '/get-points',
-          search: `?i=${influencerID}`,
-        }}
-      />
-    );
-  };
-
-  goToGetMerch = influencerID => {
-    return (
-      <Redirect
-        push
-        to={{
-          pathname: '/get-merch',
-          search: `?i=${influencerID}`,
-        }}
-      />
-    );
-  };
+  goToDashboard = influencerID => (
+    <Redirect
+      push
+      to={{
+        pathname: '/dashboard',
+        search: `?i=${influencerID}`,
+      }}
+    />
+  );
 
   render() {
     // XX TODO replace with dynamic retrieval
-    const { fans, influencerDisplayName, influencerID, toStorePoints, toStoreMerch } = this.state;
+    const { fans, influencerDisplayName, influencerID, toDashboard } = this.state;
 
-    if (toStorePoints) {
-      return this.goToGetPoints(influencerID);
-    }
-
-    if (toStoreMerch) {
-      return this.goToGetMerch(influencerID);
+    if (toDashboard) {
+      return this.goToDashboard(influencerID);
     }
 
     let leaderboard = null;
@@ -145,8 +109,8 @@ class Leaderboard extends React.Component {
       leaderboard = fans.map((fan, index) => (
         <LeaderboardRow
           key={fan.username}
-          points={getFormattedNumber(fan.points * POINTS_MULTIPLIER)}
-          profileImgUrl={fan.profilePicUrl}
+          points={fan.points}
+          profilePicURL={fan.profilePicURL}
           rank={index + 1}
           trophy={this.getTrophy(index)}
           username={fan.username}
@@ -168,12 +132,8 @@ class Leaderboard extends React.Component {
           {leaderboard}
           <br />
           <Content.Spacing />
-          <Content.Spacing />
         </Content.PaddingBottom>
-        <LeaderboardFooter
-          handleGetPoints={this.handleGetPoints}
-          handleUsePoints={this.handleUsePoints}
-        />
+        <LeaderboardFooter handleClaimPoints={this.handleClaimPoints} />
       </div>
     );
   }

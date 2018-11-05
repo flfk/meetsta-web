@@ -1,6 +1,7 @@
 import mixpanel from 'mixpanel-browser';
 // import PropTypes from 'prop-types';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import actions from '../data/actions';
 import Content from '../components/Content';
@@ -178,7 +179,6 @@ class Dashboard extends React.Component {
       influencer,
       merch,
       merchSelected,
-      showPopupBuyPoints,
       showPopupComingSoon,
       showPopupGetPrize,
       showPopupNoUser,
@@ -190,9 +190,9 @@ class Dashboard extends React.Component {
     // const levels = this.getLevels(user.points);
     const medals = this.getMedals(user);
 
-    const merchDiv = merch.sort((a, b) => a.price - b.price).map(item => {
-      const hasPointsReq = user.points >= item.price;
-      return (
+    const merchDiv = merch
+      .sort((a, b) => a.price - b.price)
+      .map(item => (
         <MerchRow
           key={item.name}
           handleClick={this.handleSelectPrize}
@@ -201,8 +201,7 @@ class Dashboard extends React.Component {
           merchID={item.merchID}
           name={item.name}
         />
-      );
-    });
+      ));
 
     const popupNoUser = showPopupNoUser ? (
       <PopupNoUser
@@ -239,11 +238,13 @@ class Dashboard extends React.Component {
             @{user.username}
           </Fonts.H3>
           <br />
-          <Fonts.A centered>
-            <strong>
-              #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
-            </strong>
-          </Fonts.A>
+          <Link to={`/top?i=${influencer.influencerID}`} style={{ textAlign: 'center' }}>
+            <Fonts.A>
+              <strong>
+                #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
+              </strong>
+            </Fonts.A>
+          </Link>
           <br />
           <Profile medals={medals} profilePicURL={user.profilePicURL} />
 
@@ -315,6 +316,7 @@ const FAN_LEVELS = [
 const JON_KLAASEN = {
   coinName: 'Klassen Koins',
   fanCount: 21941,
+  influencerID: 'jon_klaasen',
   name: 'Jon Klaasen',
   profilePicURL:
     'https://instagram.faep4-1.fna.fbcdn.net/vp/4c623d035365d5ed4c537becae2afa94/5C87D8CD/t51.2885-19/s150x150/36563227_239821553286740_6380728175147614208_n.jpg',
