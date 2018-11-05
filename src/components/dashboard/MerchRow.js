@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import Btn from '../components/Btn';
-import Content from '../components/Content';
-import Fonts from '../utils/Fonts';
-import { getFormattedNumber } from '../utils/Helpers';
+import Btn from '../Btn';
+import Content from '../Content';
+import Fonts from '../../utils/Fonts';
+import { getFormattedNumber } from '../../utils/Helpers';
 
 const propTypes = {
   handleClick: PropTypes.func.isRequired,

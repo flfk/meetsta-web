@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import Medals from './Medals';
+import Medals from './MedalEmojis';
 
 const propTypes = {
   // levelEmoji: PropTypes.string.isRequired,
@@ -20,7 +20,7 @@ const defaultProps = {};
 const DEFAULT_PROFILE_PIC_URL =
   'https://firebasestorage.googleapis.com/v0/b/online-meet-and-greets.appspot.com/o/default_profile.png?alt=media&token=abd27f4c-31e9-499e-a3aa-a97f61a5e7ea';
 
-const DashboardProfile = ({ levelEmoji, medals, profilePicURL }) => {
+const DashboardProfile = ({ medals, profilePicURL }) => {
   const { hasMedalComments, hasMedalLikes, hasMedalRank, hasMedalTags } = medals;
 
   return (

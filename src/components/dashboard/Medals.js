@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import Content from './Content';
-import Fonts from '../utils/Fonts';
-import Medals from './Medals';
+import Content from '../Content';
+import Fonts from '../../utils/Fonts';
+import Medals from './MedalEmojis';
 
 const propTypes = {
   medals: PropTypes.shape({

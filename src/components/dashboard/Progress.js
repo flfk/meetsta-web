@@ -3,8 +3,8 @@ import React from 'react';
 import { Line } from 'rc-progress';
 import styled from 'styled-components';
 
-import Colors from '../utils/Colors';
-import Fonts from '../utils/Fonts';
+import Colors from '../../utils/Colors';
+import Fonts from '../../utils/Fonts';
 
 const propTypes = {
   levels: PropTypes.shape({

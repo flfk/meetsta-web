@@ -3,9 +3,9 @@ import React from 'react';
 import { FaComment, FaHeart, FaUser } from 'react-icons/fa';
 import styled from 'styled-components';
 
-import Content from './Content';
-import Fonts from '../utils/Fonts';
-import NotifBubble from '../assets/NotifBubble.png';
+import Content from '../Content';
+import Fonts from '../../utils/Fonts';
+import NotifBubble from '../../assets/NotifBubble.png';
 
 const propTypes = {
   comments: PropTypes.number.isRequired,

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import mixpanel from 'mixpanel-browser';
 // import PropTypes from 'prop-types';
 import React from 'react';
@@ -7,11 +6,7 @@ import actions from '../data/actions';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
-import DashboardMedals from '../components/DashboardMedals';
-import DashboardMerchRow from '../components/DashboardMerchRow';
-import DashboardProfile from '../components/DashboardProfile';
-// import DashboardProgress from '../components/DashboardProgress';
-import DashboardStats from '../components/DashboardStats';
+import { Medals, MerchRow, Profile, Stats } from '../components/dashboard';
 import PopupBuyPoints from '../components/popups/PopupBuyPoints';
 import PopupComingSoon from '../components/popups/PopupComingSoon';
 import PopupNoUser from '../components/popups/PopupNoUser';
@@ -181,14 +176,14 @@ class Dashboard extends React.Component {
 
     console.log('user, ', user);
 
-    const levels = this.getLevels(user.points);
+    // const levels = this.getLevels(user.points);
     const medals = this.getMedals(user);
 
     const merchDiv = merch.sort((a, b) => a.price - b.price).map(item => {
       const hasPointsReq = user.points >= item.price;
       const handleClick = hasPointsReq ? this.handleGetPrize : this.handleGetPoints;
       return (
-        <DashboardMerchRow
+        <MerchRow
           key={item.name}
           hasPointsReq={hasPointsReq}
           handleClick={handleClick}
@@ -236,7 +231,7 @@ class Dashboard extends React.Component {
             </strong>
           </Fonts.P>
           <br />
-          <DashboardProfile medals={medals} profilePicURL={user.profilePicURL} />
+          <Profile medals={medals} profilePicURL={user.profilePicURL} />
           <Fonts.H1 centered>
             <span role="img" aria-label="party popper">
               🎉
@@ -248,19 +243,17 @@ class Dashboard extends React.Component {
               </span>{' '}
             </Content.FlipHorizontal>{' '}
           </Fonts.H1>
-          <Fonts.P centered>
-            Points earned on {influencer.name}
-            's 50 most recents
-          </Fonts.P>
+          <Fonts.P centered>{influencer.name} fan points earned</Fonts.P>
           <Content.Spacing />
-          <DashboardStats
+          <div>@{influencer.username}</div>
+          <Stats
             comments={user.postsCommented.length}
             likes={user.postsLiked.length}
             uniqueTags={user.uniqueTags.length}
           />
           <Content.Spacing />
           <Content.Spacing />
-          <DashboardMedals medals={medals} />
+          <Medals medals={medals} />
           <br />
           <Content.Seperator />
           <br />
