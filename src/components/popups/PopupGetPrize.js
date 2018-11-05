@@ -36,7 +36,7 @@ class PopupGetPrize extends React.Component {
     } = this.props;
 
     const paidPointsReq = price - points;
-    const priceDollars = (paidPointsReq / POINTS_PER_DOLLAR).toFixed(2);
+    const priceDollars = paidPointsReq / POINTS_PER_DOLLAR;
 
     const prizeAvailable = (
       <div>
@@ -64,7 +64,7 @@ class PopupGetPrize extends React.Component {
         </Fonts.P>
         <Fonts.H3 centered>OR</Fonts.H3>
         <Btn primary fill="true" onClick={() => handleBuyPoints(name, priceDollars)}>
-          Buy With Points + ${priceDollars}
+          Buy With Points + ${priceDollars.toFixed(2)}
         </Btn>
       </div>
     );

@@ -92,14 +92,14 @@ class Dashboard extends React.Component {
   };
 
   handleBuyPoints = (item, price) => {
-    mixpanel.track('Clicked Buy', { item, price });
+    mixpanel.track('Clicked Buy', { Item: item, Price: price });
     // mixpanel.track('Visited Checkout', { eventID });
     this.setState({ showPopupGetPrize: false });
     this.setState({ showPopupComingSoon: true });
   };
 
-  handleUsePoints = () => {
-    mixpanel.track('Clicked Use Points');
+  handleUsePoints = item => {
+    mixpanel.track('Clicked Use Points', { Item: item });
     this.setState({ showPopupGetPrize: false });
     this.setState({ showPopupComingSoon: true });
   };
