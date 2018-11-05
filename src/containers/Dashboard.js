@@ -34,7 +34,7 @@ class Dashboard extends React.Component {
     },
     showPopupComingSoon: false,
     showPopupGetPrize: false,
-    showPopupNoUser: true,
+    showPopupNoUser: false,
     user: {
       postsCommented: [],
       postsLiked: [],

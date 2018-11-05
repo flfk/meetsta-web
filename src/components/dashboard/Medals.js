@@ -24,23 +24,35 @@ const DashboardMedals = ({ medals }) => {
     <Content.Row alignTop>
       <MedalContainer>
         <Medals.Likes hasMedal={hasMedalLikes} />
-        <Fonts.P centered>10 Posts Liked</Fonts.P>
+        <MedalText hasMedal={hasMedalLikes} centered>
+          10 Posts Liked
+        </MedalText>
       </MedalContainer>
       <MedalContainer>
         <Medals.Comments hasMedal={hasMedalComments} />
-        <Fonts.P centered>100 Comments</Fonts.P>
+        <MedalText hasMedal={hasMedalComments} centered>
+          100 Comments
+        </MedalText>
       </MedalContainer>
       <MedalContainer>
         <Medals.Tags hasMedal={hasMedalTags} />
-        <Fonts.P centered>10 Friends Tagged</Fonts.P>
+        <MedalText hasMedal={hasMedalTags} centered>
+          10 Friends Tagged
+        </MedalText>
       </MedalContainer>
       <MedalContainer>
         <Medals.Rank hasMedal={hasMedalRank} />
-        <Fonts.P centered>Top 100</Fonts.P>
+        <MedalText hasMedal={hasMedalRank} centered>
+          Top 100
+        </MedalText>
       </MedalContainer>
     </Content.Row>
   );
 };
+
+const MedalText = styled(Fonts.P)`
+  opacity: ${props => (props.hasMedal ? '1' : '0.6')};
+`;
 
 const MedalContainer = styled.div`
   display: flex;

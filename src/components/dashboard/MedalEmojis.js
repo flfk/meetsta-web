@@ -14,6 +14,7 @@ const defaultProps = {
 const Emoji = styled.span`
   font-size: ${props => (props.isSmall ? '20px' : '48px')};
   filter: ${props => (props.hasMedal ? '' : 'grayscale(100%)')};
+  opacity: ${props => (props.hasMedal ? '1' : '0.4')};
   display: ${props => (props.isSmall && !props.hasMedal ? 'none' : '')};
 `;
 
