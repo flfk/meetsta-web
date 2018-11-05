@@ -4,7 +4,7 @@ import qs from 'qs';
 export const getDate = dateStart =>
   moment.tz(dateStart, 'America/Los_Angeles').format('dddd, MMM Do, YYYY');
 
-export const getFormattedNumber = number => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export const getFormattedNumber = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export const getParams = props => {
   return qs.parse(props.location.search, { ignoreQueryPrefix: true });
@@ -19,6 +19,18 @@ export const getTimeRange = (dateStart, dateEnd) => {
 
 export const getTimestamp = () => moment().valueOf();
 
+export const getShortenedNumber = num => {
+  if (num < 999) {
+    return num;
+  }
 
+  if (num < 1000000) {
+    return (num / 1000).toFixed(0) + 'k';
+  }
 
+  if (num < 1000000000) {
+    return (num / 1000000).toFixed(0) + 'm';
+  }
 
+  return num;
+};

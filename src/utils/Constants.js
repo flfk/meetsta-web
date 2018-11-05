@@ -1,5 +1,7 @@
 export const POINTS_BY_TYPE = {
-  comment: 5123,
-  like: 1121,
-  uniqueTag: 10742,
+  comments: 5123,
+  likes: 1121,
+  uniqueTags: 10742,
 };
+
+export const POINTS_PER_DOLLAR = 5099;

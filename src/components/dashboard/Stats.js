@@ -7,6 +7,7 @@ import Content from '../Content';
 import { POINTS_BY_TYPE } from '../../utils/Constants';
 import Colors from '../../utils/Colors';
 import Fonts from '../../utils/Fonts';
+import { getShortenedNumber } from '../../utils/Helpers';
 import NotifBubble from '../../assets/NotifBubble.png';
 
 const propTypes = {
@@ -19,24 +20,33 @@ const defaultProps = {};
 
 const DashboardStats = ({ comments, likes, uniqueTags }) => {
   return (
-    <Content.Row>
+    <Content.Row alignTop>
       <Stat>
         <StatText>
-          <FaHeart /> {likes * POINTS_BY_TYPE.likes || 0}
+          <IconText>
+            <FaHeart />
+          </IconText>{' '}
+          {getShortenedNumber(likes * POINTS_BY_TYPE.likes) || 0}
         </StatText>
         <br />
         <Fonts.P centered>From your likes</Fonts.P>
       </Stat>
       <Stat>
         <StatText>
-          <FaComment /> {comments * POINTS_BY_TYPE.comments || 0}
+          <IconText>
+            <FaComment />
+          </IconText>{' '}
+          {getShortenedNumber(comments * POINTS_BY_TYPE.comments) || 0}
         </StatText>
         <br />
         <Fonts.P centered>From your comments</Fonts.P>
       </Stat>
       <Stat>
         <StatText>
-          <FaUserTag /> {uniqueTags * POINTS_BY_TYPE.comments || 0}
+          <IconText>
+            <FaUserTag />
+          </IconText>{' '}
+          {getShortenedNumber(uniqueTags * POINTS_BY_TYPE.comments) || 0}
         </StatText>
         <br />
         <Fonts.P centered>From tagging your friends</Fonts.P>
@@ -44,6 +54,10 @@ const DashboardStats = ({ comments, likes, uniqueTags }) => {
     </Content.Row>
   );
 };
+
+const IconText = styled.span`
+  color: ${Colors.primary.red};
+`;
 
 const Stat = styled.div`
   flex: 1 0 0;

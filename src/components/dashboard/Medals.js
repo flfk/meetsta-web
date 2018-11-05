@@ -21,7 +21,7 @@ const DashboardMedals = ({ medals }) => {
   const { hasMedalComments, hasMedalLikes, hasMedalRank, hasMedalTags } = medals;
 
   return (
-    <Content.Row>
+    <Content.Row alignTop>
       <MedalContainer>
         <Medals.Likes hasMedal={hasMedalLikes} />
         <Fonts.P centered>10 Posts Liked</Fonts.P>

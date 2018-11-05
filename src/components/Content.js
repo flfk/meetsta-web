@@ -31,8 +31,9 @@ const CenteredBothAxis = Content.extend`
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
   align-items: ${props => (props.alignCenter ? 'center' : '')};
+  align-items: ${props => (props.alignTop ? 'flex-start' : '')};
 
   > divp:first-child {
     margin-right: 8px;

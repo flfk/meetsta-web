@@ -1,15 +1,14 @@
 import mixpanel from 'mixpanel-browser';
 // import PropTypes from 'prop-types';
 import React from 'react';
-import { FaInstagram } from 'react-icons/fa';
 
 import actions from '../data/actions';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
 import { InfluencerProfile, Medals, MerchRow, Profile, Stats } from '../components/dashboard';
-import PopupBuyPoints from '../components/popups/PopupBuyPoints';
 import PopupComingSoon from '../components/popups/PopupComingSoon';
+import PopupGetPrize from '../components/popups/PopupGetPrize';
 import PopupNoUser from '../components/popups/PopupNoUser';
 
 import FAN_DATA from '../data/dashboards/fanData-jon_klaasen';
@@ -27,9 +26,14 @@ class Dashboard extends React.Component {
       username: '',
     },
     merch: [],
-    showPopupBuyPoints: false,
+    merchSelected: {
+      merchID: '',
+      name: '',
+      price: 0,
+    },
     showPopupComingSoon: false,
-    showPopupNoUser: false,
+    showPopupGetPrize: false,
+    showPopupNoUser: true,
     user: {
       postsCommented: [],
       postsLiked: [],
@@ -87,22 +91,28 @@ class Dashboard extends React.Component {
     return medals;
   };
 
-  handleBuyPoints = () => {
-    mixpanel.track('Clicked Buy Points');
-    this.setState({ showPopupBuyPoints: false });
+  handleBuyPoints = (item, price) => {
+    mixpanel.track('Clicked Buy', { item, price });
+    // mixpanel.track('Visited Checkout', { eventID });
+    this.setState({ showPopupGetPrize: false });
+    this.setState({ showPopupComingSoon: true });
+  };
+
+  handleUsePoints = () => {
+    mixpanel.track('Clicked Use Points');
+    this.setState({ showPopupGetPrize: false });
     this.setState({ showPopupComingSoon: true });
   };
 
   handleChangeUsernameInput = event => this.setState({ usernameInput: event.target.value });
 
-  handleGetPoints = () => {
-    mixpanel.track('Clicked Get Points');
-    this.setState({ showPopupBuyPoints: true });
-  };
-
-  handleGetPrize = () => {
+  handleSelectPrize = event => {
+    const { merch } = this.state;
+    const merchID = event.target.value;
+    const merchSelected = merch.find(item => item.merchID === merchID);
+    this.setState({ merchSelected });
     mixpanel.track('Clicked Get Prize');
-    this.setState({ showPopupComingSoon: true });
+    this.setState({ showPopupGetPrize: true });
   };
 
   handlePopupClose = popupName => {
@@ -167,30 +177,29 @@ class Dashboard extends React.Component {
     const {
       influencer,
       merch,
+      merchSelected,
       showPopupBuyPoints,
       showPopupComingSoon,
+      showPopupGetPrize,
       showPopupNoUser,
       user,
       usernameInput,
       usernameInputErrMsg,
     } = this.state;
 
-    console.log('user, ', user);
-
     // const levels = this.getLevels(user.points);
     const medals = this.getMedals(user);
 
     const merchDiv = merch.sort((a, b) => a.price - b.price).map(item => {
       const hasPointsReq = user.points >= item.price;
-      const handleClick = hasPointsReq ? this.handleGetPrize : this.handleGetPoints;
       return (
         <MerchRow
           key={item.name}
-          hasPointsReq={hasPointsReq}
-          handleClick={handleClick}
+          handleClick={this.handleSelectPrize}
           imgURL={item.imgURL}
-          name={item.name}
           price={item.price}
+          merchID={item.merchID}
+          name={item.name}
         />
       );
     });
@@ -207,12 +216,15 @@ class Dashboard extends React.Component {
       />
     ) : null;
 
-    const popupBuyPoints = showPopupBuyPoints ? (
-      <PopupBuyPoints
-        coinName={influencer.coinName}
-        handleClose={this.handlePopupClose('BuyPoints')}
-        influencerName={influencer.name}
+    const popupGetPrize = showPopupGetPrize ? (
+      <PopupGetPrize
         handleBuyPoints={this.handleBuyPoints}
+        handleClose={this.handlePopupClose('GetPrize')}
+        handleUsePoints={this.handleUsePoints}
+        imgURL={merchSelected.imgURL}
+        name={merchSelected.name}
+        points={user.points}
+        price={merchSelected.price}
       />
     ) : null;
 
@@ -270,8 +282,8 @@ class Dashboard extends React.Component {
           <Fonts.P centered>Your points are updated every 72 hours</Fonts.P>
           <Content.Spacing />
 
-          {popupBuyPoints}
           {popupComingSoon}
+          {popupGetPrize}
           {popupNoUser}
         </Content>
       </div>
