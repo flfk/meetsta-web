@@ -1,20 +1,17 @@
-import axios from 'axios';
 import mixpanel from 'mixpanel-browser';
 // import PropTypes from 'prop-types';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import actions from '../data/actions';
+import Coins from '../components/dashboard/Coins';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
-import DashboardMedals from '../components/DashboardMedals';
-import DashboardMerchRow from '../components/DashboardMerchRow';
-import DashboardProfile from '../components/DashboardProfile';
-import DashboardProgress from '../components/DashboardProgress';
-import DashboardStats from '../components/DashboardStats';
-import PopupBuyPoints from '../components/popups/PopupBuyPoints';
-import PopupComingSoon from '../components/popups/PopupComingSoon';
-import PopupNoUser from '../components/popups/PopupNoUser';
+import { InfluencerProfile, Medals, MerchRow, Profile, Stats } from '../components/dashboard';
+import PopupComingSoon from '../components/dashboard/PopupComingSoon';
+import PopupGetPrize from '../components/dashboard/PopupGetPrize';
+import PopupNoUser from '../components/dashboard/PopupNoUser';
 
 import FAN_DATA from '../data/dashboards/fanData-jon_klaasen';
 
@@ -31,9 +28,14 @@ class Dashboard extends React.Component {
       username: '',
     },
     merch: [],
-    showPopupBuyPoints: false,
+    merchSelected: {
+      merchID: '',
+      name: '',
+      price: 0,
+    },
     showPopupComingSoon: false,
-    showPopupNoUser: true,
+    showPopupGetPrize: false,
+    showPopupNoUser: false,
     user: {
       postsCommented: [],
       postsLiked: [],
@@ -48,10 +50,22 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    mixpanel.track('Visited Dashboard');
     this.setInfluencer();
+    this.getFanUsername();
     this.setMerch();
+    mixpanel.identify();
+    console.log('mixpanel distinct ID is', mixpanel.get_distinct_id());
+    mixpanel.track('Visited Dashboard');
   }
+
+  addUsernameToURL = username => {
+    const influencerID = this.getInfluencerID();
+    const { history } = this.props;
+    history.push({
+      pathname: '/dashboard',
+      search: `?i=${influencerID}&u=${username}`,
+    });
+  };
 
   formatUsername = username =>
     username
@@ -64,21 +78,43 @@ class Dashboard extends React.Component {
     return i;
   };
 
-  getLevels = points => {
-    const current = FAN_LEVELS.reduce((aggr, level) => {
-      if (level.pointsReq <= points) {
-        return level;
-      }
-      return aggr;
-    }, {});
-
-    const next = FAN_LEVELS[current.index + 1] ? FAN_LEVELS[current.index + 1] : null;
-
-    return {
-      current,
-      next,
-    };
+  getFanUsername = () => {
+    const { u } = getParams(this.props);
+    if (u) {
+      const usernameFormatted = this.formatUsername(u);
+      const user = this.getUser(usernameFormatted);
+      this.setUser(user);
+    } else {
+      this.setState({ showPopupNoUser: true });
+    }
+    return u;
   };
+
+  getUser = username => {
+    const usernameFormatted = this.formatUsername(username);
+    const user = FAN_DATA.find(data => data.username === usernameFormatted);
+    if (user) {
+      actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
+      mixpanel.people.set({
+        $name: username,
+      });
+    }
+    return user;
+  };
+
+  // getLevels = points => {
+  //   const current = FAN_LEVELS.reduce((aggr, level) => {
+  //     if (level.pointsReq <= points) {
+  //       return level;
+  //     }
+  //     return aggr;
+  //   }, {});
+  //   const next = FAN_LEVELS[current.index + 1] ? FAN_LEVELS[current.index + 1] : null;
+  //   return {
+  //     current,
+  //     next,
+  //   };
+  // };
 
   getMedals = user => {
     const { postsCommented, postsLiked, rank, uniqueTags } = user;
@@ -91,21 +127,28 @@ class Dashboard extends React.Component {
     return medals;
   };
 
-  handleBuyPoints = () => {
-    mixpanel.track('Clicked Buy Points');
-    this.setState({ showPopupBuyPoints: false });
+  handleBuyPoints = item => {
+    mixpanel.track('Clicked Buy', { Item: item });
+    // mixpanel.track('Visited Checkout', { eventID });
+    this.setState({ showPopupGetPrize: false });
+    this.setState({ showPopupComingSoon: true });
+  };
+
+  handleUsePoints = item => {
+    mixpanel.track('Clicked Use Points', { Item: item });
+    this.setState({ showPopupGetPrize: false });
     this.setState({ showPopupComingSoon: true });
   };
 
   handleChangeUsernameInput = event => this.setState({ usernameInput: event.target.value });
 
-  handleGetPoints = () => {
-    mixpanel.track('Clicked Get Points');
-    this.setState({ showPopupBuyPoints: true });
-  };
-
-  handleGetPrize = () => {
-    mixpanel.track('Clicked Get Prize');
+  handleSelectPrize = event => {
+    const { merch } = this.state;
+    const merchID = event.target.value;
+    const merchSelected = merch.find(item => item.merchID === merchID);
+    this.setState({ merchSelected });
+    mixpanel.track('Selected Merch', { item: merchSelected.name });
+    // this.setState({ showPopupGetPrize: true });
     this.setState({ showPopupComingSoon: true });
   };
 
@@ -114,21 +157,15 @@ class Dashboard extends React.Component {
     return () => this.setState({ [key]: false });
   };
 
-  handleSearch = async () => {
+  handleSearch = () => {
     const { usernameInput } = this.state;
     const usernameFormatted = this.formatUsername(usernameInput);
-    const user = FAN_DATA.find(data => data.username === usernameFormatted);
+    const user = this.getUser(usernameFormatted);
     if (user) {
-      this.setState({
-        showPopupNoUser: false,
-        user,
-        usernameInputErrMsg: '',
-      });
-      actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
-      mixpanel.identify(user.username);
-      mixpanel.track('User Signed In');
+      this.setUser(user);
+      this.addUsernameToURL(usernameInput);
     } else {
-      this.handleSearchError(usernameFormatted);
+      this.handleSearchError(usernameInput);
     }
   };
 
@@ -143,6 +180,13 @@ class Dashboard extends React.Component {
       });
     }
   };
+
+  setUser = user =>
+    this.setState({
+      showPopupNoUser: false,
+      user,
+      usernameInputErrMsg: '',
+    });
 
   setInfluencer = () => {
     const influencerID = this.getInfluencerID();
@@ -171,33 +215,30 @@ class Dashboard extends React.Component {
     const {
       influencer,
       merch,
-      showPopupBuyPoints,
+      merchSelected,
       showPopupComingSoon,
+      showPopupGetPrize,
       showPopupNoUser,
       user,
       usernameInput,
       usernameInputErrMsg,
     } = this.state;
 
-    console.log('user, ', user);
-
-    const levels = this.getLevels(user.points);
+    // const levels = this.getLevels(user.points);
     const medals = this.getMedals(user);
 
-    const merchDiv = merch.sort((a, b) => a.price - b.price).map(item => {
-      const hasPointsReq = user.points >= item.price;
-      const handleClick = hasPointsReq ? this.handleGetPrize : this.handleGetPoints;
-      return (
-        <DashboardMerchRow
+    const merchDiv = merch
+      .sort((a, b) => a.price - b.price)
+      .map(item => (
+        <MerchRow
           key={item.name}
-          hasPointsReq={hasPointsReq}
-          handleClick={handleClick}
+          handleClick={this.handleSelectPrize}
           imgURL={item.imgURL}
-          name={item.name}
           price={item.price}
+          merchID={item.merchID}
+          name={item.name}
         />
-      );
-    });
+      ));
 
     const popupNoUser = showPopupNoUser ? (
       <PopupNoUser
@@ -211,12 +252,15 @@ class Dashboard extends React.Component {
       />
     ) : null;
 
-    const popupBuyPoints = showPopupBuyPoints ? (
-      <PopupBuyPoints
-        coinName={influencer.coinName}
-        handleClose={this.handlePopupClose('BuyPoints')}
-        influencerName={influencer.name}
+    const popupGetPrize = showPopupGetPrize ? (
+      <PopupGetPrize
         handleBuyPoints={this.handleBuyPoints}
+        handleClose={this.handlePopupClose('GetPrize')}
+        handleUsePoints={this.handleUsePoints}
+        imgURL={merchSelected.imgURL}
+        name={merchSelected.name}
+        points={user.points}
+        price={merchSelected.price}
       />
     ) : null;
 
@@ -227,55 +271,62 @@ class Dashboard extends React.Component {
     return (
       <div>
         <Content centered>
-          <Fonts.H3 centered noMarginBottom>
+          <Content.Spacing />
+          <Fonts.P centered supporting>
+            Your points are updated every 72 hours
+          </Fonts.P>
+          <Fonts.H3 centered marginBottom8px>
             @{user.username}
           </Fonts.H3>
-          <Fonts.P centered>
-            <strong>
-              #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
-            </strong>
-          </Fonts.P>
+          <Fonts.H3 centered marginBottom4px noMarginTop>
+            #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
+          </Fonts.H3>
+          <Link
+            to={`/top?i=${influencer.influencerID}`}
+            style={{ textAlign: 'center', textDecoration: 'none' }}
+          >
+            <Fonts.Link>
+              <strong>See Leaderboard</strong>
+            </Fonts.Link>
+          </Link>
           <br />
-          <DashboardProfile
-            levelEmoji={levels.current.emoji}
-            medals={medals}
-            profilePicURL={user.profilePicURL}
-          />
-          <Fonts.H1 centered>
+          <Profile medals={medals} profilePicURL={user.profilePicURL} />
+
+          <Fonts.H1 centered marginBottom8px>
             <span role="img" aria-label="party popper">
               🎉
             </span>{' '}
-            {getFormattedNumber(user.points)}{' '}
+            <Coins.Icon /> {getFormattedNumber(user.points)}{' '}
             <Content.FlipHorizontal>
               <span role="img" aria-label="party popper">
                 🎉
               </span>{' '}
             </Content.FlipHorizontal>{' '}
           </Fonts.H1>
-          <Fonts.P centered>
-            Points earned on {influencer.name}
-            's 50 most recents
-          </Fonts.P>
-          <Content.Spacing />
-          <DashboardStats
+          <Fonts.H3 centered noMarginTop marginBottom4px>
+            Earned on
+          </Fonts.H3>
+          <InfluencerProfile
+            influencerUsername={influencer.username}
+            influencerProfilePicURL={influencer.profilePicURL}
+          />
+          <br />
+          <Stats
             comments={user.postsCommented.length}
             likes={user.postsLiked.length}
             uniqueTags={user.uniqueTags.length}
           />
           <Content.Spacing />
-          <DashboardProgress points={user.points} levels={levels} />
-          <Content.Spacing />
-          <DashboardMedals medals={medals} />
+          <Medals medals={medals} />
           <br />
           <Content.Seperator />
+          <Fonts.H3 noMarginTop>Spend your points</Fonts.H3>
           <br />
           {merchDiv}
-          <Content.Seperator />
-          <Fonts.P centered>Your points are updated every 72 hours</Fonts.P>
           <Content.Spacing />
 
-          {popupBuyPoints}
           {popupComingSoon}
+          {popupGetPrize}
           {popupNoUser}
         </Content>
       </div>
@@ -307,7 +358,10 @@ const FAN_LEVELS = [
 const JON_KLAASEN = {
   coinName: 'Klassen Koins',
   fanCount: 21941,
+  influencerID: 'jon_klaasen',
   name: 'Jon Klaasen',
+  profilePicURL:
+    'https://instagram.faep4-1.fna.fbcdn.net/vp/4c623d035365d5ed4c537becae2afa94/5C87D8CD/t51.2885-19/s150x150/36563227_239821553286740_6380728175147614208_n.jpg',
   username: 'jon_klaasen',
 };
 
@@ -327,11 +381,11 @@ const MERCH = [
     name: 'Like & comment spam',
     price: 50000,
   },
-  {
-    merchID: 'FollowBack',
-    name: 'Follow back',
-    price: 500000,
-  },
+  // {
+  //   merchID: 'FollowBack',
+  //   name: 'Follow back',
+  //   price: 500000,
+  // },
   {
     merchID: 'Shoutout',
     name: 'Personal story shoutout',

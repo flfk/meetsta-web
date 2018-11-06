@@ -6,33 +6,34 @@ import styled from 'styled-components';
 import Content from './Content';
 import Colors from '../utils/Colors';
 import Fonts from '../utils/Fonts';
+import { getFormattedNumber } from '../utils/Helpers';
 import Wrapper from './Wrapper';
 
 const INSTAGRAM_URL_BASE = 'https://www.instagram.com/';
 
 const propTypes = {
-  points: PropTypes.string.isRequired,
-  profileImgUrl: PropTypes.string.isRequired,
+  points: PropTypes.number.isRequired,
+  profilePicURL: PropTypes.string.isRequired,
   rank: PropTypes.number.isRequired,
   trophy: PropTypes.element.isRequired,
-  username: PropTypes.string.isRequired
+  username: PropTypes.string.isRequired,
 };
 
 const defaultProps = {};
 
-const LeaderboardRow = ({ points, profileImgUrl, rank, trophy, username }) => {
+const LeaderboardRow = ({ points, profilePicURL, rank, trophy, username }) => {
   return (
     <Content.Row key={username} alignCenter>
       <ContentLHS href={INSTAGRAM_URL_BASE + username} target="_blank">
         <Rank>{rank}</Rank>
         <Wrapper.ProfileImage>
-          <img src={profileImgUrl} alt={''} />
+          <img src={profilePicURL} alt={''} />
         </Wrapper.ProfileImage>{' '}
         <Username>
           {username} {trophy}
         </Username>
       </ContentLHS>
-      <Username>{points}</Username>
+      <Username>{getFormattedNumber(points)}</Username>
     </Content.Row>
   );
 };
