@@ -163,10 +163,11 @@ class Dashboard extends React.Component {
     const user = this.getUser(usernameFormatted);
     if (user) {
       this.setUser(user);
-      this.addUsernameToURL(usernameInput);
+      this.addUsernameToURL(usernameFormatted);
     } else {
-      this.handleSearchError(usernameInput);
+      this.handleSearchError(usernameFormatted);
     }
+    mixpanel.track('Searched Username', { username: usernameFormatted });
   };
 
   handleSearchError = username => {

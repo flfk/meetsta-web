@@ -75,7 +75,6 @@ class Leaderboard extends React.Component {
   handleClaimPoints = () => {
     console.log('handleClaimPoints');
     const { influencerID } = this.state;
-    mixpanel.track('Clicked Claim Points', { influencerID });
     this.setState({ toDashboard: true });
   };
 
