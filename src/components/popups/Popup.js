@@ -51,7 +51,7 @@ const CardTransparent = styled(Card)`
 `;
 
 const Emoji = styled.div`
-  font-size: 142px;
+  font-size: 96px;
   align-self: center;
 `;
 

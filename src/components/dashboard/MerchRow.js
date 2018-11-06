@@ -29,7 +29,7 @@ const DashboardMerchRow = ({ handleClick, imgURL, price, merchID, name }) => {
           </Fonts.P>
         </Description>
         <Btn primary narrow short onClick={handleClick} value={merchID}>
-          Use Points
+          Use Coins
         </Btn>
       </Content.Row>
       <Content.Spacing />

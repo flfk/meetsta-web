@@ -25,8 +25,8 @@ const ImgDiv = styled.div`
 
 const IconDiv = styled(ImgDiv)`
   display: inline-block;
-  height: ${props => (props.small ? '16px' : '24px')}
-  width: ${props => (props.small ? '16px' : '24px')}
+  height: ${props => (props.small ? '24px' : '40px')}
+  width: ${props => (props.small ? '24px' : '40px')}
   background-image: url(${props => props.img});
   background-size: cover;
 `;

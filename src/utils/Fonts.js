@@ -12,6 +12,7 @@ const FONT_FAMILY = {
 
 const FONT_SIZES = {
   logo: '32px',
+  xl: '40px',
   h1: '32px',
   h2: '24px',
   h3: '20px',
@@ -27,6 +28,7 @@ const LOGO = styled.span`
 
 const H1 = styled.h1`
   font-size: ${FONT_SIZES.h1};
+  font-size: ${props => (props.extraLarge ? FONT_SIZES.xl : '')};
   font-family: ${FONT_FAMILY.header};
   color: ${Colors.greys.primary};
   font-weight: 500;

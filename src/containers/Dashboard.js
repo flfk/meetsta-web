@@ -265,7 +265,7 @@ class Dashboard extends React.Component {
     ) : null;
 
     const popupComingSoon = showPopupComingSoon ? (
-      <PopupComingSoon handleClose={this.handlePopupClose('ComingSoon')} />
+      <PopupComingSoon handleClose={this.handlePopupClose('ComingSoon')} influencer={influencer} />
     ) : null;
 
     return (
@@ -273,7 +273,7 @@ class Dashboard extends React.Component {
         <Content centered>
           <Content.Spacing />
           <Fonts.P centered supporting>
-            Your points are updated every 72 hours
+            Your coins are updated every 72 hours
           </Fonts.P>
           <Fonts.H3 centered marginBottom8px>
             @{user.username}
@@ -292,16 +292,8 @@ class Dashboard extends React.Component {
           <br />
           <Profile medals={medals} profilePicURL={user.profilePicURL} />
 
-          <Fonts.H1 centered marginBottom8px>
-            <span role="img" aria-label="party popper">
-              🎉
-            </span>{' '}
-            <Coins.Icon /> {getFormattedNumber(user.points)}{' '}
-            <Content.FlipHorizontal>
-              <span role="img" aria-label="party popper">
-                🎉
-              </span>{' '}
-            </Content.FlipHorizontal>{' '}
+          <Fonts.H1 centered marginBottom8px extraLarge>
+            <Coins.Icon /> {getFormattedNumber(user.points)} <Content.FlipHorizontal />{' '}
           </Fonts.H1>
           <Fonts.H3 centered noMarginTop marginBottom4px>
             Earned on
@@ -320,7 +312,7 @@ class Dashboard extends React.Component {
           <Medals medals={medals} />
           <br />
           <Content.Seperator />
-          <Fonts.H3 noMarginTop>Spend your points</Fonts.H3>
+          <Fonts.H3 noMarginTop>Spend your coins</Fonts.H3>
           <br />
           {merchDiv}
           <Content.Spacing />

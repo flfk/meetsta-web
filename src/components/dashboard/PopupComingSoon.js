@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import Coins from './Coins';
 import Fonts from '../../utils/Fonts';
+import InfluencerProfile from './InfluencerProfile';
 import Popup from '../popups/Popup';
 
 const propTypes = {
@@ -16,20 +17,25 @@ class PopupComingSoon extends React.Component {
   state = {};
 
   render() {
-    const { handleClose } = this.props;
+    const { handleClose, influencer } = this.props;
 
     return (
       <div>
         <Popup.BackgroundLight />
         <Popup.CardTransparent>
           <Popup.BtnClose handleClose={handleClose} />
-          <Fonts.H1 centered>This feature will be available really soon!</Fonts.H1>
+          <Fonts.H3 centered>This feature will be available really soon!</Fonts.H3>
           <Popup.Emoji>
             <span role="img" aria-label="lock">
               🔒
             </span>
           </Popup.Emoji>
-          <Fonts.H3 centered>Meanwhile, keep earning free points!</Fonts.H3>
+          <Fonts.H1 centered>Earn free coins on</Fonts.H1>
+          <InfluencerProfile
+            influencerUsername={influencer.username}
+            influencerProfilePicURL={influencer.profilePicURL}
+          />
+          <br />
           <Row>
             <Coins.Few /> <Fonts.P> Like a post</Fonts.P>
           </Row>
@@ -37,7 +43,7 @@ class PopupComingSoon extends React.Component {
             <Coins.Some /> <Fonts.P> Comment on a post</Fonts.P>
           </Row>
           <Row>
-            <Coins.Many /> <Fonts.P> Tag a friend</Fonts.P>
+            <Coins.Many /> <Fonts.P> Tag a friend in a post</Fonts.P>
           </Row>
         </Popup.CardTransparent>
       </div>

@@ -1,0 +1,156 @@
+[debug] [2018-11-06T18:23:36.299Z] ----------------------------------------------------------------------
+[debug] [2018-11-06T18:23:36.301Z] Command:       /usr/local/Cellar/node/10.4.1/bin/node /usr/local/bin/firebase deploy
+[debug] [2018-11-06T18:23:36.301Z] CLI Version:   4.2.1
+[debug] [2018-11-06T18:23:36.301Z] Platform:      darwin
+[debug] [2018-11-06T18:23:36.301Z] Node Version:  v10.4.1
+[debug] [2018-11-06T18:23:36.302Z] Time:          Tue Nov 06 2018 15:23:36 GMT-0300 (Argentina Standard Time)
+[debug] [2018-11-06T18:23:36.302Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-11-06T18:23:36.314Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-11-06T18:23:36.314Z] > authorizing via signed-in user
+[debug] [2018-11-06T18:23:36.316Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-11-06T18:23:36.316Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+
+[debug] [2018-11-06T18:23:36.474Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:23:36.499Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/online-meet-and-greets  
+ 
+[debug] [2018-11-06T18:23:37.747Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'online-meet-and-greets'...
+[info] 
+[info] i  deploying database, functions, hosting
+[info] i  database: checking rules syntax...
+[debug] [2018-11-06T18:23:39.543Z] >>> HTTP REQUEST PUT https://online-meet-and-greets.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": false,
+    ".write": false
+  }
+}
+[debug] [2018-11-06T18:23:40.678Z] <<< HTTP RESPONSE 200
+[info] ✔  database: rules syntax for database online-meet-and-greets is valid
+[debug] [2018-11-06T18:23:40.680Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase serve --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
+    "firebase-admin": "~6.0.0",
+    "firebase-functions": "^2.0.3",
+    "moment-timezone": "^0.5.21"
+  },
+  "private": true
+}
+[info] i  functions: ensuring necessary APIs are enabled...
+[debug] [2018-11-06T18:23:40.680Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/cloudfunctions.googleapis.com/projectSettings/online-meet-and-greets?view=CONSUMER_VIEW  
+ 
+[debug] [2018-11-06T18:23:40.680Z] >>> HTTP REQUEST GET https://servicemanagement.googleapis.com/v1/services/runtimeconfig.googleapis.com/projectSettings/online-meet-and-greets?view=CONSUMER_VIEW  
+ 
+[debug] [2018-11-06T18:23:42.625Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:23:42.647Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: all necessary APIs are enabled
+[debug] [2018-11-06T18:23:42.648Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/online-meet-and-greets  
+ 
+[debug] [2018-11-06T18:23:44.058Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:23:44.058Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/309382713009:getServerAppConfig  
+ 
+[debug] [2018-11-06T18:23:45.490Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:23:45.491Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/online-meet-and-greets/versions  
+
+[debug] [2018-11-06T18:23:47.363Z] <<< HTTP RESPONSE 200
+[info] i  functions: preparing functions directory for uploading...
+[debug] [2018-11-06T18:23:47.364Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/online-meet-and-greets/configs  
+ 
+[debug] [2018-11-06T18:23:47.698Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:23:47.699Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/online-meet-and-greets/configs/sendgrid/variables  
+ 
+[debug] [2018-11-06T18:23:47.953Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:23:47.953Z] >>> HTTP REQUEST GET https://runtimeconfig.googleapis.com/v1beta1/projects/online-meet-and-greets/configs/sendgrid/variables/key  
+ 
+[debug] [2018-11-06T18:23:48.256Z] <<< HTTP RESPONSE 200
+[info] i  functions: packaged functions (43.19 KB) for uploading
+[debug] [2018-11-06T18:23:48.638Z] >>> HTTP REQUEST POST https://cloudfunctions.googleapis.com/v1/projects/online-meet-and-greets/locations/us-central1/functions:generateUploadUrl  
+ 
+[debug] [2018-11-06T18:23:49.998Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:23:49.998Z] >>> HTTP REQUEST PUT https://storage.googleapis.com/gcf-upload-us-central1-0aab6c6c-ca11-4ded-9e34-20cdb612f192/eee64236-7dfe-4d92-a52b-587f8cb17a9a.zip?GoogleAccessId=service-309382713009@gcf-admin-robot.iam.gserviceaccount.com&Expires=1541530429&Signature=onsUkG9oN%2Fd%2FLBpF8JQds0nyex%2BAD0erZl%2B7bHYp%2F0cF%2FXHH4Z6Gmb%2B%2FjcoRdGRVB2Q2KIwEqNmT%2BxprMqs8mDscnk8goGly%2Bjl3FouuxUGVTsac7dzo4LeoeEhl8%2F8jK4I%2FAVjIMPLap1PDfGQlljphJSYt%2BppJAQ4bNYjQ0WJSI3q3YnRiG1MORuucpai6p86GOp9rGzN1hkC395QtwjY3TOouS%2BupjI9s3aXcO%2BcBcCRoBsWH1F1TMY36Zybu6iLE%2FAYXq8oecCSU35EPGfJ0vE851vEytN2R%2B4ylraKhTH1L1Z4E%2BPKw%2BU1C44M9rMjxu69H7iGQxgWA9%2FP0bg%3D%3D  
+
+[debug] [2018-11-06T18:23:50.918Z] <<< HTTP RESPONSE 200
+[info] ✔  functions: functions folder uploaded successfully
+[info] i  hosting[online-meet-and-greets]: beginning deploy...
+[info] i  hosting[online-meet-and-greets]: found 44 files in build
+[debug] [2018-11-06T18:23:53.303Z] [hosting] hash cache [YnVpbGQ] stored for 44 files
+[debug] [2018-11-06T18:23:53.303Z] [hosting][hash queue][FINAL]
+[debug] [2018-11-06T18:23:53.303Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/online-meet-and-greets/versions/6aa2b9bf49de456d:populateFiles  
+ <request body omitted>
+[debug] [2018-11-06T18:23:55.279Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:23:55.283Z] [hosting][populate queue][FINAL]
+[debug] [2018-11-06T18:23:55.283Z] [hosting] uploads queued: 9
+[debug] [2018-11-06T18:24:15.034Z] [hosting][upload queue][FINAL]
+[info] ✔  hosting[online-meet-and-greets]: file upload complete
+[debug] [2018-11-06T18:24:15.034Z] [hosting] deploy completed after 24115ms
+[info] i  database: releasing rules...
+[debug] [2018-11-06T18:24:15.293Z] >>> HTTP REQUEST PUT https://online-meet-and-greets.firebaseio.com/.settings/rules.json  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": false,
+    ".write": false
+  }
+}
+[debug] [2018-11-06T18:24:16.613Z] <<< HTTP RESPONSE 200
+[info] ✔  database: rules for database online-meet-and-greets released successfully
+[debug] [2018-11-06T18:24:16.615Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/projects/online-meet-and-greets/locations/-/functions  
+ 
+[debug] [2018-11-06T18:24:18.157Z] <<< HTTP RESPONSE 200
+[info] i  functions: updating Node.js 6 function orderConfirmationEmail(us-central1)...
+[debug] [2018-11-06T18:24:18.159Z] Trigger is:  {"eventTrigger":{"resource":"projects/online-meet-and-greets/databases/(default)/documents/tickets/{ticketID}","eventType":"providers/cloud.firestore/eventTypes/document.create","service":"firestore.googleapis.com"}}
+[info] i  functions: updating Node.js 6 function registrationEmail(us-central1)...
+[debug] [2018-11-06T18:24:18.160Z] Trigger is:  {"eventTrigger":{"resource":"projects/online-meet-and-greets/databases/(default)/documents/registrations/{registration}","eventType":"providers/cloud.firestore/eventTypes/document.create","service":"firestore.googleapis.com"}}
+[info] i  functions: updating Node.js 6 function emailRequests(us-central1)...
+[debug] [2018-11-06T18:24:18.160Z] Trigger is:  {"eventTrigger":{"resource":"projects/online-meet-and-greets/databases/(default)/documents/emails/{emails}","eventType":"providers/cloud.firestore/eventTypes/document.create","service":"firestore.googleapis.com"}}
+[debug] [2018-11-06T18:24:18.161Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/online-meet-and-greets/locations/us-central1/functions/orderConfirmationEmail 
+query params: {"updateMask":"sourceUploadUrl,name,labels,eventTrigger.resource,eventTrigger.eventType,eventTrigger.service"} 
+
+[debug] [2018-11-06T18:24:18.162Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/online-meet-and-greets/locations/us-central1/functions/registrationEmail 
+query params: {"updateMask":"sourceUploadUrl,name,labels,eventTrigger.resource,eventTrigger.eventType,eventTrigger.service"} 
+
+[debug] [2018-11-06T18:24:18.163Z] >>> HTTP REQUEST PATCH https://cloudfunctions.googleapis.com/v1/projects/online-meet-and-greets/locations/us-central1/functions/emailRequests 
+query params: {"updateMask":"sourceUploadUrl,name,labels,eventTrigger.resource,eventTrigger.eventType,eventTrigger.service"} 
+
+[debug] [2018-11-06T18:24:18.669Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:19.429Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:19.453Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:19.454Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/b25saW5lLW1lZXQtYW5kLWdyZWV0cy91cy1jZW50cmFsMS9vcmRlckNvbmZpcm1hdGlvbkVtYWlsL2N1VWRib3ZYMVdR  
+ 
+[debug] [2018-11-06T18:24:19.455Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/b25saW5lLW1lZXQtYW5kLWdyZWV0cy91cy1jZW50cmFsMS9yZWdpc3RyYXRpb25FbWFpbC9taEo0Mnp3cFdMbw  
+ 
+[debug] [2018-11-06T18:24:19.455Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/b25saW5lLW1lZXQtYW5kLWdyZWV0cy91cy1jZW50cmFsMS9lbWFpbFJlcXVlc3RzL185RHhSa0NCZ3NZ  
+ 
+[debug] [2018-11-06T18:24:20.615Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:20.616Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:20.682Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:22.620Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/b25saW5lLW1lZXQtYW5kLWdyZWV0cy91cy1jZW50cmFsMS9lbWFpbFJlcXVlc3RzL185RHhSa0NCZ3NZ  
+ 
+[debug] [2018-11-06T18:24:22.621Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/b25saW5lLW1lZXQtYW5kLWdyZWV0cy91cy1jZW50cmFsMS9vcmRlckNvbmZpcm1hdGlvbkVtYWlsL2N1VWRib3ZYMVdR  
+ 
+[debug] [2018-11-06T18:24:22.685Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/b25saW5lLW1lZXQtYW5kLWdyZWV0cy91cy1jZW50cmFsMS9yZWdpc3RyYXRpb25FbWFpbC9taEo0Mnp3cFdMbw  
+ 
+[debug] [2018-11-06T18:24:22.946Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:23.757Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:23.782Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:24.947Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/b25saW5lLW1lZXQtYW5kLWdyZWV0cy91cy1jZW50cmFsMS9yZWdpc3RyYXRpb25FbWFpbC9taEo0Mnp3cFdMbw  
+ 
+[debug] [2018-11-06T18:24:25.761Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/b25saW5lLW1lZXQtYW5kLWdyZWV0cy91cy1jZW50cmFsMS9vcmRlckNvbmZpcm1hdGlvbkVtYWlsL2N1VWRib3ZYMVdR  
+ 
+[debug] [2018-11-06T18:24:25.783Z] >>> HTTP REQUEST GET https://cloudfunctions.googleapis.com/v1/operations/b25saW5lLW1lZXQtYW5kLWdyZWV0cy91cy1jZW50cmFsMS9lbWFpbFJlcXVlc3RzL185RHhSa0NCZ3NZ  
+ 
+[debug] [2018-11-06T18:24:26.103Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:26.963Z] <<< HTTP RESPONSE 200
+[debug] [2018-11-06T18:24:26.964Z] <<< HTTP RESPONSE 200
