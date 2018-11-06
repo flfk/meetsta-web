@@ -9,9 +9,9 @@ import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
 import { InfluencerProfile, Medals, MerchRow, Profile, Stats } from '../components/dashboard';
-import PopupComingSoon from '../components/popups/PopupComingSoon';
-import PopupGetPrize from '../components/popups/PopupGetPrize';
-import PopupNoUser from '../components/popups/PopupNoUser';
+import PopupComingSoon from '../components/dashboard/PopupComingSoon';
+import PopupGetPrize from '../components/dashboard/PopupGetPrize';
+import PopupNoUser from '../components/dashboard/PopupNoUser';
 
 import FAN_DATA from '../data/dashboards/fanData-jon_klaasen';
 

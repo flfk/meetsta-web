@@ -120,7 +120,7 @@ class Leaderboard extends React.Component {
 
     return (
       <div>
-        <Content.PaddingBottom>
+        <Content>
           <Fonts.H1 centered noMarginBottom>
             {influencerDisplayName}
             's Top{' '}
@@ -128,11 +128,18 @@ class Leaderboard extends React.Component {
               💯
             </span>
           </Fonts.H1>
-          <Fonts.H3 centered>Earn points by commenting on and liking posts.</Fonts.H3>
-          {leaderboard}
           <br />
+          <Fonts.P centered>
+            Earn points by liking, commenting and tagging friends on @{influencerID}
+            's Instagram posts.
+          </Fonts.P>
+          <br />
+          {leaderboard}
           <Content.Spacing />
-        </Content.PaddingBottom>
+          <Content.Spacing />
+          <Content.Spacing />
+          <Content.Spacing />
+        </Content>
         <LeaderboardFooter handleClaimPoints={this.handleClaimPoints} />
       </div>
     );
