@@ -67,6 +67,11 @@ const Center = styled.div`
   justify-content: center;
 `;
 
+const CenterVertical = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const SeperatorHalf = styled.div`
   flex: 1 1 0;
   height: 1px;
@@ -117,6 +122,7 @@ Content.Seperator = Seperator;
 Content.Divider = Divider;
 Content.Spacing = Spacing;
 Content.Center = Center;
+Content.CenterVertical = CenterVertical;
 Content.CenteredBothAxis = CenteredBothAxis;
 Content.Anchor = Anchor;
 Content.FlipHorizontal = FlipHorizontal;

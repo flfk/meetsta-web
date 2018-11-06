@@ -4,6 +4,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import actions from '../data/actions';
+import Coins from '../components/dashboard/Coins';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
@@ -51,8 +52,18 @@ class Dashboard extends React.Component {
   componentDidMount() {
     mixpanel.track('Visited Dashboard');
     this.setInfluencer();
+    this.getFanUsername();
     this.setMerch();
   }
+
+  addUsernameToURL = username => {
+    const influencerID = this.getInfluencerID();
+    const { history } = this.props;
+    history.push({
+      pathname: '/dashboard',
+      search: `?i=${influencerID}&u=${username}`,
+    });
+  };
 
   formatUsername = username =>
     username
@@ -65,21 +76,41 @@ class Dashboard extends React.Component {
     return i;
   };
 
-  getLevels = points => {
-    const current = FAN_LEVELS.reduce((aggr, level) => {
-      if (level.pointsReq <= points) {
-        return level;
-      }
-      return aggr;
-    }, {});
-
-    const next = FAN_LEVELS[current.index + 1] ? FAN_LEVELS[current.index + 1] : null;
-
-    return {
-      current,
-      next,
-    };
+  getFanUsername = () => {
+    const { u } = getParams(this.props);
+    if (u) {
+      const user = this.getUser(u);
+      this.setUser(user);
+    } else {
+      this.setState({ showPopupNoUser: true });
+    }
+    return u;
   };
+
+  getUser = username => {
+    const usernameFormatted = this.formatUsername(username);
+    const user = FAN_DATA.find(data => data.username === usernameFormatted);
+    if (user) {
+      actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
+      mixpanel.identify(user.username);
+      mixpanel.track('User Signed In');
+    }
+    return user;
+  };
+
+  // getLevels = points => {
+  //   const current = FAN_LEVELS.reduce((aggr, level) => {
+  //     if (level.pointsReq <= points) {
+  //       return level;
+  //     }
+  //     return aggr;
+  //   }, {});
+  //   const next = FAN_LEVELS[current.index + 1] ? FAN_LEVELS[current.index + 1] : null;
+  //   return {
+  //     current,
+  //     next,
+  //   };
+  // };
 
   getMedals = user => {
     const { postsCommented, postsLiked, rank, uniqueTags } = user;
@@ -92,8 +123,8 @@ class Dashboard extends React.Component {
     return medals;
   };
 
-  handleBuyPoints = (item, price) => {
-    mixpanel.track('Clicked Buy', { Item: item, Price: price });
+  handleBuyPoints = item => {
+    mixpanel.track('Clicked Buy', { Item: item });
     // mixpanel.track('Visited Checkout', { eventID });
     this.setState({ showPopupGetPrize: false });
     this.setState({ showPopupComingSoon: true });
@@ -112,8 +143,9 @@ class Dashboard extends React.Component {
     const merchID = event.target.value;
     const merchSelected = merch.find(item => item.merchID === merchID);
     this.setState({ merchSelected });
-    mixpanel.track('Clicked Get Prize');
-    this.setState({ showPopupGetPrize: true });
+    mixpanel.track('Selected Merch', { item: merchSelected.name });
+    // this.setState({ showPopupGetPrize: true });
+    this.setState({ showPopupComingSoon: true });
   };
 
   handlePopupClose = popupName => {
@@ -121,21 +153,14 @@ class Dashboard extends React.Component {
     return () => this.setState({ [key]: false });
   };
 
-  handleSearch = async () => {
+  handleSearch = () => {
     const { usernameInput } = this.state;
-    const usernameFormatted = this.formatUsername(usernameInput);
-    const user = FAN_DATA.find(data => data.username === usernameFormatted);
+    const user = this.getUser(usernameInput);
     if (user) {
-      this.setState({
-        showPopupNoUser: false,
-        user,
-        usernameInputErrMsg: '',
-      });
-      actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
-      mixpanel.identify(user.username);
-      mixpanel.track('User Signed In');
+      this.setUser(user);
+      this.addUsernameToURL(usernameInput);
     } else {
-      this.handleSearchError(usernameFormatted);
+      this.handleSearchError(usernameInput);
     }
   };
 
@@ -150,6 +175,13 @@ class Dashboard extends React.Component {
       });
     }
   };
+
+  setUser = user =>
+    this.setState({
+      showPopupNoUser: false,
+      user,
+      usernameInputErrMsg: '',
+    });
 
   setInfluencer = () => {
     const influencerID = this.getInfluencerID();
@@ -234,15 +266,19 @@ class Dashboard extends React.Component {
     return (
       <div>
         <Content centered>
-          <Fonts.H3 centered noMarginBottom>
+          <Content.Spacing />
+          <Fonts.P centered supporting>
+            Your points are updated every 72 hours
+          </Fonts.P>
+          <Fonts.H3 centered marginBottom4px>
             @{user.username}
           </Fonts.H3>
-          <br />
+          <Fonts.H3 centered marginBottom4px noMarginTop>
+            #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
+          </Fonts.H3>
           <Link to={`/top?i=${influencer.influencerID}`} style={{ textAlign: 'center' }}>
             <Fonts.A>
-              <strong>
-                #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
-              </strong>
+              <strong>See Leaderboard</strong>
             </Fonts.A>
           </Link>
           <br />
@@ -252,7 +288,7 @@ class Dashboard extends React.Component {
             <span role="img" aria-label="party popper">
               🎉
             </span>{' '}
-            {getFormattedNumber(user.points)}{' '}
+            <Coins.Icon /> {getFormattedNumber(user.points)}{' '}
             <Content.FlipHorizontal>
               <span role="img" aria-label="party popper">
                 🎉
@@ -279,8 +315,6 @@ class Dashboard extends React.Component {
           <Fonts.H3 noMarginTop>Spend your points</Fonts.H3>
           <br />
           {merchDiv}
-          <Content.Seperator />
-          <Fonts.P centered>Your points are updated every 72 hours</Fonts.P>
           <Content.Spacing />
 
           {popupComingSoon}

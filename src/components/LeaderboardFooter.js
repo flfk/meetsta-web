@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FaSearch } from 'react-icons/fa';
 
 import Btn from './Btn';
 import Content from './Content';
@@ -16,9 +17,9 @@ const LeaderboardFooter = ({ handleClaimPoints }) => {
   return (
     <FooterEvents>
       <Content>
-        <Fonts.H3 centered>Use your points to get DMs, autographs and video calls.</Fonts.H3>
+        <br />
         <Btn primary onClick={handleClaimPoints}>
-          Claim My Points
+          <FaSearch /> Search My Username
         </Btn>
         <br />
       </Content>

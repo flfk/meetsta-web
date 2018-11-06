@@ -63,8 +63,8 @@ class PopupGetPrize extends React.Component {
           {getFormattedNumber(POINTS_BY_TYPE.uniqueTags)} points - Tag a friend
         </Fonts.P>
         <Fonts.H3 centered>OR</Fonts.H3>
-        <Btn primary fill="true" onClick={() => handleBuyPoints(name, priceDollars)}>
-          Buy With Points + ${priceDollars.toFixed(2)}
+        <Btn primary fill="true" onClick={() => handleBuyPoints(name)}>
+          Buy With Points and $
         </Btn>
       </div>
     );

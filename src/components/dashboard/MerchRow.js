@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Btn from '../Btn';
+import Coins from './Coins';
 import Content from '../Content';
 import Fonts from '../../utils/Fonts';
 import { getFormattedNumber } from '../../utils/Helpers';
@@ -26,10 +27,9 @@ const DashboardMerchRow = ({ handleClick, imgURL, price, merchID, name }) => {
           <Fonts.P>
             <strong>{name}</strong>
           </Fonts.P>
-          <Fonts.P>{getFormattedNumber(price)} points</Fonts.P>
         </Description>
         <Btn primary narrow short onClick={handleClick} value={merchID}>
-          Get Prize
+          Use Points
         </Btn>
       </Content.Row>
       <Content.Spacing />
@@ -37,9 +37,22 @@ const DashboardMerchRow = ({ handleClick, imgURL, price, merchID, name }) => {
   );
 };
 
+// NO PRICE INCLUDED - COPY BACK IN
+// <Fonts.P>
+// {' '}
+// <Coins.Icon small /> {getFormattedNumber(price)}
+// </Fonts.P>
+
 const Description = styled.div`
   flex-grow: 1;
   max-width: 156px;
+
+  // remove below if including price
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
 `;
 
 const MerchImg = styled.div`

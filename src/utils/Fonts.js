@@ -50,6 +50,7 @@ const H3 = styled.h3`
   font-weight: 400;
   text-align: ${props => (props.centered ? 'center' : '')};
   margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
+  margin-bottom: ${props => (props.marginBottom4px ? '4px' : '')};
   margin-top: ${props => (props.noMarginTop ? '0px' : '')};
 `;
 
@@ -57,7 +58,7 @@ const P = styled.p`
   font-size: ${FONT_SIZES.p};
   font-family: ${FONT_FAMILY.body};
   font-weight: 300;
-  color: ${Colors.greys.primary};
+  color: ${props => (props.supporting ? Colors.greys.supporting : Colors.greys.primary)}
   margin: 0;
   text-align: ${props => (props.centered ? 'center' : '')};
 
