@@ -50,10 +50,12 @@ class Dashboard extends React.Component {
   };
 
   componentDidMount() {
-    mixpanel.track('Visited Dashboard');
     this.setInfluencer();
     this.getFanUsername();
     this.setMerch();
+    mixpanel.identify();
+    console.log('mixpanel distinct ID is', mixpanel.get_distinct_id());
+    mixpanel.track('Visited Dashboard');
   }
 
   addUsernameToURL = username => {
@@ -79,7 +81,8 @@ class Dashboard extends React.Component {
   getFanUsername = () => {
     const { u } = getParams(this.props);
     if (u) {
-      const user = this.getUser(u);
+      const usernameFormatted = this.formatUsername(u);
+      const user = this.getUser(usernameFormatted);
       this.setUser(user);
     } else {
       this.setState({ showPopupNoUser: true });
@@ -92,8 +95,9 @@ class Dashboard extends React.Component {
     const user = FAN_DATA.find(data => data.username === usernameFormatted);
     if (user) {
       actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
-      mixpanel.identify(user.username);
-      mixpanel.track('User Signed In');
+      mixpanel.people.set({
+        $name: username,
+      });
     }
     return user;
   };
@@ -155,7 +159,8 @@ class Dashboard extends React.Component {
 
   handleSearch = () => {
     const { usernameInput } = this.state;
-    const user = this.getUser(usernameInput);
+    const usernameFormatted = this.formatUsername(usernameInput);
+    const user = this.getUser(usernameFormatted);
     if (user) {
       this.setUser(user);
       this.addUsernameToURL(usernameInput);
@@ -270,21 +275,24 @@ class Dashboard extends React.Component {
           <Fonts.P centered supporting>
             Your points are updated every 72 hours
           </Fonts.P>
-          <Fonts.H3 centered marginBottom4px>
+          <Fonts.H3 centered marginBottom8px>
             @{user.username}
           </Fonts.H3>
           <Fonts.H3 centered marginBottom4px noMarginTop>
             #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
           </Fonts.H3>
-          <Link to={`/top?i=${influencer.influencerID}`} style={{ textAlign: 'center' }}>
-            <Fonts.A>
+          <Link
+            to={`/top?i=${influencer.influencerID}`}
+            style={{ textAlign: 'center', textDecoration: 'none' }}
+          >
+            <Fonts.Link>
               <strong>See Leaderboard</strong>
-            </Fonts.A>
+            </Fonts.Link>
           </Link>
           <br />
           <Profile medals={medals} profilePicURL={user.profilePicURL} />
 
-          <Fonts.H1 centered>
+          <Fonts.H1 centered marginBottom8px>
             <span role="img" aria-label="party popper">
               🎉
             </span>{' '}
@@ -295,8 +303,8 @@ class Dashboard extends React.Component {
               </span>{' '}
             </Content.FlipHorizontal>{' '}
           </Fonts.H1>
-          <Fonts.H3 centered noMarginTop>
-            Points you earned on
+          <Fonts.H3 centered noMarginTop marginBottom4px>
+            Earned on
           </Fonts.H3>
           <InfluencerProfile
             influencerUsername={influencer.username}
@@ -373,11 +381,11 @@ const MERCH = [
     name: 'Like & comment spam',
     price: 50000,
   },
-  {
-    merchID: 'FollowBack',
-    name: 'Follow back',
-    price: 500000,
-  },
+  // {
+  //   merchID: 'FollowBack',
+  //   name: 'Follow back',
+  //   price: 500000,
+  // },
   {
     merchID: 'Shoutout',
     name: 'Personal story shoutout',

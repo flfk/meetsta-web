@@ -31,7 +31,9 @@ const H1 = styled.h1`
   color: ${Colors.greys.primary};
   font-weight: 500;
   text-align: ${props => (props.centered ? 'center' : '')};
+  margin: ${props => (props.noMargin ? '0px' : '')};
   margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
+  margin-bottom: ${props => (props.marginBottom8px ? '8px' : '')};
 `;
 
 const H2 = styled.h2`
@@ -40,6 +42,7 @@ const H2 = styled.h2`
   color: ${Colors.greys.primary};
   font-weight: 400;
   text-align: ${props => (props.centered ? 'center' : '')};
+  margin: ${props => (props.noMargin ? '0px' : '')};
   margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
 `;
 
@@ -49,8 +52,10 @@ const H3 = styled.h3`
   color: ${Colors.greys.primary};
   font-weight: 400;
   text-align: ${props => (props.centered ? 'center' : '')};
+  margin: ${props => (props.noMargin ? '0px' : '')};
   margin-bottom: ${props => (props.noMarginBottom ? '0px' : '')};
   margin-bottom: ${props => (props.marginBottom4px ? '4px' : '')};
+  margin-bottom: ${props => (props.marginBottom8px ? '8px' : '')};
   margin-top: ${props => (props.noMarginTop ? '0px' : '')};
 `;
 
@@ -64,6 +69,16 @@ const P = styled.p`
 
   ${Media.tablet} {
     font-size: 14px;
+  }
+`;
+
+const Link = styled(P)`
+  color: ${Colors.primary.red};
+  text-decoration-color: ${Colors.primary.red};
+  font-weight: bold;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
   }
 `;
 
@@ -105,6 +120,7 @@ FONTS.H1 = H1;
 FONTS.H2 = H2;
 FONTS.H3 = H3;
 FONTS.P = P;
+FONTS.Link = Link;
 FONTS.FinePrint = FinePrint;
 FONTS.ERROR = ERROR;
 FONTS.A = A;

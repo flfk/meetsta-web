@@ -3,6 +3,7 @@ import { storage } from './firebase';
 
 // Collection and document Names
 const COLL_ADD_ONS = 'addOns';
+const COLL_DASHBOARD_USERS = 'dashboardUsers';
 const COLL_EMAILS = 'emails';
 const COLL_EVENTS = 'events';
 const COLL_LEADERBOARD_SIGNUPS = 'leaderboardSignups';

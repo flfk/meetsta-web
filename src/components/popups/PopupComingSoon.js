@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 import Coins from '../dashboard/Coins';
 import Fonts from '../../utils/Fonts';
@@ -29,22 +30,27 @@ class PopupComingSoon extends React.Component {
             </span>
           </Popup.Emoji>
           <Fonts.H3 centered>Meanwhile, keep earning free points!</Fonts.H3>
-          <Fonts.P centered>
-            <Coins.Few /> Like a post
-          </Fonts.P>
-          <br />
-          <Fonts.P centered>
-            <Coins.Some /> Comment on a post
-          </Fonts.P>
-          <br />
-          <Fonts.P centered>
-            <Coins.Many /> Tag a friend
-          </Fonts.P>
+          <Row>
+            <Coins.Few /> <Fonts.P> Like a post</Fonts.P>
+          </Row>
+          <Row>
+            <Coins.Some /> <Fonts.P> Comment on a post</Fonts.P>
+          </Row>
+          <Row>
+            <Coins.Many /> <Fonts.P> Tag a friend</Fonts.P>
+          </Row>
         </Popup.CardTransparent>
       </div>
     );
   }
 }
+
+const Row = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 8px;
+`;
 
 PopupComingSoon.propTypes = propTypes;
 PopupComingSoon.defaultProps = defaultProps;

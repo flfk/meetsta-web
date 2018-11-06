@@ -20,7 +20,7 @@ const InfluencerProfile = ({ influencerUsername, influencerProfilePicURL }) => {
     <Container>
       <InstaLogo img={LogoInsta} />
       <ProfileImg img={influencerProfilePicURL} />
-      <Fonts.H3>
+      <Fonts.H3 noMargin>
         @{influencerUsername}
         's posts
       </Fonts.H3>
