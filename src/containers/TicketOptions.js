@@ -1,3 +1,4 @@
+import mixpanel from 'mixpanel-browser';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
@@ -21,6 +22,9 @@ class TicketOptions extends React.Component {
     } catch (err) {
       console.error('Error in getting documents', err);
     }
+    const { eventID } = this.state;
+    mixpanel.identify();
+    mixpanel.track('Visited Ticket Options', { eventID });
   }
 
   getEventID = () => {

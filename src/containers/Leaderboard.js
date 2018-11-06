@@ -34,7 +34,7 @@ class Leaderboard extends React.Component {
       case 'jon_klaasen':
         return DATA_LEADERBOARD_JON.slice(0, 100);
       default:
-        return null;
+        return DATA_LEADERBOARD_JON.slice(0, 100);
     }
   };
 
@@ -42,6 +42,12 @@ class Leaderboard extends React.Component {
     switch (influencerID) {
       case 'jon_klaasen':
         return 'Jon Klaasen';
+      case 'mackenziesol':
+        return 'Mackenzie Sol';
+      case 'raeganbeast':
+        return 'Raegan Beast';
+      case 'andreswilley':
+        return 'Andre Swilley';
       default:
         return null;
     }

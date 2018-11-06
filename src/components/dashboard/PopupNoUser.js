@@ -34,10 +34,7 @@ class PopupNoUser extends React.Component {
   }
 
   loadTeaserImg = async () => {
-    // XX TODO MAKE DYNAMIC
-    // const { influencerUsername } = this.props;
-    // console.log('influencerUsername in props', influencerUsername);
-    const influencerUsername = 'jon_klaasen';
+    const { influencerUsername } = this.props;
     const teaserImgURL = await actions.fetchDashboardTeaserImgURL(influencerUsername);
     this.setState({ teaserImgURL });
   };

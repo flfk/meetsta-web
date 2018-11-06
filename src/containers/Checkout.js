@@ -62,7 +62,7 @@ class Checkout extends React.Component {
     } catch (err) {
       console.error('Error in getting documents', err);
     }
-
+    mixpanel.identify();
     const { eventID } = this.state;
     mixpanel.track('Visited Checkout', { eventID });
   }
@@ -166,6 +166,7 @@ class Checkout extends React.Component {
       addOns: addOnsList,
     };
     this.setState({ ticketOrdered: ticket });
+    console.log('ticket is ', ticket);
     const newTicket = await actions.addDocTicket(ticket);
     this.setState({ ticketID: newTicket.id });
     mixpanel.track('Purchased Ticket', { eventID });
@@ -298,7 +299,6 @@ class Checkout extends React.Component {
 
     const params = getParams(this.props);
     if (params.souvenirs && addOns) {
-      console.log('addOns');
       const souvenirs = addOns.filter(addOn => !addOn.additionalMins);
       ticketCards = (
         <CardSouvenirs

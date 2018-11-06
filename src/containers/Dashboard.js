@@ -196,6 +196,15 @@ class Dashboard extends React.Component {
       case 'jon_klaasen':
         influencer = JON_KLAASEN;
         break;
+      case 'mackenziesol':
+        influencer = MACKENZIE_SOL;
+        break;
+      case 'andreswilley':
+        influencer = ANDRE_SWILLEY;
+        break;
+      case 'raeganbeast':
+        influencer = RAEGAN_BESAT;
+        break;
       default:
         influencer = JON_KLAASEN;
     }
@@ -356,6 +365,36 @@ const JON_KLAASEN = {
   profilePicURL:
     'https://instagram.faep4-1.fna.fbcdn.net/vp/4c623d035365d5ed4c537becae2afa94/5C87D8CD/t51.2885-19/s150x150/36563227_239821553286740_6380728175147614208_n.jpg',
   username: 'jon_klaasen',
+};
+
+const MACKENZIE_SOL = {
+  coinName: '',
+  fanCount: 61941,
+  influencerID: 'mackenziesol',
+  name: 'Mackenzie Sol',
+  profilePicURL:
+    'https://instagram.faep4-1.fna.fbcdn.net/vp/20925bbb67e9f60e4ae6b19cd84dc3f3/5C6A6BA9/t51.2885-19/s320x320/43732018_170664100525239_5463104611311157248_n.jpg',
+  username: 'mackenziesol',
+};
+
+const ANDRE_SWILLEY = {
+  coinName: '',
+  fanCount: 61941,
+  influencerID: 'andreswilley',
+  name: 'Andre Swilley',
+  profilePicURL:
+    'https://instagram.faep4-1.fna.fbcdn.net/vp/a681270ccd102a2fc3a7bd3f9d93dcc7/5C6EEAF9/t51.2885-19/s320x320/36636621_230670450991249_8383191844376281088_n.jpg',
+  username: 'andreswilley',
+};
+
+const RAEGAN_BESAT = {
+  coinName: '',
+  fanCount: 61941,
+  influencerID: 'raeganbeast',
+  name: 'Raegan Beast',
+  profilePicURL:
+    'https://instagram.faep4-1.fna.fbcdn.net/vp/79f9075f20487b595dedd7b7f0cad29c/5C89F5E7/t51.2885-19/s320x320/43818200_308132383342801_6919666697288810496_n.jpg',
+  username: 'raeganbeast',
 };
 
 const MERCH = [
