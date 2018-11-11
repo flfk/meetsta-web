@@ -45,7 +45,7 @@ const DashboardStats = ({ comments, likes, uniqueTags }) => {
           <FaUserTag />
         </IconText>{' '}
         <StatText>
-          <Coins.Icon small /> {getShortenedNumber(uniqueTags * POINTS_BY_TYPE.tags) || 0}
+          <Coins.Icon small /> {getShortenedNumber(uniqueTags * POINTS_BY_TYPE.uniqueTags) || 0}
         </StatText>
         <Fonts.P centered>From tagging your friends</Fonts.P>
       </Stat>
