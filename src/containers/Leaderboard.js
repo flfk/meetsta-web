@@ -128,15 +128,15 @@ class Leaderboard extends React.Component {
         <Content>
           <Fonts.H1 centered noMarginBottom>
             {influencerDisplayName}
-            's Top{' '}
+            's Weekly Top{' '}
             <span role="img" aria-label="100">
               💯
             </span>
           </Fonts.H1>
           <br />
           <Fonts.P centered>
-            Earn points by liking, commenting and tagging friends on @{influencerID}
-            's Instagram posts.
+            Earn points on @{influencerID}
+            ’s Instagram posts from the last week by commenting and tagging friends.
           </Fonts.P>
           <br />
           {leaderboard}

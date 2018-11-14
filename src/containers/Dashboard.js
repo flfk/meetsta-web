@@ -281,13 +281,13 @@ class Dashboard extends React.Component {
     return (
       <div>
         <Content centered>
-          <Content.Spacing />
-          <Fonts.P centered supporting>
-            Your coins are updated every 72 hours
-          </Fonts.P>
           <Fonts.H3 centered marginBottom8px>
             @{user.username}
           </Fonts.H3>
+          <Profile medals={medals} profilePicURL={user.profilePicURL} />
+          <Content.Seperator />
+
+          <Fonts.H3 noMarginTop>This Week</Fonts.H3>
           <Fonts.H3 centered marginBottom4px noMarginTop>
             #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
           </Fonts.H3>
@@ -299,9 +299,6 @@ class Dashboard extends React.Component {
               <strong>See Leaderboard</strong>
             </Fonts.Link>
           </Link>
-          <br />
-          <Profile medals={medals} profilePicURL={user.profilePicURL} />
-
           <Fonts.H1 centered marginBottom8px extraLarge>
             <Coins.Icon /> {getFormattedNumber(user.points)} <Content.FlipHorizontal />{' '}
           </Fonts.H1>
@@ -320,9 +317,20 @@ class Dashboard extends React.Component {
           />
           <Content.Spacing />
           <Medals medals={medals} />
+          <Content.Spacing />
+          <Fonts.P centered supporting>
+            Updated every Wednesday
+          </Fonts.P>
           <br />
+
           <Content.Seperator />
-          <Fonts.H3 noMarginTop>Spend your coins</Fonts.H3>
+          <Fonts.H3 noMargin>All Time</Fonts.H3>
+          <Fonts.H1 centered marginBottom8px extraLarge>
+            <Coins.Icon /> {getFormattedNumber(user.points)} <Content.FlipHorizontal />{' '}
+          </Fonts.H1>
+          <Fonts.H3 centered noMarginTop marginBottom4px>
+            Total Earned
+          </Fonts.H3>
           <br />
           {merchDiv}
           <Content.Spacing />
@@ -359,7 +367,7 @@ const FAN_LEVELS = [
 
 const JON_KLAASEN = {
   coinName: 'Klassen Koins',
-  fanCount: 21941,
+  fanCount: 64532,
   influencerID: 'jon_klaasen',
   name: 'Jon Klaasen',
   profilePicURL:

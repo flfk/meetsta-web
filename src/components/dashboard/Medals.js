@@ -9,7 +9,7 @@ import Medals from './MedalEmojis';
 const propTypes = {
   medals: PropTypes.shape({
     hasMedalComments: PropTypes.bool,
-    hasMedalLikes: PropTypes.bool,
+    hasMedalFirst: PropTypes.bool,
     hasMedalRank: PropTypes.bool,
     hasMedalTags: PropTypes.bool,
   }).isRequired,
@@ -18,28 +18,31 @@ const propTypes = {
 const defaultProps = {};
 
 const DashboardMedals = ({ medals }) => {
-  const { hasMedalComments, hasMedalLikes, hasMedalRank, hasMedalTags } = medals;
+  const { hasMedalComments, hasMedalFirst, hasMedalRank, hasMedalTags } = medals;
 
   return (
     <Content.Row alignTop>
       <MedalContainer>
-        <Medals.Likes hasMedal={hasMedalLikes} />
-        <MedalText hasMedal={hasMedalLikes} centered>
-          10 Posts Liked
+        <Medals.Likes hasMedal={hasMedalFirst} />
+        <MedalText hasMedal={hasMedalFirst} centered>
+          First 10 fans to comment
         </MedalText>
       </MedalContainer>
+
       <MedalContainer>
         <Medals.Comments hasMedal={hasMedalComments} />
         <MedalText hasMedal={hasMedalComments} centered>
           100 Comments
         </MedalText>
       </MedalContainer>
+
       <MedalContainer>
         <Medals.Tags hasMedal={hasMedalTags} />
         <MedalText hasMedal={hasMedalTags} centered>
           10 Friends Tagged
         </MedalText>
       </MedalContainer>
+
       <MedalContainer>
         <Medals.Rank hasMedal={hasMedalRank} />
         <MedalText hasMedal={hasMedalRank} centered>

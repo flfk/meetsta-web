@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { FaLock } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const propTypes = {
@@ -16,6 +17,18 @@ const Emoji = styled.span`
   filter: ${props => (props.hasMedal ? '' : 'grayscale(100%)')};
   opacity: ${props => (props.hasMedal ? '1' : '0.4')};
   display: ${props => (props.isSmall && !props.hasMedal ? 'none' : '')};
+
+  max-width: 50px;
+`;
+
+const Lock = styled.span`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+
+  font-size: 16px;
+  color: black;
+  display: ${props => (props.hasMedal ? 'none' : '')};
 `;
 
 const Comments = ({ hasMedal, isSmall }) => (
@@ -23,6 +36,9 @@ const Comments = ({ hasMedal, isSmall }) => (
     <span role="img" aria-label="medal">
       🦁
     </span>
+    <Lock hasMedal={hasMedal}>
+      <FaLock />
+    </Lock>
   </Emoji>
 );
 
@@ -34,6 +50,9 @@ const Likes = ({ hasMedal, isSmall }) => (
     <span role="img" aria-label="medal">
       🍓
     </span>
+    <Lock hasMedal={hasMedal}>
+      <FaLock />
+    </Lock>
   </Emoji>
 );
 
@@ -45,6 +64,9 @@ const Tags = ({ hasMedal, isSmall }) => (
     <span role="img" aria-label="medal">
       🔮
     </span>
+    <Lock hasMedal={hasMedal}>
+      <FaLock />
+    </Lock>
   </Emoji>
 );
 
@@ -56,6 +78,9 @@ const Rank = ({ hasMedal, isSmall }) => (
     <span role="img" aria-label="medal">
       💎
     </span>
+    <Lock hasMedal={hasMedal}>
+      <FaLock />
+    </Lock>
   </Emoji>
 );
 
