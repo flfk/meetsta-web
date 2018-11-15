@@ -13,7 +13,7 @@ import PopupComingSoon from '../components/dashboard/PopupComingSoon';
 import PopupGetPrize from '../components/dashboard/PopupGetPrize';
 import PopupNoUser from '../components/dashboard/PopupNoUser';
 
-import FAN_DATA from '../data/dashboards/fanData-jon_klaasen';
+// import FAN_DATA from '../data/dashboards/fanData-jon_klaasen';
 import SCORECARDS from '../data/dashboards/jon_klaasen';
 
 const WEEK_INDEX = 1;
@@ -65,7 +65,6 @@ class Dashboard extends React.Component {
     this.getFanUsername();
     this.setMerch();
     mixpanel.identify();
-    console.log('mixpanel distinct ID is', mixpanel.get_distinct_id());
     mixpanel.track('Visited Dashboard');
   }
 
@@ -116,31 +115,6 @@ class Dashboard extends React.Component {
     }
     return { ...user, pointsAllTime, profilePicURL };
   };
-
-  // getLevels = points => {
-  //   const current = FAN_LEVELS.reduce((aggr, level) => {
-  //     if (level.pointsReq <= points) {
-  //       return level;
-  //     }
-  //     return aggr;
-  //   }, {});
-  //   const next = FAN_LEVELS[current.index + 1] ? FAN_LEVELS[current.index + 1] : null;
-  //   return {
-  //     current,
-  //     next,
-  //   };
-  // };
-
-  // getMedals = user => {
-  //   const { postsCommented, postsLiked, rank, uniqueTags } = user;
-  //   const trophies = {
-  //     hasMedalComments: postsCommented.length >= MEDAL_REQUIREMENTS.comments,
-  //     hasMedalLikes: postsLiked.length >= MEDAL_REQUIREMENTS.likes,
-  //     hasMedalRank: rank <= MEDAL_REQUIREMENTS.rank,
-  //     hasMedalTags: uniqueTags.length >= MEDAL_REQUIREMENTS.tags,
-  //   };
-  //   return trophies;
-  // };
 
   handleBuyPoints = item => {
     mixpanel.track('Clicked Buy', { Item: item });
@@ -248,8 +222,6 @@ class Dashboard extends React.Component {
       usernameInput,
       usernameInputErrMsg,
     } = this.state;
-
-    console.log(user);
 
     const merchDiv = merch
       .sort((a, b) => a.price - b.price)
