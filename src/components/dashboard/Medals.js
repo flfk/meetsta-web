@@ -25,7 +25,7 @@ const DashboardMedals = ({ medals }) => {
       <MedalContainer>
         <Medals.Likes hasMedal={hasMedalFirst} />
         <MedalText hasMedal={hasMedalFirst} centered>
-          First 10 fans to comment
+          In First 10 Comments
         </MedalText>
       </MedalContainer>
 
