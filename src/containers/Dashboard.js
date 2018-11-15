@@ -45,6 +45,7 @@ class Dashboard extends React.Component {
       profilePicURL: '',
       rank: 0,
       // NEW ENDPOINTS
+      pointsAllTime: 1000000,
       pointsComments: 999,
       pointsTags: 888,
       pointsTotal: 777,
@@ -105,13 +106,16 @@ class Dashboard extends React.Component {
     const user = SCORECARDS.filter(scorecard => scorecard.weekIndex === WEEK_INDEX).find(
       data => data.username === usernameFormatted
     );
+    const pointsAllTime = SCORECARDS.filter(
+      scorecard => scorecard.username === usernameFormatted
+    ).reduce((aggr, scorecard) => aggr + scorecard.pointsTotal, 0);
     if (user) {
       actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
       mixpanel.people.set({
         $name: username,
       });
     }
-    return user;
+    return { ...user, pointsAllTime };
   };
 
   // getLevels = points => {
@@ -337,7 +341,7 @@ class Dashboard extends React.Component {
           <Content.Seperator />
           <Fonts.H3 noMargin>All Time</Fonts.H3>
           <Fonts.H1 centered marginBottom8px extraLarge>
-            <Coins.Icon /> {getFormattedNumber(user.pointsTotal)} <Content.FlipHorizontal />{' '}
+            <Coins.Icon /> {getFormattedNumber(user.pointsAllTime)} <Content.FlipHorizontal />{' '}
           </Fonts.H1>
           <Fonts.H3 centered noMarginTop marginBottom4px>
             Total Earned

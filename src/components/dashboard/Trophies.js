@@ -13,13 +13,10 @@ const propTypes = {
 const defaultProps = {};
 
 const Trophies = ({ trophies }) => {
-  console.log('trophies in Trophies are', trophies);
   const hasTrophyComments = trophies.indexOf('comments') > -1;
   const hasTrophySpeed = trophies.indexOf('speed') > -1;
   const hasTrophyTags = trophies.indexOf('tags') > -1;
   const hasTrophyRank = trophies.indexOf('rank') > -1;
-
-  console.log('hasTrophySpeed', hasTrophySpeed);
 
   return (
     <Content.Row alignTop>

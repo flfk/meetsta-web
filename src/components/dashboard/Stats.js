@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import Coins from './Coins';
 import Content from '../Content';
-import { POINTS_BY_TYPE } from '../../utils/Constants';
 import Colors from '../../utils/Colors';
 import Fonts from '../../utils/Fonts';
 import { getShortenedNumber } from '../../utils/Helpers';
