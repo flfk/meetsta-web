@@ -12,14 +12,14 @@ import { getShortenedNumber } from '../../utils/Helpers';
 import NotifBubble from '../../assets/NotifBubble.png';
 
 const propTypes = {
-  comments: PropTypes.number.isRequired,
-  likes: PropTypes.number.isRequired,
-  uniqueTags: PropTypes.number.isRequired,
+  pointsComments: PropTypes.number.isRequired,
+  pointsTags: PropTypes.number.isRequired,
+  pointsTrophies: PropTypes.number.isRequired,
 };
 
 const defaultProps = {};
 
-const DashboardStats = ({ comments, likes, uniqueTags }) => {
+const DashboardStats = ({ pointsComments, pointsTags, pointsTrophies }) => {
   return (
     <Content.Row alignTop>
       <Stat>
@@ -27,7 +27,7 @@ const DashboardStats = ({ comments, likes, uniqueTags }) => {
           <FaComment />
         </IconText>{' '}
         <StatText>
-          <Coins.Icon small /> {getShortenedNumber(comments * POINTS_BY_TYPE.comments) || 0}
+          <Coins.Icon small /> {getShortenedNumber(pointsComments) || 0}
         </StatText>
         <Fonts.P centered>From your comments</Fonts.P>
       </Stat>
@@ -37,7 +37,7 @@ const DashboardStats = ({ comments, likes, uniqueTags }) => {
           <FaUserTag />
         </IconText>{' '}
         <StatText>
-          <Coins.Icon small /> {getShortenedNumber(uniqueTags * POINTS_BY_TYPE.uniqueTags) || 0}
+          <Coins.Icon small /> {getShortenedNumber(pointsTags) || 0}
         </StatText>
         <Fonts.P centered>From tagging your friends</Fonts.P>
       </Stat>
@@ -47,7 +47,7 @@ const DashboardStats = ({ comments, likes, uniqueTags }) => {
           <FaTrophy />
         </IconText>{' '}
         <StatText>
-          <Coins.Icon small /> {getShortenedNumber(likes * POINTS_BY_TYPE.likes) || 0}
+          <Coins.Icon small /> {getShortenedNumber(pointsTrophies) || 0}
         </StatText>
         <Fonts.P centered>From your unlocked trophies</Fonts.P>
       </Stat>

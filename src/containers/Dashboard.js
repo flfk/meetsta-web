@@ -8,12 +8,15 @@ import Coins from '../components/dashboard/Coins';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
-import { InfluencerProfile, Medals, MerchRow, Profile, Stats } from '../components/dashboard';
+import { InfluencerProfile, Trophies, MerchRow, Profile, Stats } from '../components/dashboard';
 import PopupComingSoon from '../components/dashboard/PopupComingSoon';
 import PopupGetPrize from '../components/dashboard/PopupGetPrize';
 import PopupNoUser from '../components/dashboard/PopupNoUser';
 
 import FAN_DATA from '../data/dashboards/fanData-jon_klaasen';
+import SCORECARDS from '../data/dashboards/jon_klaasen';
+
+const WEEK_INDEX = 1;
 
 // const propTypes = {};
 
@@ -37,12 +40,19 @@ class Dashboard extends React.Component {
     showPopupGetPrize: false,
     showPopupNoUser: false,
     user: {
-      postsCommented: [],
-      postsLiked: [],
       username: '',
       points: 0,
       profilePicURL: '',
       rank: 0,
+      // NEW ENDPOINTS
+      pointsComments: 999,
+      pointsTags: 888,
+      pointsTotal: 777,
+      pointsTrophies: 666,
+      trophies: [],
+      // EXPIRED ENDPOINTS
+      postsCommented: [],
+      postsLiked: [],
       uniqueTags: [],
     },
     usernameInput: '',
@@ -92,7 +102,9 @@ class Dashboard extends React.Component {
 
   getUser = username => {
     const usernameFormatted = this.formatUsername(username);
-    const user = FAN_DATA.find(data => data.username === usernameFormatted);
+    const user = SCORECARDS.filter(scorecard => scorecard.weekIndex === WEEK_INDEX).find(
+      data => data.username === usernameFormatted
+    );
     if (user) {
       actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
       mixpanel.people.set({
@@ -116,16 +128,16 @@ class Dashboard extends React.Component {
   //   };
   // };
 
-  getMedals = user => {
-    const { postsCommented, postsLiked, rank, uniqueTags } = user;
-    const medals = {
-      hasMedalComments: postsCommented.length >= MEDAL_REQUIREMENTS.comments,
-      hasMedalLikes: postsLiked.length >= MEDAL_REQUIREMENTS.likes,
-      hasMedalRank: rank <= MEDAL_REQUIREMENTS.rank,
-      hasMedalTags: uniqueTags.length >= MEDAL_REQUIREMENTS.tags,
-    };
-    return medals;
-  };
+  // getMedals = user => {
+  //   const { postsCommented, postsLiked, rank, uniqueTags } = user;
+  //   const trophies = {
+  //     hasMedalComments: postsCommented.length >= MEDAL_REQUIREMENTS.comments,
+  //     hasMedalLikes: postsLiked.length >= MEDAL_REQUIREMENTS.likes,
+  //     hasMedalRank: rank <= MEDAL_REQUIREMENTS.rank,
+  //     hasMedalTags: uniqueTags.length >= MEDAL_REQUIREMENTS.tags,
+  //   };
+  //   return trophies;
+  // };
 
   handleBuyPoints = item => {
     mixpanel.track('Clicked Buy', { Item: item });
@@ -234,8 +246,7 @@ class Dashboard extends React.Component {
       usernameInputErrMsg,
     } = this.state;
 
-    // const levels = this.getLevels(user.points);
-    const medals = this.getMedals(user);
+    console.log(user);
 
     const merchDiv = merch
       .sort((a, b) => a.price - b.price)
@@ -284,7 +295,7 @@ class Dashboard extends React.Component {
           <Fonts.H3 centered marginBottom8px>
             @{user.username}
           </Fonts.H3>
-          <Profile medals={medals} profilePicURL={user.profilePicURL} />
+          <Profile trophies={user.trophies} profilePicURL={user.profilePicURL} />
           <Content.Seperator />
 
           <Fonts.H3 noMarginTop>This Week</Fonts.H3>
@@ -300,7 +311,7 @@ class Dashboard extends React.Component {
             </Fonts.Link>
           </Link>
           <Fonts.H1 centered marginBottom8px extraLarge>
-            <Coins.Icon /> {getFormattedNumber(user.points)} <Content.FlipHorizontal />{' '}
+            <Coins.Icon /> {getFormattedNumber(user.pointsTotal)} <Content.FlipHorizontal />{' '}
           </Fonts.H1>
           <Fonts.H3 centered noMarginTop marginBottom4px>
             Earned on
@@ -311,12 +322,12 @@ class Dashboard extends React.Component {
           />
           <br />
           <Stats
-            comments={user.postsCommented.length}
-            likes={user.postsLiked.length}
-            uniqueTags={user.uniqueTags.length}
+            pointsComments={user.pointsComments}
+            pointsTags={user.pointsTags}
+            pointsTrophies={user.pointsTrophies}
           />
           <Content.Spacing />
-          <Medals medals={medals} />
+          <Trophies trophies={user.trophies} />
           <Content.Spacing />
           <Fonts.P centered supporting>
             Updated every Wednesday
@@ -326,7 +337,7 @@ class Dashboard extends React.Component {
           <Content.Seperator />
           <Fonts.H3 noMargin>All Time</Fonts.H3>
           <Fonts.H1 centered marginBottom8px extraLarge>
-            <Coins.Icon /> {getFormattedNumber(user.points)} <Content.FlipHorizontal />{' '}
+            <Coins.Icon /> {getFormattedNumber(user.pointsTotal)} <Content.FlipHorizontal />{' '}
           </Fonts.H1>
           <Fonts.H3 centered noMarginTop marginBottom4px>
             Total Earned
