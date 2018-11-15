@@ -103,19 +103,18 @@ class Dashboard extends React.Component {
 
   getUser = username => {
     const usernameFormatted = this.formatUsername(username);
-    const user = SCORECARDS.filter(scorecard => scorecard.weekIndex === WEEK_INDEX).find(
-      data => data.username === usernameFormatted
-    );
-    const pointsAllTime = SCORECARDS.filter(
-      scorecard => scorecard.username === usernameFormatted
-    ).reduce((aggr, scorecard) => aggr + scorecard.pointsTotal, 0);
+    const scorecards = SCORECARDS.filter(scorecard => scorecard.username === usernameFormatted);
+    const user = scorecards.find(scorecard => scorecard.weekIndex === WEEK_INDEX);
+    const pointsAllTime = scorecards.reduce((aggr, scorecard) => aggr + scorecard.pointsTotal, 0);
+    const profilePicURL =
+      scorecards.find(scorecard => scorecard.profilePicURL !== '').profilePicURL || '';
     if (user) {
       actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
       mixpanel.people.set({
         $name: username,
       });
     }
-    return { ...user, pointsAllTime };
+    return { ...user, pointsAllTime, profilePicURL };
   };
 
   // getLevels = points => {
