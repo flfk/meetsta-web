@@ -9,6 +9,9 @@ import LeaderboardFooter from '../components/LeaderboardFooter';
 import { getParams } from '../utils/Helpers';
 
 import DATA_LEADERBOARD_JON from '../data/dashboards/fanData-jon_klaasen';
+import SCORECARDS from '../data/dashboards/jon_klaasen';
+
+const WEEK_INDEX = 1;
 
 class Leaderboard extends React.Component {
   state = {
@@ -30,11 +33,24 @@ class Leaderboard extends React.Component {
   };
 
   getFanData = influencerID => {
+    const scorecardsWeekly = SCORECARDS.filter(scorecard => scorecard.weekIndex === WEEK_INDEX);
+    const dataJonKlaasen = scorecardsWeekly.slice(0, 100).map(data => {
+      const scorecards = SCORECARDS.filter(scorecard => scorecard.username === data.username);
+      const scorecardWithImg = scorecards.find(scorecard => scorecard.profilePicURL !== '');
+      let profilePicURL = '';
+      if (scorecardWithImg) {
+        if (scorecardWithImg.profilePicURL) {
+          profilePicURL = scorecardWithImg.profilePicURL;
+        }
+      }
+      return { ...data, profilePicURL };
+    });
+
     switch (influencerID) {
       case 'jon_klaasen':
-        return DATA_LEADERBOARD_JON.slice(0, 100);
+        return dataJonKlaasen;
       default:
-        return DATA_LEADERBOARD_JON.slice(0, 100);
+        return dataJonKlaasen;
     }
   };
 
@@ -114,7 +130,7 @@ class Leaderboard extends React.Component {
       leaderboard = fans.map((fan, index) => (
         <LeaderboardRow
           key={fan.username}
-          points={fan.points}
+          points={fan.pointsTotal}
           profilePicURL={fan.profilePicURL}
           rank={index + 1}
           trophy={this.getTrophy(index)}
@@ -128,15 +144,15 @@ class Leaderboard extends React.Component {
         <Content>
           <Fonts.H1 centered noMarginBottom>
             {influencerDisplayName}
-            's Top{' '}
+            's Weekly Top{' '}
             <span role="img" aria-label="100">
               💯
             </span>
           </Fonts.H1>
           <br />
           <Fonts.P centered>
-            Earn points by liking, commenting and tagging friends on @{influencerID}
-            's Instagram posts.
+            Earn points on @{influencerID}
+            ’s Instagram posts from the last week by commenting and tagging friends.
           </Fonts.P>
           <br />
           {leaderboard}

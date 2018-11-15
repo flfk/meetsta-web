@@ -37,13 +37,13 @@ class PopupComingSoon extends React.Component {
           />
           <br />
           <Row>
-            <Coins.Few /> <Fonts.P> Like a post</Fonts.P>
+            <Coins.Few /> <Fonts.P> Comment on a post (faster is better)</Fonts.P>
           </Row>
           <Row>
-            <Coins.Some /> <Fonts.P> Comment on a post</Fonts.P>
+            <Coins.Some /> <Fonts.P> Tag a friend in a post</Fonts.P>
           </Row>
           <Row>
-            <Coins.Many /> <Fonts.P> Tag a friend in a post</Fonts.P>
+            <Coins.Many /> <Fonts.P> Unlock trophies</Fonts.P>
           </Row>
         </Popup.CardTransparent>
       </div>

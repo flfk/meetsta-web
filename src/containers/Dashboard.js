@@ -8,12 +8,15 @@ import Coins from '../components/dashboard/Coins';
 import Content from '../components/Content';
 import Fonts from '../utils/Fonts';
 import { getTimestamp, getParams, getFormattedNumber } from '../utils/Helpers';
-import { InfluencerProfile, Medals, MerchRow, Profile, Stats } from '../components/dashboard';
+import { InfluencerProfile, Trophies, MerchRow, Profile, Stats } from '../components/dashboard';
 import PopupComingSoon from '../components/dashboard/PopupComingSoon';
 import PopupGetPrize from '../components/dashboard/PopupGetPrize';
 import PopupNoUser from '../components/dashboard/PopupNoUser';
 
-import FAN_DATA from '../data/dashboards/fanData-jon_klaasen';
+// import FAN_DATA from '../data/dashboards/fanData-jon_klaasen';
+import SCORECARDS from '../data/dashboards/jon_klaasen';
+
+const WEEK_INDEX = 1;
 
 // const propTypes = {};
 
@@ -37,12 +40,20 @@ class Dashboard extends React.Component {
     showPopupGetPrize: false,
     showPopupNoUser: false,
     user: {
-      postsCommented: [],
-      postsLiked: [],
       username: '',
       points: 0,
       profilePicURL: '',
       rank: 0,
+      // NEW ENDPOINTS
+      pointsAllTime: 1000000,
+      pointsComments: 999,
+      pointsTags: 888,
+      pointsTotal: 777,
+      pointsTrophies: 666,
+      trophies: [],
+      // EXPIRED ENDPOINTS
+      postsCommented: [],
+      postsLiked: [],
       uniqueTags: [],
     },
     usernameInput: '',
@@ -54,7 +65,6 @@ class Dashboard extends React.Component {
     this.getFanUsername();
     this.setMerch();
     mixpanel.identify();
-    console.log('mixpanel distinct ID is', mixpanel.get_distinct_id());
     mixpanel.track('Visited Dashboard');
   }
 
@@ -92,39 +102,18 @@ class Dashboard extends React.Component {
 
   getUser = username => {
     const usernameFormatted = this.formatUsername(username);
-    const user = FAN_DATA.find(data => data.username === usernameFormatted);
+    const scorecards = SCORECARDS.filter(scorecard => scorecard.username === usernameFormatted);
+    const user = scorecards.find(scorecard => scorecard.weekIndex === WEEK_INDEX);
+    const pointsAllTime = scorecards.reduce((aggr, scorecard) => aggr + scorecard.pointsTotal, 0);
+    const profilePicURL =
+      scorecards.find(scorecard => scorecard.profilePicURL !== '').profilePicURL || '';
     if (user) {
       actions.leaderboardSignup({ username: user.username, date: getTimestamp() });
       mixpanel.people.set({
         $name: username,
       });
     }
-    return user;
-  };
-
-  // getLevels = points => {
-  //   const current = FAN_LEVELS.reduce((aggr, level) => {
-  //     if (level.pointsReq <= points) {
-  //       return level;
-  //     }
-  //     return aggr;
-  //   }, {});
-  //   const next = FAN_LEVELS[current.index + 1] ? FAN_LEVELS[current.index + 1] : null;
-  //   return {
-  //     current,
-  //     next,
-  //   };
-  // };
-
-  getMedals = user => {
-    const { postsCommented, postsLiked, rank, uniqueTags } = user;
-    const medals = {
-      hasMedalComments: postsCommented.length >= MEDAL_REQUIREMENTS.comments,
-      hasMedalLikes: postsLiked.length >= MEDAL_REQUIREMENTS.likes,
-      hasMedalRank: rank <= MEDAL_REQUIREMENTS.rank,
-      hasMedalTags: uniqueTags.length >= MEDAL_REQUIREMENTS.tags,
-    };
-    return medals;
+    return { ...user, pointsAllTime, profilePicURL };
   };
 
   handleBuyPoints = item => {
@@ -234,9 +223,6 @@ class Dashboard extends React.Component {
       usernameInputErrMsg,
     } = this.state;
 
-    // const levels = this.getLevels(user.points);
-    const medals = this.getMedals(user);
-
     const merchDiv = merch
       .sort((a, b) => a.price - b.price)
       .map(item => (
@@ -281,13 +267,13 @@ class Dashboard extends React.Component {
     return (
       <div>
         <Content centered>
-          <Content.Spacing />
-          <Fonts.P centered supporting>
-            Your coins are updated every 72 hours
-          </Fonts.P>
           <Fonts.H3 centered marginBottom8px>
             @{user.username}
           </Fonts.H3>
+          <Profile trophies={user.trophies} profilePicURL={user.profilePicURL} />
+          <Content.Seperator />
+
+          <Fonts.H3 noMarginTop>This Week</Fonts.H3>
           <Fonts.H3 centered marginBottom4px noMarginTop>
             #{getFormattedNumber(user.rank)} of {getFormattedNumber(influencer.fanCount)}
           </Fonts.H3>
@@ -299,11 +285,8 @@ class Dashboard extends React.Component {
               <strong>See Leaderboard</strong>
             </Fonts.Link>
           </Link>
-          <br />
-          <Profile medals={medals} profilePicURL={user.profilePicURL} />
-
           <Fonts.H1 centered marginBottom8px extraLarge>
-            <Coins.Icon /> {getFormattedNumber(user.points)} <Content.FlipHorizontal />{' '}
+            <Coins.Icon /> {getFormattedNumber(user.pointsTotal)} <Content.FlipHorizontal />{' '}
           </Fonts.H1>
           <Fonts.H3 centered noMarginTop marginBottom4px>
             Earned on
@@ -314,15 +297,26 @@ class Dashboard extends React.Component {
           />
           <br />
           <Stats
-            comments={user.postsCommented.length}
-            likes={user.postsLiked.length}
-            uniqueTags={user.uniqueTags.length}
+            pointsComments={user.pointsComments}
+            pointsTags={user.pointsTags}
+            pointsTrophies={user.pointsTrophies}
           />
           <Content.Spacing />
-          <Medals medals={medals} />
+          <Trophies trophies={user.trophies} />
+          <Content.Spacing />
+          <Fonts.P centered supporting>
+            Updated every Wednesday
+          </Fonts.P>
           <br />
+
           <Content.Seperator />
-          <Fonts.H3 noMarginTop>Spend your coins</Fonts.H3>
+          <Fonts.H3 noMargin>All Time</Fonts.H3>
+          <Fonts.H1 centered marginBottom8px extraLarge>
+            <Coins.Icon /> {getFormattedNumber(user.pointsAllTime)} <Content.FlipHorizontal />{' '}
+          </Fonts.H1>
+          <Fonts.H3 centered noMarginTop marginBottom4px>
+            Total Earned
+          </Fonts.H3>
           <br />
           {merchDiv}
           <Content.Spacing />
@@ -359,7 +353,7 @@ const FAN_LEVELS = [
 
 const JON_KLAASEN = {
   coinName: 'Klassen Koins',
-  fanCount: 21941,
+  fanCount: 64532,
   influencerID: 'jon_klaasen',
   name: 'Jon Klaasen',
   profilePicURL:

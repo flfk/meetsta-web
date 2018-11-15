@@ -1,5 +1,5 @@
 export { default as InfluencerProfile } from './InfluencerProfile';
-export { default as Medals } from './Medals';
+export { default as Trophies } from './Trophies';
 export { default as MerchRow } from './MerchRow';
 export { default as Profile } from './Profile';
 export { default as Progress } from './Progress';

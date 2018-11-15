@@ -2,16 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import Medals from './MedalEmojis';
+import TrophyEmojis from './TrophyEmojis';
 
 const propTypes = {
   // levelEmoji: PropTypes.string.isRequired,
-  medals: PropTypes.shape({
-    hasMedalComments: PropTypes.bool,
-    hasMedalLikes: PropTypes.bool,
-    hasMedalRank: PropTypes.bool,
-    hasMedalTags: PropTypes.bool,
-  }).isRequired,
+  trophies: PropTypes.arrayOf(PropTypes.string).isRequired,
   profilePicURL: PropTypes.string.isRequired,
 };
 
@@ -20,17 +15,20 @@ const defaultProps = {};
 const DEFAULT_PROFILE_PIC_URL =
   'https://firebasestorage.googleapis.com/v0/b/online-meet-and-greets.appspot.com/o/default_profile.png?alt=media&token=abd27f4c-31e9-499e-a3aa-a97f61a5e7ea';
 
-const DashboardProfile = ({ medals, profilePicURL }) => {
-  const { hasMedalComments, hasMedalLikes, hasMedalRank, hasMedalTags } = medals;
+const DashboardProfile = ({ trophies, profilePicURL }) => {
+  const hasTrophyComments = trophies.indexOf('comments') > -1;
+  const hasTrophySpeed = trophies.indexOf('speed') > -1;
+  const hasTrophyTags = trophies.indexOf('tags') > -1;
+  const hasTrophyRank = trophies.indexOf('rank') > -1;
 
   return (
     <Container img={profilePicURL || DEFAULT_PROFILE_PIC_URL}>
-      <MedalsContainer>
-        <Medals.Likes hasMedal={hasMedalLikes} isSmall />
-        <Medals.Comments hasMedal={hasMedalComments} isSmall />
-        <Medals.Tags hasMedal={hasMedalTags} isSmall />
-        <Medals.Rank hasMedal={hasMedalRank} isSmall />
-      </MedalsContainer>
+      <TrophyContainer>
+        <TrophyEmojis.Speed hasTrophy={hasTrophySpeed} isSmall />
+        <TrophyEmojis.Comments hasTrophy={hasTrophyComments} isSmall />
+        <TrophyEmojis.Tags hasTrophy={hasTrophyTags} isSmall />
+        <TrophyEmojis.Rank hasTrophy={hasTrophyRank} isSmall />
+      </TrophyContainer>
     </Container>
   );
 };
@@ -63,7 +61,7 @@ const Level = styled.div`
   font-size: 20px;
 `;
 
-const MedalsContainer = styled.div`
+const TrophyContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   height: 20px;
