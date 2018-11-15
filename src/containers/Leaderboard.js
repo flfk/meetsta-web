@@ -8,7 +8,7 @@ import LeaderboardRow from '../components/LeaderboardRow';
 import LeaderboardFooter from '../components/LeaderboardFooter';
 import { getParams } from '../utils/Helpers';
 
-import DATA_LEADERBOARD_JON from '../data/dashboards/fanData-jon_klaasen';
+// import DATA_LEADERBOARD_JON from '../data/dashboards/fanData-jon_klaasen';
 import SCORECARDS from '../data/dashboards/jon_klaasen';
 
 const WEEK_INDEX = 1;
