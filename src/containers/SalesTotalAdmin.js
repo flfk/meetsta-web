@@ -1,4 +1,5 @@
 // import PropTypes from 'prop-types';
+import _ from 'lodash';
 import React from 'react';
 import qs from 'qs';
 import moment from 'moment-timezone';
@@ -19,7 +20,7 @@ const TEST_EVENT_IDS = [
   'cookie-cutters',
   'meet-lexi-jayde',
   'meet-mackenzie-sol',
-  'masterclass-test'
+  'masterclass-test',
 ];
 
 class Sales extends React.Component {
@@ -29,9 +30,9 @@ class Sales extends React.Component {
         eventID: '',
         eventTitle: '',
         tickets: [],
-        registrations: []
-      }
-    ]
+        registrations: [],
+      },
+    ],
   };
 
   componentDidMount() {
@@ -52,7 +53,6 @@ class Sales extends React.Component {
   };
 
   loadFormattedData = async () => {
-    console.log('loading all events');
     const eventsColl = await actions.getDocsEvent();
     const events = eventsColl.map(async event => {
       const { eventID } = event;
@@ -148,11 +148,12 @@ class Sales extends React.Component {
     let totalInviteCompletions = 0;
     let totalTriviaCompletions = 0;
 
-    console.log(events);
-
     let eventsDiv = <div />;
+    let addOnsDiv = <div />;
     if (events) {
       const eventsFiltered = events.filter(event => !(TEST_EVENT_IDS.indexOf(event.eventID) > -1));
+
+      // eventsDiv
       eventsDiv = eventsFiltered.map(event => {
         const revenue = this.getRevenue(event);
         const revenueTickets = this.getRevenueTickets(event);
@@ -198,6 +199,25 @@ class Sales extends React.Component {
           </div>
         );
       });
+
+      // addOnsDiv
+      addOnsDiv = <div>test</div>;
+      const ticketsAll = _.flatten(eventsFiltered.map(event => event.tickets));
+      const addOnsAll = _.flatten(
+        ticketsAll.filter(ticket => ticket.addOns).map(ticket => ticket.addOns)
+      );
+      const addOnsUnique = _.uniq(addOnsAll);
+      const addOnSales = addOnsUnique.map(addOnID => {
+        const count = addOnsAll.filter(addOn => addOn === addOnID).length;
+        return { addOnID, count };
+      });
+      console.log(addOnSales);
+
+      addOnsDiv = addOnSales.sort((a, b) => b.count - a.count).map(addOn => (
+        <FONTS.P>
+          {addOn.count} {addOn.addOnID.slice(0, 30)}
+        </FONTS.P>
+      ));
     }
 
     return (
@@ -240,6 +260,8 @@ class Sales extends React.Component {
         <Content.Seperator />
         <FONTS.H1>Revenue by Event</FONTS.H1>
         {eventsDiv}
+        <FONTS.H1>Add On Sales</FONTS.H1>
+        {addOnsDiv}
         <br />
         <br />
       </Content>
