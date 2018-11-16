@@ -214,9 +214,12 @@ class Sales extends React.Component {
       console.log(addOnSales);
 
       addOnsDiv = addOnSales.sort((a, b) => b.count - a.count).map(addOn => (
-        <FONTS.P>
-          {addOn.count} {addOn.addOnID.slice(0, 30)}
-        </FONTS.P>
+        <div>
+          <br />
+          <FONTS.P>
+            {addOn.count} {addOn.addOnID.slice(0, 30)}
+          </FONTS.P>
+        </div>
       ));
     }
 
