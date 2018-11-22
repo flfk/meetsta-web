@@ -2,10 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import Coin0 from '../../assets/Coin0.png';
-import Coin1 from '../../assets/Coin1.png';
-import Coin2 from '../../assets/Coin2.png';
-import Coin3 from '../../assets/Coin3.png';
+// import Coin0 from '../../assets/Coin0.png';
+// import Coin1 from '../../assets/Coin1.png';
+// import Coin2 from '../../assets/Coin2.png';
+// import Coin3 from '../../assets/Coin3.png';
+
+const Coin0 = null;
+const Coin1 = null;
+const Coin2 = null;
+const Coin3 = null;
 
 const propTypes = {
   small: PropTypes.bool,

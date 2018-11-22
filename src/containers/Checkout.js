@@ -144,7 +144,6 @@ class Checkout extends React.Component {
     const addOnsList = addOnsSelected.map(addOn => addOn.name);
     const ticket = {
       eventID,
-      eventTitle: title,
       influencerName,
       name: ticketSelected.name,
       priceTotal: ticketSelected.priceTotal,
